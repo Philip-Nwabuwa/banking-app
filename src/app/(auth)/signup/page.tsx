@@ -2,7 +2,7 @@
 
 import Logo from "@/app/assets/logos/custom-1.png";
 import Image from "next/image";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import zxcvbn from "zxcvbn";
@@ -16,6 +16,13 @@ const SignupPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
 
+  const [accountType, setAccountType] = useState<"personal" | "corporate">(
+    "personal"
+  );
+
+  const handleAccountTypeChange = (type: "personal" | "corporate") => {
+    setAccountType(type);
+  };
   const stepsData = [
     { title: "Account Type", desc: "Select your account type" },
     { title: "Email", desc: "Provide your email address" },
@@ -33,8 +40,6 @@ const SignupPage = () => {
   } = useForm({
     resolver: zodResolver(validationSchema),
   });
-
-  const defaultAccountType = watch("account_type");
 
   const confirmPassword = watch("confirmPassword");
   const isPasswordMatch = password === confirmPassword;
@@ -57,9 +62,6 @@ const SignupPage = () => {
     setPassword(newPassword);
     setValue("password", newPassword);
   };
-  const handleAccountTypeChange = (value: any) => {
-    setValue("account_type", value);
-  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState);
@@ -81,10 +83,6 @@ const SignupPage = () => {
     }
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
   const validateStep = (step: number): boolean => {
     return true;
   };
@@ -99,7 +97,7 @@ const SignupPage = () => {
           <div className="d-flex flex-column flex-lg-row-auto w-lg-350px w-xl-500px">
             <div className="signupBg d-flex flex-column position-lg-fixed top-0 bottom-0 w-lg-350px w-xl-500px scroll-y bgi-size-cover bgi-position-center">
               <div className="d-flex flex-center py-10 py-lg-20 mt-lg-20">
-                <a href="index.html">
+                <Link href="/">
                   <Image
                     alt="Logo"
                     src={Logo}
@@ -107,7 +105,7 @@ const SignupPage = () => {
                     height={70}
                     width={70}
                   />
-                </a>
+                </Link>
               </div>
 
               <div className="d-flex flex-row-fluid justify-content-center p-10">
@@ -212,9 +210,7 @@ const SignupPage = () => {
                             <input
                               type="radio"
                               className="btn-check"
-                              value="personal"
-                              {...register("account_type")}
-                              checked={defaultAccountType === "personal"}
+                              checked={accountType === "personal"}
                               onChange={() =>
                                 handleAccountTypeChange("personal")
                               }
@@ -236,9 +232,7 @@ const SignupPage = () => {
                             <input
                               type="radio"
                               className="btn-check"
-                              value="corporate"
-                              {...register("account_type")}
-                              checked={defaultAccountType === "corporate"}
+                              checked={accountType === "corporate"}
                               onChange={() =>
                                 handleAccountTypeChange("corporate")
                               }
@@ -250,7 +244,7 @@ const SignupPage = () => {
                                   Corporate Account
                                 </span>
                                 <span className="text-muted fw-semibold fs-6">
-                                  Create corporate account to mane users
+                                  Create corporate account to manage users
                                 </span>
                               </span>
                             </label>
@@ -315,10 +309,7 @@ const SignupPage = () => {
                       </div>
 
                       <div className="d-flex flex-column mb-7 fv-row">
-                        <form
-                          onSubmit={handleSubmit(onSubmit)}
-                          className="form w-100"
-                        >
+                        <form className="form w-100">
                           <div
                             className="fv-row mb-8"
                             data-kt-password-meter="true"
@@ -437,7 +428,6 @@ const SignupPage = () => {
                         <input
                           name="business_name"
                           className="form-control form-control-lg form-control-solid"
-                          value="Keenthemes Inc."
                         />
                       </div>
 
@@ -458,7 +448,6 @@ const SignupPage = () => {
                         <input
                           name="business_descriptor"
                           className="form-control form-control-lg form-control-solid"
-                          value="KEENTHEMES"
                         />
 
                         <div className="form-text">
@@ -507,7 +496,6 @@ const SignupPage = () => {
                         <input
                           name="business_email"
                           className="form-control form-control-lg form-control-solid"
-                          value="corp@support.com"
                         />
                       </div>
                     </div>
