@@ -1,12 +1,9 @@
-import "bootstrap/dist/css/bootstrap.css";
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"
-/>;
+import ThemeProvider from "@/componets/providers/ThemeProvider";
+import "./globals.css";
+import "./plugins.bundle.css";
+import "./style.bundle.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import BootstrapClient from "@/componets/providers/BootstrapProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +19,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}<BootstrapClient/></body>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"
+      />
+      <ThemeProvider>
+        <body className={inter.className}>{children}</body>
+      </ThemeProvider>
     </html>
   );
 }

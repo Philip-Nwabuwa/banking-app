@@ -1,0 +1,11 @@
+.signinImage {
+  background-image: url("./assets/bgLogin.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.signupBg {
+  background-image: url("./assets/auth-bg.png");
+}

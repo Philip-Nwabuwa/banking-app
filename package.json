@@ -9,15 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "bootstrap": "^5.3.3",
+    "@hookform/resolvers": "^3.3.4",
+    "lucide-react": "^0.364.0",
     "next": "14.1.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.2",
+    "sonner": "^1.4.41",
+    "zod": "^3.22.4",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/zxcvbn": "^4.4.4",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
     "typescript": "^5"
