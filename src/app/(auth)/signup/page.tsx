@@ -1,8 +1,8 @@
 "use client";
 
-import Logo from "@/app/assets/logos/custom-1.png";
+import Logo from "@/app/assets/logos/main-logo.png";
 import Image from "next/image";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import zxcvbn from "zxcvbn";
@@ -101,7 +101,7 @@ const SignupPage = () => {
                   <Image
                     alt="Logo"
                     src={Logo}
-                    className="h-70px w-100"
+                    className="h-100 w-100"
                     height={70}
                     width={70}
                   />

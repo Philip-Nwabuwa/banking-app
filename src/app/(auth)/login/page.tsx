@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "@/app/assets/logos/custom-3.svg";
+import Logo from "@/app/assets/logos/main-logo.png";
 import Link from "next/link";
 
 const page = () => {
@@ -12,7 +12,7 @@ const page = () => {
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
             <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
-                <Image alt="Logo" src={Logo} width={226} height={42} />
+                <Image alt="Logo" src={Logo} width={226} height={100} />
               </Link>
               <h2 className="text-white fw-normal m-0">
                 Branding tools designed for your business
@@ -27,7 +27,7 @@ const page = () => {
                   <div className="text-center mb-11">
                     <h1 className="text-gray-900 fw-bolder mb-3">Sign In</h1>
                     <div className="text-gray-500 fw-semibold fs-6">
-                      Your Social Campaigns
+                      Welcome back, please login to your account.
                     </div>
                   </div>
 
