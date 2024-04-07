@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import Logo from "@/app/assets/logos/main-logo.png";
+import Logo from "@/app/assets/logos/main.png";
 import WelcomeImage from "@/app/assets/welcome.png";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ const WelcomePage = () => {
             <div className="card card-flush w-md-650px py-5">
               <div className="card-body py-15 py-lg-20">
                 <div className="mb-7">
-                  <a href="index.html" className="">
+                  <a href="/" className="">
                     <Image alt="Logo" src={Logo} width={100} height={100} />
                   </a>
                 </div>
