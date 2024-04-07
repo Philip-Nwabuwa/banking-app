@@ -46633,12 +46633,6 @@ code:not([class*="language-"]).code-dark {
   background-color: var(--bs-dark-light);
   color: var(--bs-dark);
 }
-.indicator-progress {
-  display: none;
-}
-[data-kt-indicator="on"] > .indicator-progress {
-  display: inline-block;
-}
 [data-kt-indicator="on"] > .indicator-label {
   display: none;
 }

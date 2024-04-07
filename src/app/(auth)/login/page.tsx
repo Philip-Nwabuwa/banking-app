@@ -1,10 +1,47 @@
 "use client";
 
 import Image from "next/image";
-import Logo from "@/app/assets/logos/main.png";
+import { useState } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 
-const page = () => {
+import Logo from "@/assets/logos/main.png";
+import { LoginSchema } from "@/lib/validation";
+import { useRouter } from "next/navigation";
+import SubmitButton from "@/componets/common/SubmitBtn";
+
+const LoginPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(LoginSchema),
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setIsSubmitting(true);
+    try {
+      setIsSubmitting(false);
+      toast.success("Login successful!");
+      console.log(data);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2000);
+    } catch (error) {
+      setIsSubmitting(false);
+      toast.error("An error occurred. Please try again later.");
+    }
+  };
   return (
     <body className="app-blank signinImage h-100">
       <div className="d-flex flex-column flex-root">
@@ -21,7 +58,7 @@ const page = () => {
                 />
               </Link>
               <h2 className="text-white fw-normal m-0">
-                Branding tools designed for your business
+                A redefined payment service for your business
               </h2>
             </div>
           </div>
@@ -29,7 +66,7 @@ const page = () => {
           <div className="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
             <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-20">
               <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
-                <form className="form w-100">
+                <form className="form w-100" onSubmit={handleSubmit(onSubmit)}>
                   <div className="text-center mb-11">
                     <h1 className="text-gray-900 fw-bolder mb-3">Sign In</h1>
                     <div className="text-gray-500 fw-semibold fs-6">
@@ -41,17 +78,32 @@ const page = () => {
                     <input
                       type="email"
                       placeholder="Email"
-                      name="email"
-                      className="form-control bg-transparent"
+                      className={`form-control bg-transparent ${
+                        errors.password ? "is-invalid" : ""
+                      }`}
+                      {...register("email")}
                     />
                   </div>
-                  <div className="fv-row mb-3">
+                  <div className="fv-row mb-3 position-relative">
                     <input
-                      type="password"
+                      type={passwordVisible ? "text" : "password"}
                       placeholder="Password"
-                      name="password"
-                      className="form-control bg-transparent"
+                      className={`form-control bg-transparent ${
+                        errors.password ? "is-invalid" : ""
+                      }`}
+                      {...register("password")}
                     />
+                    <span
+                      className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
+                      data-kt-password-meter-control="visibility"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {passwordVisible ? (
+                        <i className="ki-outline ki-eye fs-2"></i>
+                      ) : (
+                        <i className="ki-outline ki-eye-slash fs-2"></i>
+                      )}
+                    </span>
                   </div>
 
                   <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
@@ -62,14 +114,8 @@ const page = () => {
                   </div>
 
                   <div className="d-grid mb-10">
-                    <button type="submit" className="btn btn-primary">
-                      <span className="indicator-label">Sign In</span>
+                  <SubmitButton isSubmitting={isSubmitting} disabled={isSubmitting} text="Sign In" />
 
-                      <span className="indicator-progress">
-                        Please wait...
-                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                      </span>
-                    </button>
                   </div>
                   <div className="text-gray-500 text-center fw-semibold fs-6">
                     Not a Member yet?{" "}
@@ -103,4 +149,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default LoginPage;

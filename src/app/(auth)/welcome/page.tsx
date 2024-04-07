@@ -36,11 +36,7 @@ const WelcomePage = () => {
                     width={100}
                     height={100}
                   />
-                  <img
-                    src="assets/media/auth/welcome-dark.png"
-                    className="mw-100 mh-300px theme-dark-show"
-                    alt=""
-                  />
+                  
                 </div>
 
                 <div className="mb-0">

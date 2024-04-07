@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/app/assets/logos/custom-2.svg";
 
-const page = () => {
+const ForgotPasswordPage = () => {
   return (
     <div id="kt_body" className="app-blank signinImage h-100">
       <div className="d-flex flex-column flex-root" id="kt_app_root">
@@ -88,4 +88,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ForgotPasswordPage;

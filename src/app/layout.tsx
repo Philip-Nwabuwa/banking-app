@@ -1,11 +1,9 @@
-import ThemeProvider from "@/componets/providers/ThemeProvider";
-import "./globals.css";
-import "./plugins.bundle.css";
-import "./style.bundle.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import "../style/globals.css";
+import "../style/plugins.bundle.css";
+import "../style/style.bundle.css";
+import ThemeProvider from "@/componets/providers/ThemeProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <ThemeProvider>
-        <body className={inter.className}>{children}</body>
+        <body>{children}</body>
+        <Toaster richColors position="top-center" />
       </ThemeProvider>
     </html>
   );

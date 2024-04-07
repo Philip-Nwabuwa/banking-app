@@ -1,28 +1,26 @@
 "use client";
 
-import Logo from "@/app/assets/logos/main.png";
+import Logo from "@/assets/logos/main.png";
 import Image from "next/image";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import zxcvbn from "zxcvbn";
 
 import { Check } from "lucide-react";
 import Link from "next/link";
-import { validationSchema } from "@/lib/validation";
+import RadioButton from "@/componets/common/RadioButton";
+import SubmitButton from "@/componets/common/SubmitBtn";
+import Button from "@/componets/common/Button";
+import { toast } from "sonner";
+import { SignUpSchema } from "@/lib/validation";
 
 const SignupPage = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [accountType, setAccountType] = useState("personal");
 
-  const [accountType, setAccountType] = useState<"personal" | "corporate">(
-    "personal"
-  );
-
-  const handleAccountTypeChange = (type: "personal" | "corporate") => {
-    setAccountType(type);
-  };
   const stepsData = [
     { title: "Account Type", desc: "Select your account type" },
     { title: "Email", desc: "Provide your email address" },
@@ -38,30 +36,30 @@ const SignupPage = () => {
     watch,
     setValue,
   } = useForm({
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(SignUpSchema),
   });
 
-  const confirmPassword = watch("confirmPassword");
-  const isPasswordMatch = password === confirmPassword;
+  console.log(errors);
+    console.log("accountType", accountType);
 
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setValue("confirmPassword", e.target.value);
+  const handleRadioChange = (value: any) => {
+    
+    
+    setAccountType(value);
+    setValue('accountType', value);
   };
+
+  const password = watch("password");
 
   const getPasswordStrength = () => {
-    const result = zxcvbn(password);
-    return result.score;
+    if (password) {
+      const result = zxcvbn(password);
+      return result.score;
+    }
+    return 0;
   };
 
-  const passwordStrengthScore = getPasswordStrength();
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newPassword = e.target.value;
-    setPassword(newPassword);
-    setValue("password", newPassword);
-  };
+  const passwordStrengthScore = password ? getPasswordStrength() : 0;
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState);
@@ -72,27 +70,26 @@ const SignupPage = () => {
   };
 
   const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep((prevStep) => prevStep + 1);
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    console.log("Form submitted with data:", data);
+    setIsSubmitting(true);
+    try {
+      setIsSubmitting(false);
+      toast.success("Account created successfully");
+      console.log(data);
+    } catch (error) {
+      setIsSubmitting(false);
+      console.error(error);
+      toast.error("Failed to create account");
     }
   };
 
-  const handleFormSubmit = () => {
-    if (validateFinalStep()) {
-      console.log("Form submitted successfully");
-    }
-  };
-
-  const validateStep = (step: number): boolean => {
-    return true;
-  };
-
-  const validateFinalStep = (): boolean => {
-    return true;
-  };
   return (
-    <body id="kt_body" className="app-blank">
-      <div className="d-flex flex-column flex-root" id="kt_app_root">
+    <body className="app-blank">
+      <div className="d-flex flex-column flex-root">
         <div className="d-flex flex-column flex-lg-row flex-column-fluid stepper stepper-pills stepper-column stepper-multistep">
           <div className="d-flex flex-column flex-lg-row-auto w-lg-350px w-xl-500px">
             <div className="signupBg d-flex flex-column position-lg-fixed top-0 bottom-0 w-lg-350px w-xl-500px scroll-y bgi-size-cover bgi-position-center">
@@ -175,7 +172,11 @@ const SignupPage = () => {
           <div className="d-flex flex-column flex-lg-row-fluid py-10">
             <div className="d-flex flex-center flex-column flex-column-fluid">
               <div className="w-lg-650px w-xl-700px p-10 p-lg-15 mx-auto">
-                <form className="my-auto pb-5" noValidate>
+                <form
+                  className="my-auto pb-5"
+                  onSubmit={handleSubmit(onSubmit)}
+                  noValidate
+                >
                   <div
                     className={`step-content ${
                       currentStep === 1 ? "current" : ""
@@ -206,49 +207,22 @@ const SignupPage = () => {
 
                       <div className="fv-row">
                         <div className="row">
-                          <div className="col-lg-6">
-                            <input
-                              type="radio"
-                              className="btn-check"
-                              checked={accountType === "personal"}
-                              onChange={() =>
-                                handleAccountTypeChange("personal")
-                              }
-                            />
-                            <label className="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center mb-10">
-                              <i className="ki-outline ki-badge fs-3x me-5"></i>
-                              <span className="d-block fw-semibold text-start">
-                                <span className="text-gray-900 fw-bold d-block fs-4 mb-2">
-                                  Personal Account
-                                </span>
-                                <span className="text-muted fw-semibold fs-6">
-                                  If you need more info, please check it out
-                                </span>
-                              </span>
-                            </label>
-                          </div>
-
-                          <div className="col-lg-6">
-                            <input
-                              type="radio"
-                              className="btn-check"
-                              checked={accountType === "corporate"}
-                              onChange={() =>
-                                handleAccountTypeChange("corporate")
-                              }
-                            />
-                            <label className="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex align-items-center">
-                              <i className="ki-outline ki-briefcase fs-3x me-5"></i>
-                              <span className="d-block fw-semibold text-start">
-                                <span className="text-gray-900 fw-bold d-block fs-4 mb-2">
-                                  Corporate Account
-                                </span>
-                                <span className="text-muted fw-semibold fs-6">
-                                  Create corporate account to manage users
-                                </span>
-                              </span>
-                            </label>
-                          </div>
+                          <RadioButton
+                            id="badge"
+                            value="personal"
+                            checked={accountType === "personal"}
+                            label="Personal Account"
+                            description="If you need more info, please check it out"
+                            onRadioButtonChange={() => handleRadioChange("personal")}
+                          />
+                          <RadioButton
+                            id="briefcase"
+                            value="corporate"
+                            checked={accountType === "corporate"}
+                            label="Corporate Account"
+                            description="Create corporate account to manage users"
+                            onRadioButtonChange={() => handleRadioChange("corporate")}
+                          />
                         </div>
                       </div>
                     </div>
@@ -279,8 +253,9 @@ const SignupPage = () => {
                           </label>
 
                           <input
-                            name="business_email"
                             className="form-control form-control-lg form-control-solid"
+                            type="email"
+                            {...register("email")}
                           />
                         </div>
                       </div>
@@ -310,19 +285,14 @@ const SignupPage = () => {
 
                       <div className="d-flex flex-column mb-7 fv-row">
                         <form className="form w-100">
-                          <div
-                            className="fv-row mb-8"
-                            data-kt-password-meter="true"
-                          >
+                          <div className="fv-row mb-8">
                             <div className="mb-1">
                               <div className="position-relative mb-3">
                                 <input
                                   className="form-control bg-transparent"
                                   type={passwordVisible ? "text" : "password"}
                                   placeholder="Password"
-                                  name="password"
-                                  value={password}
-                                  onChange={handlePasswordChange}
+                                  {...register("password")}
                                 />
                                 <span
                                   className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
@@ -383,16 +353,14 @@ const SignupPage = () => {
                             <input
                               type={passwordVisible ? "text" : "password"}
                               placeholder="Confirm Password"
-                              name="confirmPassword"
                               className="form-control bg-transparent"
-                              value={confirmPassword}
-                              onChange={handleConfirmPasswordChange}
+                              {...register("confirmPassword")}
                             />
-                            {!isPasswordMatch && (
+                            {/* {errors.confirmPassword && (
                               <div className="text-danger">
                                 Passwords do not match
                               </div>
-                            )}
+                            )} */}
                           </div>
                         </form>
                       </div>
@@ -426,8 +394,8 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          name="business_name"
                           className="form-control form-control-lg form-control-solid"
+                          {...register("business_name")}
                         />
                       </div>
 
@@ -446,8 +414,8 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          name="business_descriptor"
                           className="form-control form-control-lg form-control-solid"
+                          {...register("business_descriptor")}
                         />
 
                         <div className="form-text">
@@ -462,12 +430,12 @@ const SignupPage = () => {
                         </label>
 
                         <select
-                          name="business_type"
                           className="form-select form-select-lg form-select-solid"
                           data-control="select2"
                           data-placeholder="Select..."
                           data-allow-clear="true"
                           data-hide-search="true"
+                          {...register("business_type")}
                         >
                           <option></option>
                           <option value="1">S Corporation</option>
@@ -483,8 +451,8 @@ const SignupPage = () => {
                           Business Description
                         </label>
                         <textarea
-                          name="business_description"
                           className="form-control form-control-lg form-control-solid"
+                          {...register("business_description")}
                         ></textarea>
                       </div>
 
@@ -494,8 +462,8 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          name="business_email"
                           className="form-control form-control-lg form-control-solid"
+                          {...register("business_email")}
                         />
                       </div>
                     </div>
@@ -556,42 +524,35 @@ const SignupPage = () => {
 
                   <div className="d-flex flex-stack pt-15">
                     <div className="mr-2">
-                      {currentStep !== 1 && (
-                        <button
-                          type="button"
-                          className="btn btn-lg btn-light-primary me-3"
+                      {currentStep !== 1 && currentStep !== 5 && (
+                        <Button
                           onClick={handlePrevious}
-                        >
-                          <i className="ki-outline ki-arrow-left fs-4 me-1"></i>
-                          Previous
-                        </button>
+                          text="Previous"
+                          iconClass="ki-arrow-left"
+                          position="me-1"
+                        />
                       )}
                     </div>
                     <div>
-                      {currentStep !== 4 ? (
-                        <button
-                          type="button"
-                          className="btn btn-lg btn-primary"
+                      {((accountType === "personal" && currentStep < 3) ||
+                        (accountType === "corporate" && currentStep < 4)) && (
+                        <Button
+                          disabled={isSubmitting}
                           onClick={handleNext}
-                        >
-                          Continue
-                          <i className="ki-outline ki-arrow-right fs-4 ms-1"></i>
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="btn btn-lg btn-primary"
-                          onClick={handleFormSubmit}
-                        >
-                          <span className="indicator-label">
-                            Submit
-                            <i className="ki-outline ki-arrow-right fs-4 ms-2"></i>
-                          </span>
-                          <span className="indicator-progress">
-                            Please wait...
-                            <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                          </span>
-                        </button>
+                          text="Continue"
+                          iconClass="ki-arrow-right"
+                          position="ms-1"
+                        />
+                      )}
+
+                      {((accountType === "personal" && currentStep === 3) ||
+                        (accountType === "corporate" && currentStep === 4)) && (
+                        <SubmitButton
+                          onClick={handleSubmit(onSubmit)}
+                          isSubmitting={isSubmitting}
+                          disabled={isSubmitting}
+                          text="Sign In"
+                        />
                       )}
                     </div>
                   </div>

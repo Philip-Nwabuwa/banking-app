@@ -8626,12 +8626,12 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
 }
 @font-face {
   font-family: keenicons-duotone;
-  src: url(./assets/fonts/keenicons/keenicons-duotone.eot?eut7fk);
-  src: url(./assets/fonts/keenicons/keenicons-duotone.eot?eut7fk#iefix)
+  src: url(../assets/fonts/keenicons/keenicons-duotone.eot?eut7fk);
+  src: url(../assets/fonts/keenicons/keenicons-duotone.eot?eut7fk#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/keenicons/keenicons-duotone.ttf?eut7fk) format("truetype"),
-    url(./assets/fonts/keenicons/keenicons-duotone.woff?eut7fk) format("woff"),
-    url(./assets/fonts/keenicons/keenicons-duotone.svg?eut7fk#keenicons-duotone)
+    url(../assets/fonts/keenicons/keenicons-duotone.ttf?eut7fk) format("truetype"),
+    url(../assets/fonts/keenicons/keenicons-duotone.woff?eut7fk) format("woff"),
+    url(../assets/fonts/keenicons/keenicons-duotone.svg?eut7fk#keenicons-duotone)
       format("svg");
   font-weight: 400;
   font-style: normal;
@@ -16757,12 +16757,12 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
 
 @font-face {
   font-family: keenicons-outline;
-  src: url(./assets/fonts/keenicons/keenicons-outline.eot?fzo4bm);
-  src: url(./assets/fonts/keenicons/keenicons-outline.eot?fzo4bm#iefix)
+  src: url(../assets/fonts/keenicons/keenicons-outline.eot?fzo4bm);
+  src: url(../assets/fonts/keenicons/keenicons-outline.eot?fzo4bm#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/keenicons/keenicons-outline.ttf?fzo4bm) format("truetype"),
-    url(./assets/fonts/keenicons/keenicons-outline.woff?fzo4bm) format("woff"),
-    url(./assets/fonts/keenicons/keenicons-outline.svg?fzo4bm#keenicons-outline)
+    url(../assets/fonts/keenicons/keenicons-outline.ttf?fzo4bm) format("truetype"),
+    url(../assets/fonts/keenicons/keenicons-outline.woff?fzo4bm) format("woff"),
+    url(../assets/fonts/keenicons/keenicons-outline.svg?fzo4bm#keenicons-outline)
       format("svg");
   font-weight: 400;
   font-style: normal;
@@ -18500,12 +18500,12 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
 }
 @font-face {
   font-family: keenicons-solid;
-  src: url(./assets/fonts/keenicons/keenicons-solid.eot?812fv7);
-  src: url(./assets/fonts/keenicons/keenicons-solid.eot?812fv7#iefix)
+  src: url(../assets/fonts/keenicons/keenicons-solid.eot?812fv7);
+  src: url(../assets/fonts/keenicons/keenicons-solid.eot?812fv7#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/keenicons/keenicons-solid.ttf?812fv7) format("truetype"),
-    url(./assets/fonts/keenicons/keenicons-solid.woff?812fv7) format("woff"),
-    url(./assets/fonts/keenicons/keenicons-solid.svg?812fv7#keenicons-solid)
+    url(../assets/fonts/keenicons/keenicons-solid.ttf?812fv7) format("truetype"),
+    url(../assets/fonts/keenicons/keenicons-solid.woff?812fv7) format("woff"),
+    url(../assets/fonts/keenicons/keenicons-solid.svg?812fv7#keenicons-solid)
       format("svg");
   font-weight: 400;
   font-style: normal;
@@ -24631,13 +24631,13 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-  src: url(./assets/fonts/line-awesome/la-brands-400.eot);
-  src: url(./assets/fonts/line-awesome/la-brands-400.eot?#iefix)
+  src: url(../assets/fonts/line-awesome/la-brands-400.eot);
+  src: url(../assets/fonts/line-awesome/la-brands-400.eot?#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/line-awesome/la-brands-400.woff2) format("woff2"),
-    url(./assets/fonts/line-awesome/la-brands-400.woff) format("woff"),
-    url(./assets/fonts/line-awesome/la-brands-400.ttf) format("truetype"),
-    url(./assets/fonts/line-awesome/la-brands-400.svg#lineawesome) format("svg");
+    url(../assets/fonts/line-awesome/la-brands-400.woff2) format("woff2"),
+    url(../assets/fonts/line-awesome/la-brands-400.woff) format("woff"),
+    url(../assets/fonts/line-awesome/la-brands-400.ttf) format("truetype"),
+    url(../assets/fonts/line-awesome/la-brands-400.svg#lineawesome) format("svg");
 }
 .lab {
   font-family: "Line Awesome Brands";
@@ -24647,13 +24647,13 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 400;
   font-display: auto;
-  src: url(./assets/fonts/line-awesome/la-regular-400.eot);
-  src: url(./assets/fonts/line-awesome/la-regular-400.eot?#iefix)
+  src: url(../assets/fonts/line-awesome/la-regular-400.eot);
+  src: url(../assets/fonts/line-awesome/la-regular-400.eot?#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/line-awesome/la-regular-400.woff2) format("woff2"),
-    url(./assets/fonts/line-awesome/la-regular-400.woff) format("woff"),
-    url(./assets/fonts/line-awesome/la-regular-400.ttf) format("truetype"),
-    url(./assets/fonts/line-awesome/la-regular-400.svg#lineawesome) format("svg");
+    url(../assets/fonts/line-awesome/la-regular-400.woff2) format("woff2"),
+    url(../assets/fonts/line-awesome/la-regular-400.woff) format("woff"),
+    url(../assets/fonts/line-awesome/la-regular-400.ttf) format("truetype"),
+    url(../assets/fonts/line-awesome/la-regular-400.svg#lineawesome) format("svg");
 }
 .lar {
   font-family: "Line Awesome Free";
@@ -24664,13 +24664,13 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 900;
   font-display: auto;
-  src: url(./assets/fonts/line-awesome/la-solid-900.eot);
-  src: url(./assets/fonts/line-awesome/la-solid-900.eot?#iefix)
+  src: url(../assets/fonts/line-awesome/la-solid-900.eot);
+  src: url(../assets/fonts/line-awesome/la-solid-900.eot?#iefix)
       format("embedded-opentype"),
-    url(./assets/fonts/line-awesome/la-solid-900.woff2) format("woff2"),
-    url(./assets/fonts/line-awesome/la-solid-900.woff) format("woff"),
-    url(./assets/fonts/line-awesome/la-solid-900.ttf) format("truetype"),
-    url(./assets/fonts/line-awesome/la-solid-900.svg#lineawesome) format("svg");
+    url(../assets/fonts/line-awesome/la-solid-900.woff2) format("woff2"),
+    url(../assets/fonts/line-awesome/la-solid-900.woff) format("woff"),
+    url(../assets/fonts/line-awesome/la-solid-900.ttf) format("truetype"),
+    url(../assets/fonts/line-awesome/la-solid-900.svg#lineawesome) format("svg");
 }
 .la,
 .las {
@@ -26847,9 +26847,9 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
 @font-face {
   font-display: block;
   font-family: bootstrap-icons;
-  src: url(./assets/fonts/bootstrap-icons/bootstrap-icons.woff2?dd67030699838ea613ee6dbda90effa6)
+  src: url(../assets/fonts/bootstrap-icons/bootstrap-icons.woff2?dd67030699838ea613ee6dbda90effa6)
       format("woff2"),
-    url(./assets/fonts/bootstrap-icons/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6)
+    url(../assets/fonts/bootstrap-icons/bootstrap-icons.woff?dd67030699838ea613ee6dbda90effa6)
       format("woff");
 }
 .bi::before,
@@ -38425,8 +38425,8 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
 }
 .fa-brands,
 .fab {
@@ -39927,8 +39927,8 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
 }
 .fa-regular,
 .far {
@@ -39944,8 +39944,8 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
 }
 .fa-solid,
 .fas {
@@ -39955,40 +39955,40 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
   font-family: "Font Awesome 5 Brands";
   font-display: block;
   font-weight: 400;
-  src: url(./assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
 }
 @font-face {
   font-family: "Font Awesome 5 Free";
   font-display: block;
   font-weight: 900;
-  src: url(./assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
 }
 @font-face {
   font-family: "Font Awesome 5 Free";
   font-display: block;
   font-weight: 400;
-  src: url(./assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
 }
 @font-face {
   font-family: FontAwesome;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-solid-900.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-solid-900.ttf) format("truetype");
 }
 @font-face {
   font-family: FontAwesome;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-brands-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-brands-400.ttf) format("truetype");
 }
 @font-face {
   font-family: FontAwesome;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-regular-400.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-regular-400.ttf) format("truetype");
   unicode-range: u+f003, u+f006, u+f014, u+f016-f017, u+f01a-f01b, u+f01d,
     u+f022, u+f03e, u+f044, u+f046, u+f05c-f05d, u+f06e, u+f070, u+f087-f088,
     u+f08a, u+f094, u+f096-f097, u+f09d, u+f0a0, u+f0a2, u+f0a4-f0a7, u+f0c5,
@@ -40002,8 +40002,8 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
 @font-face {
   font-family: FontAwesome;
   font-display: block;
-  src: url(./assets/fonts/@fortawesome/fa-v4compatibility.woff2) format("woff2"),
-    url(./assets/fonts/@fortawesome/fa-v4compatibility.ttf) format("truetype");
+  src: url(../assets/fonts/@fortawesome/fa-v4compatibility.woff2) format("woff2"),
+    url(../assets/fonts/@fortawesome/fa-v4compatibility.ttf) format("truetype");
   unicode-range: u+f041, u+f047, u+f065-f066, u+f07d-f07e, u+f080, u+f08b,
     u+f08e, u+f090, u+f09a, u+f0ac, u+f0ae, u+f0b2, u+f0d0, u+f0d6, u+f0e4,
     u+f0ec, u+f10a-f10b, u+f123, u+f13e, u+f148-f149, u+f14c, u+f156, u+f15e,
