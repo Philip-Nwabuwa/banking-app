@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import Logo from "@/app/assets/logos/main.png";
-import WelcomeImage from "@/app/assets/welcome.png";
+import Logo from "@/assets/logos/main.png";
+import WelcomeImage from "@/assets/images/welcome.png";
 import Link from "next/link";
 
 const WelcomePage = () => {

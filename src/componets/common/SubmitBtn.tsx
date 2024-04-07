@@ -1,8 +1,8 @@
 "use client";
 
 interface SubmitButtonProps {
-  isSubmitting: boolean;
-  disabled: boolean;
+  isSubmitting?: boolean;
+  disabled?: boolean;
   text: string;
   className?: string;
   onClick?: (data: any) => void;

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "@/app/assets/logos/custom-2.svg";
+import Logo from "@/assets/logos/main.png";
+import SubmitButton from "@/componets/common/SubmitBtn";
 
 const ForgotPasswordPage = () => {
   return (
@@ -8,12 +9,18 @@ const ForgotPasswordPage = () => {
       <div className="d-flex flex-column flex-root" id="kt_app_root">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
-            <div className="d-flex flex-center flex-lg-start flex-column">
+          <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
-                <Image alt="Logo" src={Logo} width={226} height={42} />
+                <Image
+                  alt="Logo"
+                  src={Logo}
+                  className="h-100 w-100"
+                  width={226}
+                  height={42}
+                />
               </Link>
               <h2 className="text-white fw-normal m-0">
-                Branding tools designed for your business
+                A redefined payment service for your business
               </h2>
             </div>
           </div>
@@ -45,18 +52,9 @@ const ForgotPasswordPage = () => {
                       className="form-control bg-transparent"
                     />
                   </div>
-                  <div className="d-flex flex-wrap justify-content-center pb-lg-0">
-                    <button
-                      type="button"
-                      id="kt_password_reset_submit"
-                      className="btn btn-primary me-4"
-                    >
-                      <span className="indicator-label">Submit</span>
-                      <span className="indicator-progress">
-                        Please wait...
-                        <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                      </span>
-                    </button>
+                  <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
+                  <SubmitButton  text="Sign In" />
+
                     <Link href="/login" className="btn btn-light">
                       Cancel
                     </Link>
