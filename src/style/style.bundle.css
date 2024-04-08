@@ -43956,7 +43956,7 @@ code:not([class*="language-"]).code-dark {
     width: 225px;
     max-width: none;
   }
-  .symbol.symbol-lg-160px > img {
+  .symbol.symbol-lg-160px > Image {
     width: 160px;
     height: 160px;
   }
@@ -43968,7 +43968,7 @@ code:not([class*="language-"]).code-dark {
     width: 160px;
     height: 160px;
   }
-  .symbol.symbol-lg-160px.symbol-fixed > img {
+  .symbol.symbol-lg-160px.symbol-fixed > Image {
     width: 160px;
     height: 160px;
     max-width: none;
@@ -43977,12 +43977,12 @@ code:not([class*="language-"]).code-dark {
     height: 160px;
     width: 240px;
   }
-  .symbol.symbol-lg-160px.symbol-2by3 > img {
+  .symbol.symbol-lg-160px.symbol-2by3 > Image {
     height: 160px;
     width: 240px;
     max-width: none;
   }
-  .symbol.symbol-lg-175px > img {
+  .symbol.symbol-lg-175px > Image {
     width: 175px;
     height: 175px;
   }
@@ -43994,7 +43994,7 @@ code:not([class*="language-"]).code-dark {
     width: 175px;
     height: 175px;
   }
-  .symbol.symbol-lg-175px.symbol-fixed > img {
+  .symbol.symbol-lg-175px.symbol-fixed > Image {
     width: 175px;
     height: 175px;
     max-width: none;
@@ -44003,12 +44003,12 @@ code:not([class*="language-"]).code-dark {
     height: 175px;
     width: 262.5px;
   }
-  .symbol.symbol-lg-175px.symbol-2by3 > img {
+  .symbol.symbol-lg-175px.symbol-2by3 > Image {
     height: 175px;
     width: 262.5px;
     max-width: none;
   }
-  .symbol.symbol-lg-200px > img {
+  .symbol.symbol-lg-200px > Image {
     width: 200px;
     height: 200px;
   }
@@ -44020,7 +44020,7 @@ code:not([class*="language-"]).code-dark {
     width: 200px;
     height: 200px;
   }
-  .symbol.symbol-lg-200px.symbol-fixed > img {
+  .symbol.symbol-lg-200px.symbol-fixed > Image {
     width: 200px;
     height: 200px;
     max-width: none;
@@ -44029,14 +44029,14 @@ code:not([class*="language-"]).code-dark {
     height: 200px;
     width: 300px;
   }
-  .symbol.symbol-lg-200px.symbol-2by3 > img {
+  .symbol.symbol-lg-200px.symbol-2by3 > Image {
     height: 200px;
     width: 300px;
     max-width: none;
   }
 }
 @media (min-width: 1200px) {
-  .symbol.symbol-xl-20px > img {
+  .symbol.symbol-xl-20px > Image {
     width: 20px;
     height: 20px;
   }
@@ -44048,7 +44048,7 @@ code:not([class*="language-"]).code-dark {
     width: 20px;
     height: 20px;
   }
-  .symbol.symbol-xl-20px.symbol-fixed > img {
+  .symbol.symbol-xl-20px.symbol-fixed > Image {
     width: 20px;
     height: 20px;
     max-width: none;
