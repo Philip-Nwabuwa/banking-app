@@ -807,7 +807,7 @@ const page = () => {
                           Costa Rica
                         </option>
                         <option data-kt-flag="flags/ivory-coast.svg" value="CI">
-                          Côte d'Ivoire
+                          Côte d&aois;Ivoire
                         </option>
                         <option data-kt-flag="flags/croatia.svg" value="HR">
                           Croatia
@@ -996,7 +996,7 @@ const page = () => {
                           Kiribati
                         </option>
                         <option data-kt-flag="flags/north-korea.svg" value="KP">
-                          Korea, Democratic People's Republic of
+                          Korea, Democratic People&aois;s Republic of
                         </option>
                         <option data-kt-flag="flags/kuwait.svg" value="KW">
                           Kuwait
@@ -1005,7 +1005,7 @@ const page = () => {
                           Kyrgyzstan
                         </option>
                         <option data-kt-flag="flags/laos.svg" value="LA">
-                          Lao People's Democratic Republic
+                          Lao People&aois;s Democratic Republic
                         </option>
                         <option data-kt-flag="flags/latvia.svg" value="LV">
                           Latvia
@@ -1618,7 +1618,7 @@ const page = () => {
                       </h4>
                       <div className="fs-6 text-gray-700 pe-7">
                         Two-factor authentication adds an extra layer of
-                        security to your account. To log in, in addition you'll
+                        security to your account. To log in, in addition you&aois;ll
                         need to provide a 6 digit code
                       </div>
                     </div>
