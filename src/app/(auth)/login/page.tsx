@@ -114,8 +114,11 @@ const LoginPage = () => {
                   </div>
 
                   <div className="d-grid mb-10">
-                  <SubmitButton isSubmitting={isSubmitting} disabled={isSubmitting} text="Sign In" />
-
+                    <SubmitButton
+                      isSubmitting={isSubmitting}
+                      disabled={isSubmitting}
+                      text="Sign In"
+                    />
                   </div>
                   <div className="text-gray-500 text-center fw-semibold fs-6">
                     Not a Member yet?{" "}

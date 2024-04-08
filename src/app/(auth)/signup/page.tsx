@@ -3,7 +3,7 @@
 import Logo from "@/assets/logos/main.png";
 import Image from "next/image";
 import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm, Controller  } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import zxcvbn from "zxcvbn";
 
@@ -14,8 +14,10 @@ import SubmitButton from "@/componets/common/SubmitBtn";
 import Button from "@/componets/common/Button";
 import { toast } from "sonner";
 import { SignUpSchema } from "@/lib/validation";
+import { useRouter } from "next/navigation";
 
 const SignupPage = () => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,20 +36,10 @@ const SignupPage = () => {
     handleSubmit,
     formState: { errors },
     watch,
-    setValue,
+    control,
   } = useForm({
     resolver: zodResolver(SignUpSchema),
   });
-
-  console.log(errors);
-    console.log("accountType", accountType);
-
-  const handleRadioChange = (value: any) => {
-    
-    
-    setAccountType(value);
-    setValue('accountType', value);
-  };
 
   const password = watch("password");
 
@@ -79,6 +71,9 @@ const SignupPage = () => {
     try {
       setIsSubmitting(false);
       toast.success("Account created successfully");
+      setTimeout(() => {
+        setCurrentStep(5)
+      }, 2000);
       console.log(data);
     } catch (error) {
       setIsSubmitting(false);
@@ -207,22 +202,31 @@ const SignupPage = () => {
 
                       <div className="fv-row">
                         <div className="row">
-                          <RadioButton
-                            id="badge"
-                            value="personal"
-                            checked={accountType === "personal"}
-                            label="Personal Account"
-                            description="If you need more info, please check it out"
-                            onRadioButtonChange={() => handleRadioChange("personal")}
-                          />
-                          <RadioButton
-                            id="briefcase"
-                            value="corporate"
-                            checked={accountType === "corporate"}
-                            label="Corporate Account"
-                            description="Create corporate account to manage users"
-                            onRadioButtonChange={() => handleRadioChange("corporate")}
-                          />
+                        <Controller
+        name="accountType"
+        control={control}
+        defaultValue="personal"
+        render={({ field }) => (
+          <>
+            <RadioButton
+              id="badge"
+              value="personal"
+              checked={field.value === 'personal'}
+              label="Personal Account"
+              description="If you need more info, please check it out"
+              onRadioButtonChange={() => field.onChange('personal')}
+            />
+            <RadioButton
+              id="briefcase"
+              value="corporate"
+              checked={field.value === 'corporate'}
+              label="Corporate Account"
+              description="Create corporate account to manage users"
+              onRadioButtonChange={() => field.onChange('corporate')}
+            />
+          </>
+        )}
+      />
                         </div>
                       </div>
                     </div>
@@ -552,6 +556,15 @@ const SignupPage = () => {
                           isSubmitting={isSubmitting}
                           disabled={isSubmitting}
                           text="Sign In"
+                        />
+                      )}
+
+                      {currentStep === 5 && (
+                        <Button
+                          onClick={() => router.push("/welcome")}
+                          text="Continue"
+                          iconClass="ki-arrow-right"
+                          position="ms-1"
                         />
                       )}
                     </div>

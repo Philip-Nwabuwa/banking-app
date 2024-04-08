@@ -9,7 +9,7 @@ const ForgotPasswordPage = () => {
       <div className="d-flex flex-column flex-root" id="kt_app_root">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
-          <div className="d-flex flex-center flex-lg-start flex-column">
+            <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
                 <Image
                   alt="Logo"
@@ -53,7 +53,7 @@ const ForgotPasswordPage = () => {
                     />
                   </div>
                   <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
-                  <SubmitButton  text="Sign In" />
+                    <SubmitButton text="Sign In" />
 
                     <Link href="/login" className="btn btn-light">
                       Cancel
