@@ -42157,7 +42157,7 @@ code:not([class*="language-"]).code-dark {
   width: 52.5px;
   max-width: none;
 }
-.symbol.symbol-40px > img {
+.symbol.symbol-40px > Link >Image {
   width: 40px;
   height: 40px;
 }
@@ -43916,7 +43916,7 @@ code:not([class*="language-"]).code-dark {
     width: 125px;
     height: 125px;
   }
-  .symbol.symbol-lg-125px.symbol-fixed > img {
+  .symbol.symbol-lg-125px.symbol-fixed > Image {
     width: 125px;
     height: 125px;
     max-width: none;
@@ -43925,12 +43925,12 @@ code:not([class*="language-"]).code-dark {
     height: 125px;
     width: 187.5px;
   }
-  .symbol.symbol-lg-125px.symbol-2by3 > img {
+  .symbol.symbol-lg-125px.symbol-2by3 > Image {
     height: 125px;
     width: 187.5px;
     max-width: none;
   }
-  .symbol.symbol-lg-150px > img {
+  .symbol.symbol-lg-150px > Image {
     width: 150px;
     height: 150px;
   }
@@ -43942,7 +43942,7 @@ code:not([class*="language-"]).code-dark {
     width: 150px;
     height: 150px;
   }
-  .symbol.symbol-lg-150px.symbol-fixed > img {
+  .symbol.symbol-lg-150px.symbol-fixed > Image {
     width: 150px;
     height: 150px;
     max-width: none;
@@ -43951,7 +43951,7 @@ code:not([class*="language-"]).code-dark {
     height: 150px;
     width: 225px;
   }
-  .symbol.symbol-lg-150px.symbol-2by3 > img {
+  .symbol.symbol-lg-150px.symbol-2by3 > Image {
     height: 150px;
     width: 225px;
     max-width: none;

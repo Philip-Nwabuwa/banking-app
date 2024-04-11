@@ -8,6 +8,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
+  {
+    href: "/dashboard/accounts",
+    icon: "ki-chart-line-up-2",
+    label: "Accounts",
+  },
   { href: "/dashboard/payout", icon: "ki-calendar", label: "Payout" },
   { href: "/dashboard/bills", icon: "ki-security-check", label: "Bills" },
   {
@@ -15,23 +20,14 @@ const links = [
     icon: "ki-wifi-square",
     label: "Withdrawals",
   },
-  {
-    href: "/dashboard/accounts",
-    icon: "ki-chart-line-up-2",
-    label: "Accounts",
-  },
-  {
-    href: "/dashboard/statistics",
-    icon: "ki-shield-tick",
-    label: "Statistics",
-  },
-  { href: "/dashboard/merchant", icon: "ki-rocket", label: "PayMerchant" },
+  { href: "/dashboard/airtime", icon: "ki-rocket", label: "Airtime" },
   {
     href: "/dashboard/statements",
     icon: "ki-geolocation",
     label: "Statements",
   },
-  { href: "/dashboard/settings", icon: "ki-abstract-28", label: "Settings" },
+  { href: "/dashboard/reversal", icon: "ki-abstract-28", label: "Reversal" },
+  { href: "/dashboard/pos", icon: "ki-abstract-28", label: "POS" },
 ];
 
 const Sidebar = () => {
@@ -80,7 +76,19 @@ const Sidebar = () => {
             data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end"
           >
-            <Image src={UserImage} width={100} height={100} alt="user" />
+            <Link href={"/dashboard/settings"}>
+              <Image
+                src={UserImage}
+                width={100}
+                height={100}
+                alt="user"
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  borderRadius: "100%",
+                }}
+              />
+            </Link>
             <div className="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
           </div>
         </div>
@@ -100,7 +108,7 @@ const Sidebar = () => {
           data-kt-scroll-wrappers="#kt_app_sidebar, #kt_app_sidebar_nav"
           data-kt-scroll-offset="5px"
         >
-          <div className="d-flex align-items-center flex-column w-100 mb-6">
+          {/* <div className="d-flex align-items-center flex-column w-100 mb-6">
             <div className="d-flex justify-content-between fw-bolder fs-6 text-gray-800 w-100 mt-auto mb-3">
               <span>Your Goal</span>
             </div>
@@ -120,16 +128,16 @@ const Sidebar = () => {
             <div className="fw-semibold fs-7 text-primary w-100 mt-auto">
               <span>reached 0% of your target</span>
             </div>
-          </div>
+          </div> */}
           <div className="d-flex mb-3 mb-lg-6">
             <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6">
-              <span className="fs-6 text-gray-500 fw-bold">Budget</span>
+              <span className="fs-6 text-gray-500 fw-bold">Balance</span>
 
               <div className="fs-2 fw-bold text-success">$0</div>
             </div>
 
             <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4">
-              <span className="fs-6 text-gray-500 fw-bold">Spent</span>
+              <span className="fs-6 text-gray-500 fw-bold">Legder</span>
 
               <div className="fs-2 fw-bold text-danger">$0</div>
             </div>
@@ -160,6 +168,19 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+      <div
+        className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8"
+        id="kt_app_sidebar_footer"
+      >
+        <div className="app-footer-item">
+          <Link
+            href="/dashboard/settings"
+            className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
+          >
+            <i className="ki-outline ki-setting-2 fs-2"></i>
+          </Link>
         </div>
       </div>
     </div>

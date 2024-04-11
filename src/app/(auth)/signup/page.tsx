@@ -3,9 +3,14 @@
 import Logo from "@/assets/logos/main.png";
 import Image from "next/image";
 import { useState } from "react";
-import { FieldValues, SubmitHandler, useForm, Controller  } from "react-hook-form";
+import {
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  Controller,
+  FieldError,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import zxcvbn from "zxcvbn";
 
 import { Check } from "lucide-react";
 import Link from "next/link";
@@ -15,6 +20,8 @@ import Button from "@/componets/common/Button";
 import { toast } from "sonner";
 import { SignUpSchema } from "@/lib/validation";
 import { useRouter } from "next/navigation";
+import { getPasswordStrength } from "@/lib/utils";
+import { countries } from "@/types/countries";
 
 const SignupPage = () => {
   const router = useRouter();
@@ -25,8 +32,8 @@ const SignupPage = () => {
 
   const stepsData = [
     { title: "Account Type", desc: "Select your account type" },
-    { title: "Email", desc: "Provide your email address" },
-    { title: "Password", desc: "Choose a strong password" },
+    { title: "Login Credentials", desc: "Provide your login credentials" },
+    { title: "Personal Info", desc: "Provide your personal info" },
     { title: "Bussiness Info", desc: "Provide your bussiness info" },
     { title: "Completed", desc: "Your account is created" },
   ];
@@ -41,17 +48,10 @@ const SignupPage = () => {
     resolver: zodResolver(SignUpSchema),
   });
 
+  const account = watch("accountType");
   const password = watch("password");
 
-  const getPasswordStrength = () => {
-    if (password) {
-      const result = zxcvbn(password);
-      return result.score;
-    }
-    return 0;
-  };
-
-  const passwordStrengthScore = password ? getPasswordStrength() : 0;
+  const passwordStrengthScore = getPasswordStrength(password);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState);
@@ -62,8 +62,47 @@ const SignupPage = () => {
   };
 
   const handleNext = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+    if (currentStep === 1) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    } else if (currentStep === 2) {
+      const emailValue = watch("email");
+      const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue);
+
+      const passwordValue = watch("password");
+      const passwordStrengthScore = getPasswordStrength(passwordValue);
+
+      if (emailValue === "" && passwordValue === "") {
+        toast.error("Email and password is empty.");
+        return;
+      }
+
+      if (!isEmailValid) {
+        toast.error("Email format is incorrect.");
+        return;
+      }
+
+      if (passwordStrengthScore < 4) {
+        toast.error("Password strength is not sufficient.");
+        return;
+      }
+      setCurrentStep(3);
+    } else if (currentStep === 3) {
+      // Proceed to Step 4
+      setCurrentStep(4);
+    } else if (currentStep === 4) {
+      // Proceed to Step 5
+      setCurrentStep(5);
+    }
   };
+
+  const minDate = new Date();
+  minDate.setFullYear(minDate.getFullYear() - 18);
+  const minDateStr = minDate.toISOString().split("T")[0];
+
+  const filteredStepsData =
+    account === "personal"
+      ? stepsData.filter((step, index) => index !== 3)
+      : stepsData;
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     console.log("Form submitted with data:", data);
@@ -72,7 +111,7 @@ const SignupPage = () => {
       setIsSubmitting(false);
       toast.success("Account created successfully");
       setTimeout(() => {
-        setCurrentStep(5)
+        setCurrentStep(5);
       }, 2000);
       console.log(data);
     } catch (error) {
@@ -102,7 +141,7 @@ const SignupPage = () => {
 
               <div className="d-flex flex-row-fluid justify-content-center p-10">
                 <div className="stepper-nav">
-                  {stepsData.map((stepData, index) => (
+                  {filteredStepsData.map((stepData, index) => (
                     <div
                       key={index + 1}
                       className={`stepper-item ${
@@ -129,7 +168,7 @@ const SignupPage = () => {
                         </div>
                       </div>
 
-                      {index < stepsData.length - 1 && (
+                      {index < filteredStepsData.length - 1 && (
                         <div className="stepper-line h-40px"></div>
                       )}
                     </div>
@@ -138,27 +177,27 @@ const SignupPage = () => {
               </div>
               <div className="d-flex flex-center flex-wrap px-5 py-10">
                 <div className="d-flex fw-normal">
-                  <a
-                    href="https://keenthemes.com"
+                  <Link
+                    href="/terms"
                     className="text-success px-5"
                     target="_blank"
                   >
                     Terms
-                  </a>
-                  <a
-                    href="https://devs.keenthemes.com"
+                  </Link>
+                  <Link
+                    href="/plans"
                     className="text-success px-5"
                     target="_blank"
                   >
                     Plans
-                  </a>
-                  <a
-                    href="https://1.envato.market/EA4JP"
+                  </Link>
+                  <Link
+                    href="/contact"
                     className="text-success px-5"
                     target="_blank"
                   >
                     Contact Us
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -202,31 +241,35 @@ const SignupPage = () => {
 
                       <div className="fv-row">
                         <div className="row">
-                        <Controller
-        name="accountType"
-        control={control}
-        defaultValue="personal"
-        render={({ field }) => (
-          <>
-            <RadioButton
-              id="badge"
-              value="personal"
-              checked={field.value === 'personal'}
-              label="Personal Account"
-              description="If you need more info, please check it out"
-              onRadioButtonChange={() => field.onChange('personal')}
-            />
-            <RadioButton
-              id="briefcase"
-              value="corporate"
-              checked={field.value === 'corporate'}
-              label="Corporate Account"
-              description="Create corporate account to manage users"
-              onRadioButtonChange={() => field.onChange('corporate')}
-            />
-          </>
-        )}
-      />
+                          <Controller
+                            name="accountType"
+                            control={control}
+                            defaultValue="personal"
+                            render={({ field }) => (
+                              <>
+                                <RadioButton
+                                  id="badge"
+                                  value="personal"
+                                  checked={field.value === "personal"}
+                                  label="Personal Account"
+                                  description="If you need more info, please check it out"
+                                  onRadioButtonChange={() =>
+                                    field.onChange("personal")
+                                  }
+                                />
+                                <RadioButton
+                                  id="briefcase"
+                                  value="corporate"
+                                  checked={field.value === "corporate"}
+                                  label="Corporate Account"
+                                  description="Create corporate account to manage users"
+                                  onRadioButtonChange={() =>
+                                    field.onChange("corporate")
+                                  }
+                                />
+                              </>
+                            )}
+                          />
                         </div>
                       </div>
                     </div>
@@ -240,7 +283,9 @@ const SignupPage = () => {
                   >
                     <div className="w-100">
                       <div className="pb-10 pb-lg-15">
-                        <h2 className="fw-bold text-gray-900">Email Address</h2>
+                        <h2 className="fw-bold text-gray-900">
+                          Login Credentials
+                        </h2>
 
                         <div className="text-muted fw-semibold fs-6">
                           If you need more info, please check out{" "}
@@ -251,16 +296,81 @@ const SignupPage = () => {
                         </div>
                       </div>
                       <div className="mb-10 fv-row">
-                        <div className="fv-row mb-0">
-                          <label className="fs-6 fw-semibold form-label required">
-                            Contact Email
-                          </label>
-
+                        <div className="fv-row mb-10">
                           <input
-                            className="form-control form-control-lg form-control-solid"
+                            className="form-control bg-transparent"
                             type="email"
                             {...register("email")}
+                            placeholder="example@email.com"
                           />
+                          {errors.email && typeof errors.email === "object" && (
+                            <p className="text-danger">
+                              {(errors.email as FieldError).message}
+                            </p>
+                          )}
+                        </div>
+                        <div className="fv-row mb-8">
+                          <div className="mb-1">
+                            <div className="position-relative mb-3">
+                              <input
+                                className="form-control bg-transparent"
+                                type={passwordVisible ? "text" : "password"}
+                                placeholder="Password"
+                                {...register("password")}
+                              />
+                              <span
+                                className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
+                                data-kt-password-meter-control="visibility"
+                                onClick={togglePasswordVisibility}
+                              >
+                                {passwordVisible ? (
+                                  <i className="ki-outline ki-eye fs-2"></i>
+                                ) : (
+                                  <i className="ki-outline ki-eye-slash fs-2"></i>
+                                )}
+                              </span>
+                            </div>
+                            {password && (
+                              <div
+                                className="d-flex align-items-center mb-3"
+                                data-kt-password-meter-control="highlight"
+                              >
+                                <div
+                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
+                                    passwordStrengthScore >= 1
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
+                                    passwordStrengthScore >= 2
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
+                                    passwordStrengthScore >= 3
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px ${
+                                    passwordStrengthScore === 4
+                                      ? "bg-success"
+                                      : ""
+                                  }`}
+                                ></div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="text-muted">
+                            Use 8 or more characters with a mix of letters,
+                            numbers & symbols.
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -273,104 +383,144 @@ const SignupPage = () => {
                     data-kt-stepper-element="content"
                   >
                     <div className="w-100">
-                      <div className="pb-10 pb-lg-15">
+                      <div className="pb-10 pb-lg-12">
                         <h2 className="fw-bold text-gray-900">
-                          Setup Password
+                          Personal Details
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
                           If you need more info, please check out{" "}
-                          <Link href="/help" className="text-primary fw-bold">
+                          <Link href="#" className="link-primary fw-bold">
                             Help Page
                           </Link>
                           .
                         </div>
                       </div>
 
-                      <div className="d-flex flex-column mb-7 fv-row">
-                        <form className="form w-100">
-                          <div className="fv-row mb-8">
-                            <div className="mb-1">
-                              <div className="position-relative mb-3">
-                                <input
-                                  className="form-control bg-transparent"
-                                  type={passwordVisible ? "text" : "password"}
-                                  placeholder="Password"
-                                  {...register("password")}
-                                />
-                                <span
-                                  className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
-                                  data-kt-password-meter-control="visibility"
-                                  onClick={togglePasswordVisibility}
-                                >
-                                  {passwordVisible ? (
-                                    <i className="ki-outline ki-eye fs-2"></i>
-                                  ) : (
-                                    <i className="ki-outline ki-eye-slash fs-2"></i>
-                                  )}
-                                </span>
-                              </div>
-                              {password && (
-                                <div
-                                  className="d-flex align-items-center mb-3"
-                                  data-kt-password-meter-control="highlight"
-                                >
-                                  <div
-                                    className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                      passwordStrengthScore >= 1
-                                        ? "bg-success"
-                                        : ""
-                                    }`}
-                                  ></div>
-                                  <div
-                                    className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                      passwordStrengthScore >= 2
-                                        ? "bg-success"
-                                        : ""
-                                    }`}
-                                  ></div>
-                                  <div
-                                    className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                      passwordStrengthScore >= 3
-                                        ? "bg-success"
-                                        : ""
-                                    }`}
-                                  ></div>
-                                  <div
-                                    className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px ${
-                                      passwordStrengthScore === 4
-                                        ? "bg-success"
-                                        : ""
-                                    }`}
-                                  ></div>
-                                </div>
-                              )}
-                            </div>
+                      <div
+                        className="mb-10"
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          width: "100%",
+                          justifyContent: "space-between",
+                          gap: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <label className="form-label required">
+                            First Name
+                          </label>
 
-                            <div className="text-muted">
-                              Use 8 or more characters with a mix of letters,
-                              numbers & symbols.
-                            </div>
-                          </div>
+                          <input
+                            className="form-control bg-transparent w-100"
+                            {...register("business_name")}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <label className="form-label required">
+                            Last Name
+                          </label>
 
-                          <div className="fv-row mb-8">
-                            <input
-                              type={passwordVisible ? "text" : "password"}
-                              placeholder="Confirm Password"
-                              className="form-control bg-transparent"
-                              {...register("confirmPassword")}
-                            />
-                            {/* {errors.confirmPassword && (
-                              <div className="text-danger">
-                                Passwords do not match
-                              </div>
-                            )} */}
-                          </div>
-                        </form>
+                          <input
+                            className="form-control bg-transparent"
+                            {...register("business_name")}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="fv-row mb-10">
+                        <label className="form-label required">Gender</label>
+
+                        <select
+                          name="business_type"
+                          className="form-select bg-transparent"
+                          data-control="select2"
+                          data-placeholder="Select..."
+                          data-allow-clear="true"
+                          data-hide-search="false"
+                        >
+                          <option></option>
+                          <option value="1">Male</option>
+                          <option value="1">Female</option>
+                          <option value="2">Other</option>
+                        </select>
+                      </div>
+
+                      <div className="mb-0">
+                        <label className="form-label">D.O.B</label>
+                        <input
+                          className="form-control bg-transparent"
+                          placeholder="Pick date rage"
+                          type="date"
+                          id="kt_daterangepicker_3"
+                          min={minDateStr}
+                        />
+                      </div>
+
+                        <div className="col-lg-8 fv-row mb-10 mt-10">
+                        <label className="form-label required">Country</label>
+
+                          <select
+                            name="country"
+                            aria-label="Select a Country"
+                            data-control="select2"
+                            data-placeholder="Select a country..."
+                            className="form-select bg-transparent"
+                          >
+                            {countries.map((country, index) => (
+                              <option key={index} value={country.value}>
+                                {country.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                      <div className="fv-row mb-10 mt-10">
+                        <label className="form-label required">
+                          Phone Number
+                        </label>
+
+                        <input
+                          className="form-control bg-transparent"
+                          type="number"
+                        />
+                      </div>
+
+                      <div className="fv-row mb-10 mt-10">
+                        <label className="d-flex align-items-center form-label">
+                          <span className="required">Occupation</span>
+                          <span
+                            className="lh-1 ms-1"
+                            data-bs-toggle="popover"
+                            data-bs-trigger="hover"
+                            data-bs-html="true"
+                            data-bs-content='&lt;div className=&#039;p-4 rounded bg-light&#039;&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-4&#039;&gt; &lt;i className="ki-outline ki-bank fs-3 me-3"&gt;&lt;/i&gt; &lt;div className=&#039;fw-bold&#039;&gt;INCBANK **** 1245 STATEMENT&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack fw-semibold text-gray-600&#039;&gt; &lt;div&gt;Amount&lt;/div&gt; &lt;div&gt;Transaction&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;separator separator-dashed my-2&#039;&gt;&lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-gray-900 fw-bold mb-2&#039;&gt; &lt;div&gt;USD345.00&lt;/div&gt; &lt;div&gt;KEENTHEMES*&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-2&#039;&gt; &lt;div&gt;USD75.00&lt;/div&gt; &lt;div&gt;Hosting fee&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted&#039;&gt; &lt;div&gt;USD3,950.00&lt;/div&gt; &lt;div&gt;Payrol&lt;/div&gt; &lt;/div&gt; &lt;/div&gt;'
+                          >
+                            <i className="ki-outline ki-information-5 text-gray-500 fs-6"></i>
+                          </span>
+                        </label>
+
+                        <input
+                          className="form-control bg-transparent"
+                          {...register("business_descriptor")}
+                        />
+
+                        {/* <div className="form-text">
+                          Customers will see this shortened version of your
+                          statement descriptor
+                        </div> */}
                       </div>
                     </div>
                   </div>
-
                   <div
                     className={`step-content ${
                       currentStep === 4 ? "current" : ""
@@ -398,7 +548,7 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          className="form-control form-control-lg form-control-solid"
+                          className="form-control bg-transparent"
                           {...register("business_name")}
                         />
                       </div>
@@ -418,7 +568,7 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          className="form-control form-control-lg form-control-solid"
+                          className="form-control bg-transparent"
                           {...register("business_descriptor")}
                         />
 
@@ -434,7 +584,7 @@ const SignupPage = () => {
                         </label>
 
                         <select
-                          className="form-select form-select-lg form-select-solid"
+                          className="form-select bg-transparent"
                           data-control="select2"
                           data-placeholder="Select..."
                           data-allow-clear="true"
@@ -455,7 +605,7 @@ const SignupPage = () => {
                           Business Description
                         </label>
                         <textarea
-                          className="form-control form-control-lg form-control-solid"
+                          className="form-control bg-transparent"
                           {...register("business_description")}
                         ></textarea>
                       </div>
@@ -466,7 +616,7 @@ const SignupPage = () => {
                         </label>
 
                         <input
-                          className="form-control form-control-lg form-control-solid"
+                          className="form-control bg-transparent"
                           {...register("business_email")}
                         />
                       </div>
@@ -538,8 +688,8 @@ const SignupPage = () => {
                       )}
                     </div>
                     <div>
-                      {((accountType === "personal" && currentStep < 3) ||
-                        (accountType === "corporate" && currentStep < 4)) && (
+                      {((account === "personal" && currentStep < 3) ||
+                        (account === "corporate" && currentStep < 4)) && (
                         <Button
                           disabled={isSubmitting}
                           onClick={handleNext}
@@ -549,8 +699,8 @@ const SignupPage = () => {
                         />
                       )}
 
-                      {((accountType === "personal" && currentStep === 3) ||
-                        (accountType === "corporate" && currentStep === 4)) && (
+                      {((account === "personal" && currentStep === 3) ||
+                        (account === "corporate" && currentStep === 4)) && (
                         <SubmitButton
                           onClick={handleSubmit(onSubmit)}
                           isSubmitting={isSubmitting}
@@ -561,7 +711,7 @@ const SignupPage = () => {
 
                       {currentStep === 5 && (
                         <Button
-                          onClick={() => router.push("/welcome")}
+                          onClick={() => router.push("/dashboard/welcome")}
                           text="Continue"
                           iconClass="ki-arrow-right"
                           position="ms-1"

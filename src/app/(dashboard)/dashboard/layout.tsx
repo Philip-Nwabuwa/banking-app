@@ -31,7 +31,7 @@ const layout = ({
               id="kt_app_main"
             >
               {children}
-              <Footer />
+              {/* <Footer /> */}
             </div>
           </div>
         </div>

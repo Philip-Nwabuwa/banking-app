@@ -1,5 +1,6 @@
-"use client"
+"use client";
 
+import Link from "next/link";
 import { SetStateAction, useState } from "react";
 
 const transactions = [
@@ -92,133 +93,19 @@ const Dashboard = () => {
         >
           <div className="page-title d-flex flex-column justify-content-center me-3">
             <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-              Getting Started
+              Welcome
             </h1>
 
             <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
               <li className="breadcrumb-item text-muted">
-                <a href="index.html" className="text-muted text-hover-primary">
-                  Home
-                </a>
+                <Link
+                  href="/dashboard"
+                  className="text-muted text-hover-primary"
+                >
+                  Dashboard
+                </Link>
               </li>
-              <li className="breadcrumb-item">
-                <span className="bullet bg-gray-500 w-5px h-2px"></span>
-              </li>
-              <li className="breadcrumb-item text-muted">Subscription</li>
             </ul>
-          </div>
-          <div className="d-flex align-items-center gap-2 gap-lg-3">
-            <div className="m-0">
-              <a
-                href="#"
-                className="btn btn-sm btn-flex btn-secondary fw-bold"
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-              >
-                <i className="ki-outline ki-filter fs-6 text-muted me-1"></i>
-                Filter
-              </a>
-              <div
-                className="menu menu-sub menu-sub-dropdown w-250px w-md-300px"
-                data-kt-menu="true"
-                id="kt_menu_65a10d99c96cf"
-              >
-                <div className="px-7 py-5">
-                  <div className="fs-5 text-gray-900 fw-bold">
-                    Filter Options
-                  </div>
-                </div>
-
-                <div className="separator border-gray-200"></div>
-
-                <div className="px-7 py-5">
-                  <div className="mb-10">
-                    <label className="form-label fw-semibold">Status:</label>
-
-                    <div>
-                      <select
-                        className="form-select form-select-solid"
-                        data-kt-select2="true"
-                        data-close-on-select="false"
-                        data-placeholder="Select option"
-                        data-dropdown-parent="#kt_menu_65a10d99c96cf"
-                        data-allow-clear="true"
-                      >
-                        <option></option>
-                        <option value="1">Approved</option>
-                        <option value="2">Pending</option>
-                        <option value="2">In Process</option>
-                        <option value="2">Rejected</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="mb-10">
-                    <label className="form-label fw-semibold">
-                      Member Type:
-                    </label>
-
-                    <div className="d-flex">
-                      <label className="form-check form-check-sm form-check-custom form-check-solid me-5">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value="1"
-                        />
-                        <span className="form-check-label">Author</span>
-                      </label>
-                      <label className="form-check form-check-sm form-check-custom form-check-solid">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          value="2"
-                        />
-                        <span className="form-check-label">Customer</span>
-                      </label>
-                    </div>
-                  </div>
-                  <div className="mb-10">
-                    <label className="form-label fw-semibold">
-                      Notifications:
-                    </label>
-
-                    <div className="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        value=""
-                        name="notifications"
-                      />
-                      <label className="form-check-label">Enabled</label>
-                    </div>
-                  </div>
-                  <div className="d-flex justify-content-end">
-                    <button
-                      type="reset"
-                      className="btn btn-sm btn-light btn-active-light-primary me-2"
-                      data-kt-menu-dismiss="true"
-                    >
-                      Reset
-                    </button>
-                    <button
-                      type="submit"
-                      className="btn btn-sm btn-primary"
-                      data-kt-menu-dismiss="true"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <a
-              href="#"
-              className="btn btn-sm fw-bold btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_create_app"
-            >
-              Create
-            </a>
           </div>
         </div>
       </div>
@@ -243,7 +130,6 @@ const Dashboard = () => {
                     <th className="min-w-100px">Order No.</th>
                     <th>Status</th>
                     <th>Amount</th>
-                    <th className="min-w-100px">Rewards</th>
                     <th className="min-w-100px">Date</th>
                   </tr>
                 </thead>
@@ -272,7 +158,6 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td>{transaction.amount}</td>
-                      <td>{transaction.rewards}</td>
                       <td>{transaction.date}</td>
                     </tr>
                   ))}

@@ -19,38 +19,46 @@ const WelcomePage = () => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
   };
   return (
-    <body className="welcomeBg app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
-      <div className="d-flex flex-column flex-root" id="kt_app_root">
-        <div className="d-flex flex-column flex-center flex-column-fluid">
-          <div className="d-flex flex-column flex-center text-center p-10">
-            <div className="card card-flush w-md-650px py-5">
-              <div className="card-body py-15 py-lg-20">
-                <div className="mb-7">
-                  <a href="/" className="">
-                    <Image alt="Logo" src={Logo} width={226} height={42} />
-                  </a>
+    <div className="app-main flex-column flex-row-fluid" id="kt_app_main">
+      <div className="d-flex flex-column flex-column-fluid">
+        <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
+          <div className="app-container container-xxl d-flex flex-stack">
+            <div className="page-title d-flex flex-column justify-content-center me-3">
+              <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                Upgrade Status
+              </h1>
+              <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li className="breadcrumb-item text-muted">
+                  <Link
+                    href="index.html"
+                    className="text-muted text-hover-primary"
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li className="breadcrumb-item">
+                  <span className="bullet bg-gray-500 w-5px h-2px"></span>
+                </li>
+                <li className="breadcrumb-item text-muted">Welcome</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="kt_app_content" className="app-content flex-column-fluid">
+          <div
+            id="kt_app_content_container"
+            className="app-container container-xxl"
+          >
+            <div className="card">
+              <div className="card-body">
+                <div className="card-px text-center pt-15 pb-15">
+                  <h2 className="fs-2x fw-bold mb-0">
+                    Welcome to Paytonic
+                  </h2>
+                  <p className="text-gray-500 fs-4 fw-semibold py-7">
+                    Fill in the details below to fully activate your account.
+                  </p>
                 </div>
-
-                <h1 className="fw-bolder text-gray-900 mb-5">
-                  Welcome to Paytonic
-                </h1>
-
-                <div className="fw-semibold fs-6 text-gray-500 mb-7">
-                  This is your opportunity to get creative and make a name
-                  <br />
-                  that gives readers an idea
-                </div>
-
-                <div className="mb-0">
-                  <Image
-                    src={WelcomeImage}
-                    className="mw-200 mh-300px theme-light-show"
-                    alt=""
-                    width={300}
-                    height={300}
-                  />
-                </div>
-
                 <form
                   className="form w-100 accordion accordion-icon-toggle"
                   id="kt_accordion_2"
@@ -174,18 +182,20 @@ const WelcomePage = () => {
                     )}
                   </div>
                 </form>
-
-                <div className="mb-0 mt-10">
-                  <Link href="/dashboard" className="btn btn-sm btn-primary">
-                    Proceed To Dashboard
-                  </Link>
-                </div>
+                <Link
+                  href="/dashboard"
+                  className="btn btn-primary er fs-6 px-8 py-4"
+                  data-bs-toggle="modal"
+                  data-bs-target="#kt_modal_upgrade_plan"
+                >
+                  Submit
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 
