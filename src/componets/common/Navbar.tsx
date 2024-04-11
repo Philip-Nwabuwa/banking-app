@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 import MinLogo from '@/assets/logos/main.png'
-import { useState } from 'react'
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -12,6 +13,18 @@ const Navbar = () => {
   const toggleDrawer = () => {
     setDrawerOpen((prevState) => !prevState)
   }
+
+  const pathname = usePathname()
+  console.log(pathname);
+  
+
+  const menuItems = [
+    { path: '/dashboard', title: 'Dashboard' },
+    { path: '/dashboard/transfers', title: 'Transfers' },
+    { path: '/dashboard/bills', title: 'Bills' },
+    { path: '/dashboard/transactions', title: 'Transactions' },
+  ]
+
   return (
     <div
       id="kt_app_header"
@@ -47,30 +60,27 @@ const Navbar = () => {
               id="#kt_header_menu"
               data-kt-menu="true"
             >
-              <div
-                data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                data-kt-menu-placement="bottom-start"
-                className="menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2"
-              >
-                <span className="menu-link">
-                  <Link href={'/dashboard'}>
-                    <span className="menu-title">Dashboard</span>
-                  </Link>
-                  <span className="menu-arrow d-lg-none"></span>
-                </span>
-              </div>
-              <div
-                data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-                data-kt-menu-placement="bottom-start"
-                className="menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2"
-              >
-                <span className="menu-link">
-                  <Link href={'/dashboard/transactions'}>
-                    <span className="menu-title">Transactions</span>
-                  </Link>
-                  <span className="menu-arrow d-lg-none"></span>
-                </span>
-              </div>
+              {menuItems.map((item, index) => (
+                <div
+                  key={index}
+                  data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+                  data-kt-menu-placement="bottom-start"
+                  className={`menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2 `}
+                >
+                  <span className="menu-link">
+                    <Link href={item.path}>
+                      <span
+                        className={`menu-title ${
+                          pathname === item.path ? 'text-active' : ''
+                        }`}
+                      >
+                        {item.title}
+                      </span>
+                    </Link>
+                    <span className="menu-arrow d-lg-none"></span>
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 

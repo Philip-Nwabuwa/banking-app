@@ -13,7 +13,7 @@ const links = [
     icon: 'ki-chart-line-up-2',
     label: 'Accounts',
   },
-  { href: '/dashboard/payout', icon: 'ki-calendar', label: 'Payout' },
+  { href: '/dashboard/transfers', icon: 'ki-calendar', label: 'Transfer' },
   { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
   {
     href: '/dashboard/withdrawals',
