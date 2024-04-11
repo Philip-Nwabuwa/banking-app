@@ -1,7 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
-import Logo from "@/assets/logos/main.png";
-import SubmitButton from "@/componets/common/SubmitBtn";
+import Link from 'next/link'
+import Image from 'next/image'
+import Logo from '@/assets/logos/main.png'
+import SubmitButton from '@/componets/common/SubmitBtn'
 
 const ForgotPasswordPage = () => {
   return (
@@ -83,7 +83,7 @@ const ForgotPasswordPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ForgotPasswordPage;
+export default ForgotPasswordPage

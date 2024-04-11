@@ -1,23 +1,23 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import OtpInput from "react-otp-input";
+import Image from 'next/image'
+import OtpInput from 'react-otp-input'
 
-import Logo from "@/assets/logos/main.png";
-import WelcomeImage from "@/assets/images/welcome.png";
-import Link from "next/link";
-import { useState } from "react";
+import Logo from '@/assets/logos/main.png'
+import WelcomeImage from '@/assets/images/welcome.png'
+import Link from 'next/link'
+import { useState } from 'react'
 
 const WelcomePage = () => {
-  const [emailOtp, setEmailOtp] = useState("");
-  const [authorizationPin, setAuthorizationPin] = useState("");
+  const [emailOtp, setEmailOtp] = useState('')
+  const [authorizationPin, setAuthorizationPin] = useState('')
 
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  console.log(activeIndex);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  console.log(activeIndex)
 
   const toggleAccordion = (index: number) => {
-    setActiveIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
+    setActiveIndex((prevIndex) => (prevIndex === index ? null : index))
+  }
   return (
     <div className="app-main flex-column flex-row-fluid" id="kt_app_main">
       <div className="d-flex flex-column flex-column-fluid">
@@ -52,9 +52,7 @@ const WelcomePage = () => {
             <div className="card">
               <div className="card-body">
                 <div className="card-px text-center pt-15 pb-15">
-                  <h2 className="fs-2x fw-bold mb-0">
-                    Welcome to Paytonic
-                  </h2>
+                  <h2 className="fs-2x fw-bold mb-0">Welcome to Paytonic</h2>
                   <p className="text-gray-500 fs-4 fw-semibold py-7">
                     Fill in the details below to fully activate your account.
                   </p>
@@ -66,7 +64,7 @@ const WelcomePage = () => {
                   <div className="mb-5">
                     <div
                       className={`accordion-header py-3 d-flex ${
-                        activeIndex === 1 ? "show" : "collapsed"
+                        activeIndex === 1 ? 'show' : 'collapsed'
                       }`}
                       onClick={() => toggleAccordion(1)}
                     >
@@ -94,7 +92,7 @@ const WelcomePage = () => {
                   <div className="mb-5">
                     <div
                       className={`accordion-header py-3 d-flex ${
-                        activeIndex === 2 ? "show" : "collapsed"
+                        activeIndex === 2 ? 'show' : 'collapsed'
                       }`}
                       onClick={() => toggleAccordion(2)}
                     >
@@ -119,7 +117,7 @@ const WelcomePage = () => {
                   <div className="mb-5">
                     <div
                       className={`accordion-header py-3 d-flex ${
-                        activeIndex === 3 ? "show" : "collapsed"
+                        activeIndex === 3 ? 'show' : 'collapsed'
                       }`}
                       onClick={() => toggleAccordion(3)}
                     >
@@ -150,7 +148,7 @@ const WelcomePage = () => {
                   <div className="mb-5">
                     <div
                       className={`accordion-header py-3 d-flex ${
-                        activeIndex === 4 ? "show" : "collapsed"
+                        activeIndex === 4 ? 'show' : 'collapsed'
                       }`}
                       onClick={() => toggleAccordion(4)}
                     >
@@ -196,7 +194,7 @@ const WelcomePage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WelcomePage;
+export default WelcomePage

@@ -1,41 +1,41 @@
-"use client";
+'use client'
 
-import Logo from "@/assets/logos/main.png";
-import MinLogo from "@/assets/logos/simple.png";
-import UserImage from "@/assets/images/user.jpg";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Logo from '@/assets/logos/main.png'
+import MinLogo from '@/assets/logos/simple.png'
+import UserImage from '@/assets/images/user.jpg'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const links = [
   {
-    href: "/dashboard/accounts",
-    icon: "ki-chart-line-up-2",
-    label: "Accounts",
+    href: '/dashboard/accounts',
+    icon: 'ki-chart-line-up-2',
+    label: 'Accounts',
   },
-  { href: "/dashboard/payout", icon: "ki-calendar", label: "Payout" },
-  { href: "/dashboard/bills", icon: "ki-security-check", label: "Bills" },
+  { href: '/dashboard/payout', icon: 'ki-calendar', label: 'Payout' },
+  { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
   {
-    href: "/dashboard/withdrawals",
-    icon: "ki-wifi-square",
-    label: "Withdrawals",
+    href: '/dashboard/withdrawals',
+    icon: 'ki-wifi-square',
+    label: 'Withdrawals',
   },
-  { href: "/dashboard/airtime", icon: "ki-rocket", label: "Airtime" },
+  { href: '/dashboard/airtime', icon: 'ki-rocket', label: 'Airtime' },
   {
-    href: "/dashboard/statements",
-    icon: "ki-geolocation",
-    label: "Statements",
+    href: '/dashboard/statements',
+    icon: 'ki-geolocation',
+    label: 'Statements',
   },
-  { href: "/dashboard/reversal", icon: "ki-abstract-28", label: "Reversal" },
-  { href: "/dashboard/pos", icon: "ki-abstract-28", label: "POS" },
-];
+  { href: '/dashboard/reversal', icon: 'ki-abstract-28', label: 'Reversal' },
+  { href: '/dashboard/pos', icon: 'ki-abstract-28', label: 'POS' },
+]
 
 const Sidebar = () => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const isActiveLink = (href: string) => {
-    return pathname === href;
-  };
+    return pathname === href
+  }
 
   return (
     <div
@@ -76,16 +76,16 @@ const Sidebar = () => {
             data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end"
           >
-            <Link href={"/dashboard/settings"}>
+            <Link href={'/dashboard/settings'}>
               <Image
                 src={UserImage}
                 width={100}
                 height={100}
                 alt="user"
                 style={{
-                  width: "50px",
-                  height: "50px",
-                  borderRadius: "100%",
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '100%',
                 }}
               />
             </Link>
@@ -155,7 +155,7 @@ const Sidebar = () => {
                   <Link
                     href={link.href}
                     className={`btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200 ${
-                      isActiveLink(link.href) ? "active" : ""
+                      isActiveLink(link.href) ? 'active' : ''
                     }`}
                     data-kt-button="true"
                   >
@@ -184,7 +184,7 @@ const Sidebar = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

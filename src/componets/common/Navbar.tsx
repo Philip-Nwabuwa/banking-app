@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link'
+import Image from 'next/image'
 
-import MinLogo from "@/assets/logos/main.png";
-import { useState } from "react";
+import MinLogo from '@/assets/logos/main.png'
+import { useState } from 'react'
 
 const Navbar = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const toggleDrawer = () => {
-    setDrawerOpen((prevState) => !prevState);
-  };
+    setDrawerOpen((prevState) => !prevState)
+  }
   return (
     <div
       id="kt_app_header"
@@ -53,7 +53,7 @@ const Navbar = () => {
                 className="menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2"
               >
                 <span className="menu-link">
-                  <Link href={"/dashboard"}>
+                  <Link href={'/dashboard'}>
                     <span className="menu-title">Dashboard</span>
                   </Link>
                   <span className="menu-arrow d-lg-none"></span>
@@ -65,9 +65,9 @@ const Navbar = () => {
                 className="menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2"
               >
                 <span className="menu-link">
-                <Link href={"/dashboard/transactions"}>
-                  <span className="menu-title">Transactions</span>
-                </Link>
+                  <Link href={'/dashboard/transactions'}>
+                    <span className="menu-title">Transactions</span>
+                  </Link>
                   <span className="menu-arrow d-lg-none"></span>
                 </span>
               </div>
@@ -88,11 +88,6 @@ const Navbar = () => {
                 className="h-25px h-lg-30px theme-light-show"
                 width={226}
                 height={60}
-              />
-              <img
-                alt="Logo"
-                src="assets/media/logos/demo23-dark.svg"
-                className="h-20px theme-dark-show"
               />
             </Link>
           </div>
@@ -121,7 +116,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

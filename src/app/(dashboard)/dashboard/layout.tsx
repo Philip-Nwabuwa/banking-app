@@ -1,11 +1,11 @@
-import Footer from "@/componets/common/Footer";
-import Navbar from "@/componets/common/Navbar";
-import Sidebar from "@/componets/common/Sidebar";
+import Footer from '@/componets/common/Footer'
+import Navbar from '@/componets/common/Navbar'
+import Sidebar from '@/componets/common/Sidebar'
 
 const layout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) => {
   return (
     <body
@@ -37,7 +37,7 @@ const layout = ({
         </div>
       </div>
     </body>
-  );
-};
+  )
+}
 
-export default layout;
+export default layout

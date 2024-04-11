@@ -1,89 +1,89 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { SetStateAction, useState } from "react";
+import Link from 'next/link'
+import { SetStateAction, useState } from 'react'
 
 const transactions = [
   {
-    orderNo: "#15317",
-    status: "Successful",
-    amount: "$1,200.00",
+    orderNo: '#15317',
+    status: 'Successful',
+    amount: '$1,200.00',
     rewards: 120,
-    date: "14 Dec 2020, 8:43 pm",
+    date: '14 Dec 2020, 8:43 pm',
   },
   {
-    orderNo: "#15998",
-    status: "Successful",
-    amount: "$79.00",
+    orderNo: '#15998',
+    status: 'Successful',
+    amount: '$79.00',
     rewards: 7,
-    date: "01 Dec 2020, 10:12 am",
+    date: '01 Dec 2020, 10:12 am',
   },
   {
-    orderNo: "#15046",
-    status: "Successful",
-    amount: "$5,500.00",
+    orderNo: '#15046',
+    status: 'Successful',
+    amount: '$5,500.00',
     rewards: 550,
-    date: "12 Nov 2020, 2:01 pm",
+    date: '12 Nov 2020, 2:01 pm',
   },
   {
-    orderNo: "#15917",
-    status: "Pending",
-    amount: "$880.00",
+    orderNo: '#15917',
+    status: 'Pending',
+    amount: '$880.00',
     rewards: 88,
-    date: "21 Oct 2020, 5:54 pm",
+    date: '21 Oct 2020, 5:54 pm',
   },
   {
-    orderNo: "#14404",
-    status: "Successful",
-    amount: "$7,650.00",
+    orderNo: '#14404',
+    status: 'Successful',
+    amount: '$7,650.00',
     rewards: 765,
-    date: "19 Oct 2020, 7:32 am",
+    date: '19 Oct 2020, 7:32 am',
   },
   {
-    orderNo: "#15238",
-    status: "Successful",
-    amount: "$375.00",
+    orderNo: '#15238',
+    status: 'Successful',
+    amount: '$375.00',
     rewards: 37,
-    date: "23 Sep 2020, 12:38 am",
+    date: '23 Sep 2020, 12:38 am',
   },
   {
-    orderNo: "#15929",
-    status: "Successful",
-    amount: "$129.00",
+    orderNo: '#15929',
+    status: 'Successful',
+    amount: '$129.00',
     rewards: 12,
-    date: "11 Sep 2020, 3:18 pm",
+    date: '11 Sep 2020, 3:18 pm',
   },
   {
-    orderNo: "#15445",
-    status: "Rejected",
-    amount: "$450.00",
+    orderNo: '#15445',
+    status: 'Rejected',
+    amount: '$450.00',
     rewards: 45,
-    date: "03 Sep 2020, 1:08 am",
+    date: '03 Sep 2020, 1:08 am',
   },
   {
-    orderNo: "#14575",
-    status: "Pending",
-    amount: "$8,700.00",
+    orderNo: '#14575',
+    status: 'Pending',
+    amount: '$8,700.00',
     rewards: 870,
-    date: "01 Sep 2020, 4:58 pm",
+    date: '01 Sep 2020, 4:58 pm',
   },
-];
+]
 
 const Dashboard = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const transactionsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1)
+  const transactionsPerPage = 5
 
-  const indexOfLastTransaction = currentPage * transactionsPerPage;
-  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const indexOfLastTransaction = currentPage * transactionsPerPage
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage
   const currentTransactions = transactions.slice(
     indexOfFirstTransaction,
     indexOfLastTransaction
-  );
+  )
 
-  const totalPages = Math.ceil(transactions.length / transactionsPerPage);
+  const totalPages = Math.ceil(transactions.length / transactionsPerPage)
 
   const paginate = (pageNumber: SetStateAction<number>) =>
-    setCurrentPage(pageNumber);
+    setCurrentPage(pageNumber)
   return (
     <div className="d-flex flex-column flex-column-fluid">
       <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
@@ -147,11 +147,11 @@ const Dashboard = () => {
                       <td>
                         <span
                           className={`badge badge-light-${
-                            transaction.status === "Successful"
-                              ? "success"
-                              : transaction.status === "Pending"
-                              ? "warning"
-                              : "danger"
+                            transaction.status === 'Successful'
+                              ? 'success'
+                              : transaction.status === 'Pending'
+                                ? 'warning'
+                                : 'danger'
                           }`}
                         >
                           {transaction.status}
@@ -167,7 +167,7 @@ const Dashboard = () => {
             <ul className="pagination mb-10">
               <li
                 className={`page-item previous ${
-                  currentPage === 1 ? "disabled" : ""
+                  currentPage === 1 ? 'disabled' : ''
                 }`}
                 onClick={() => paginate(currentPage - 1)}
               >
@@ -179,7 +179,7 @@ const Dashboard = () => {
                 <li
                   key={i}
                   className={`page-item ${
-                    currentPage === i + 1 ? "active" : ""
+                    currentPage === i + 1 ? 'active' : ''
                   }`}
                   onClick={() => paginate(i + 1)}
                 >
@@ -190,7 +190,7 @@ const Dashboard = () => {
               ))}
               <li
                 className={`page-item next ${
-                  currentPage === totalPages ? "disabled" : ""
+                  currentPage === totalPages ? 'disabled' : ''
                 }`}
                 onClick={() => paginate(currentPage + 1)}
               >
@@ -203,7 +203,7 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

@@ -1,26 +1,25 @@
-"use client"
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-import UserImage from "@/assets/images/300-1.jpg";
+import UserImage from '@/assets/images/300-1.jpg'
 
 const Layout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) => {
-
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const navItems = [
     { label: 'Settings', path: '/dashboard/settings' },
     { label: 'Security', path: '/dashboard/settings/security' },
     { label: 'Referrals', path: '/dashboard/settings/referrals' },
-    { label: 'API Keys', path: '/dashboard/settings/api' }
-  ];
-  
+    { label: 'API Keys', path: '/dashboard/settings/api' },
+  ]
+
   return (
     <div className="d-flex flex-column flex-column-fluid">
       <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
@@ -235,7 +234,7 @@ const Layout = ({
                         <div
                           className="bg-success rounded h-5px"
                           role="progressbar"
-                          style={{ width: "50%" }}
+                          style={{ width: '50%' }}
                           aria-valuenow={50}
                           aria-valuemin={0}
                           aria-valuemax={100}
@@ -247,16 +246,16 @@ const Layout = ({
               </div>
 
               <ul className="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
-              {navItems.map((item, index) => (
-        <li key={index} className="nav-item mt-2">
-          <Link
-            href={item.path}
-            className={`nav-link text-active-primary ms-0 me-10 py-5 ${pathname === item.path ? 'active' : ''}`}
-          >
-            {item.label}
-          </Link>
-        </li>
-      ))}
+                {navItems.map((item, index) => (
+                  <li key={index} className="nav-item mt-2">
+                    <Link
+                      href={item.path}
+                      className={`nav-link text-active-primary ms-0 me-10 py-5 ${pathname === item.path ? 'active' : ''}`}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -265,7 +264,7 @@ const Layout = ({
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

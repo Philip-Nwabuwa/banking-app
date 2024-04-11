@@ -1,42 +1,42 @@
-"use client";
+'use client'
 
-import Logo from "@/assets/logos/main.png";
-import Image from "next/image";
-import { useState } from "react";
+import Logo from '@/assets/logos/main.png'
+import Image from 'next/image'
+import { useState } from 'react'
 import {
   FieldValues,
   SubmitHandler,
   useForm,
   Controller,
   FieldError,
-} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+} from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Check } from "lucide-react";
-import Link from "next/link";
-import RadioButton from "@/componets/common/RadioButton";
-import SubmitButton from "@/componets/common/SubmitBtn";
-import Button from "@/componets/common/Button";
-import { toast } from "sonner";
-import { SignUpSchema } from "@/lib/validation";
-import { useRouter } from "next/navigation";
-import { getPasswordStrength } from "@/lib/utils";
-import { countries } from "@/types/countries";
+import { Check } from 'lucide-react'
+import Link from 'next/link'
+import RadioButton from '@/componets/common/RadioButton'
+import SubmitButton from '@/componets/common/SubmitBtn'
+import Button from '@/componets/common/Button'
+import { toast } from 'sonner'
+import { SignUpSchema } from '@/lib/validation'
+import { useRouter } from 'next/navigation'
+import { getPasswordStrength } from '@/lib/utils'
+import { countries } from '@/types/countries'
 
 const SignupPage = () => {
-  const router = useRouter();
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [accountType, setAccountType] = useState("personal");
+  const router = useRouter()
+  const [currentStep, setCurrentStep] = useState<number>(1)
+  const [passwordVisible, setPasswordVisible] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [accountType, setAccountType] = useState('personal')
 
   const stepsData = [
-    { title: "Account Type", desc: "Select your account type" },
-    { title: "Login Credentials", desc: "Provide your login credentials" },
-    { title: "Personal Info", desc: "Provide your personal info" },
-    { title: "Bussiness Info", desc: "Provide your bussiness info" },
-    { title: "Completed", desc: "Your account is created" },
-  ];
+    { title: 'Account Type', desc: 'Select your account type' },
+    { title: 'Login Credentials', desc: 'Provide your login credentials' },
+    { title: 'Personal Info', desc: 'Provide your personal info' },
+    { title: 'Bussiness Info', desc: 'Provide your bussiness info' },
+    { title: 'Completed', desc: 'Your account is created' },
+  ]
 
   const {
     register,
@@ -46,80 +46,80 @@ const SignupPage = () => {
     control,
   } = useForm({
     resolver: zodResolver(SignUpSchema),
-  });
+  })
 
-  const account = watch("accountType");
-  const password = watch("password");
+  const account = watch('accountType')
+  const password = watch('password')
 
-  const passwordStrengthScore = getPasswordStrength(password);
+  const passwordStrengthScore = getPasswordStrength(password)
 
   const togglePasswordVisibility = () => {
-    setPasswordVisible((prevState) => !prevState);
-  };
+    setPasswordVisible((prevState) => !prevState)
+  }
 
   const handlePrevious = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
-  };
+    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
+  }
 
   const handleNext = () => {
     if (currentStep === 1) {
-      setCurrentStep((prevStep) => prevStep + 1);
+      setCurrentStep((prevStep) => prevStep + 1)
     } else if (currentStep === 2) {
-      const emailValue = watch("email");
-      const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue);
+      const emailValue = watch('email')
+      const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue)
 
-      const passwordValue = watch("password");
-      const passwordStrengthScore = getPasswordStrength(passwordValue);
+      const passwordValue = watch('password')
+      const passwordStrengthScore = getPasswordStrength(passwordValue)
 
-      if (emailValue === "" && passwordValue === "") {
-        toast.error("Email and password is empty.");
-        return;
+      if (emailValue === '' && passwordValue === '') {
+        toast.error('Email and password is empty.')
+        return
       }
 
       if (!isEmailValid) {
-        toast.error("Email format is incorrect.");
-        return;
+        toast.error('Email format is incorrect.')
+        return
       }
 
       if (passwordStrengthScore < 4) {
-        toast.error("Password strength is not sufficient.");
-        return;
+        toast.error('Password strength is not sufficient.')
+        return
       }
-      setCurrentStep(3);
+      setCurrentStep(3)
     } else if (currentStep === 3) {
       // Proceed to Step 4
-      setCurrentStep(4);
+      setCurrentStep(4)
     } else if (currentStep === 4) {
       // Proceed to Step 5
-      setCurrentStep(5);
+      setCurrentStep(5)
     }
-  };
+  }
 
-  const minDate = new Date();
-  minDate.setFullYear(minDate.getFullYear() - 18);
-  const minDateStr = minDate.toISOString().split("T")[0];
+  const minDate = new Date()
+  minDate.setFullYear(minDate.getFullYear() - 18)
+  const minDateStr = minDate.toISOString().split('T')[0]
 
   const filteredStepsData =
-    account === "personal"
+    account === 'personal'
       ? stepsData.filter((step, index) => index !== 3)
-      : stepsData;
+      : stepsData
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log("Form submitted with data:", data);
-    setIsSubmitting(true);
+    console.log('Form submitted with data:', data)
+    setIsSubmitting(true)
     try {
-      setIsSubmitting(false);
-      toast.success("Account created successfully");
+      setIsSubmitting(false)
+      toast.success('Account created successfully')
       setTimeout(() => {
-        setCurrentStep(5);
-      }, 2000);
-      console.log(data);
+        setCurrentStep(5)
+      }, 2000)
+      console.log(data)
     } catch (error) {
-      setIsSubmitting(false);
-      console.error(error);
-      toast.error("Failed to create account");
+      setIsSubmitting(false)
+      console.error(error)
+      toast.error('Failed to create account')
     }
-  };
+  }
 
   return (
     <body className="app-blank">
@@ -145,7 +145,7 @@ const SignupPage = () => {
                     <div
                       key={index + 1}
                       className={`stepper-item ${
-                        currentStep === index + 1 ? "current" : ""
+                        currentStep === index + 1 ? 'current' : ''
                       }`}
                       data-kt-stepper-element="nav"
                     >
@@ -213,7 +213,7 @@ const SignupPage = () => {
                 >
                   <div
                     className={`step-content ${
-                      currentStep === 1 ? "current" : ""
+                      currentStep === 1 ? 'current' : ''
                     }`}
                     data-kt-stepper-element="content"
                   >
@@ -231,7 +231,7 @@ const SignupPage = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please check out{" "}
+                          If you need more info, please check out{' '}
                           <a href="#" className="link-primary fw-bold">
                             Help Page
                           </a>
@@ -250,21 +250,21 @@ const SignupPage = () => {
                                 <RadioButton
                                   id="badge"
                                   value="personal"
-                                  checked={field.value === "personal"}
+                                  checked={field.value === 'personal'}
                                   label="Personal Account"
                                   description="If you need more info, please check it out"
                                   onRadioButtonChange={() =>
-                                    field.onChange("personal")
+                                    field.onChange('personal')
                                   }
                                 />
                                 <RadioButton
                                   id="briefcase"
                                   value="corporate"
-                                  checked={field.value === "corporate"}
+                                  checked={field.value === 'corporate'}
                                   label="Corporate Account"
                                   description="Create corporate account to manage users"
                                   onRadioButtonChange={() =>
-                                    field.onChange("corporate")
+                                    field.onChange('corporate')
                                   }
                                 />
                               </>
@@ -277,7 +277,7 @@ const SignupPage = () => {
 
                   <div
                     className={`step-content ${
-                      currentStep === 2 ? "current" : ""
+                      currentStep === 2 ? 'current' : ''
                     }`}
                     data-kt-stepper-element="content"
                   >
@@ -288,7 +288,7 @@ const SignupPage = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please check out{" "}
+                          If you need more info, please check out{' '}
                           <Link href="/help" className="link-primary fw-bold">
                             Help Page
                           </Link>
@@ -300,10 +300,10 @@ const SignupPage = () => {
                           <input
                             className="form-control bg-transparent"
                             type="email"
-                            {...register("email")}
+                            {...register('email')}
                             placeholder="example@email.com"
                           />
-                          {errors.email && typeof errors.email === "object" && (
+                          {errors.email && typeof errors.email === 'object' && (
                             <p className="text-danger">
                               {(errors.email as FieldError).message}
                             </p>
@@ -314,9 +314,9 @@ const SignupPage = () => {
                             <div className="position-relative mb-3">
                               <input
                                 className="form-control bg-transparent"
-                                type={passwordVisible ? "text" : "password"}
+                                type={passwordVisible ? 'text' : 'password'}
                                 placeholder="Password"
-                                {...register("password")}
+                                {...register('password')}
                               />
                               <span
                                 className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
@@ -338,29 +338,29 @@ const SignupPage = () => {
                                 <div
                                   className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
                                     passwordStrengthScore >= 1
-                                      ? "bg-success"
-                                      : ""
+                                      ? 'bg-success'
+                                      : ''
                                   }`}
                                 ></div>
                                 <div
                                   className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
                                     passwordStrengthScore >= 2
-                                      ? "bg-success"
-                                      : ""
+                                      ? 'bg-success'
+                                      : ''
                                   }`}
                                 ></div>
                                 <div
                                   className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
                                     passwordStrengthScore >= 3
-                                      ? "bg-success"
-                                      : ""
+                                      ? 'bg-success'
+                                      : ''
                                   }`}
                                 ></div>
                                 <div
                                   className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px ${
                                     passwordStrengthScore === 4
-                                      ? "bg-success"
-                                      : ""
+                                      ? 'bg-success'
+                                      : ''
                                   }`}
                                 ></div>
                               </div>
@@ -378,7 +378,7 @@ const SignupPage = () => {
 
                   <div
                     className={`step-content ${
-                      currentStep === 3 ? "current" : ""
+                      currentStep === 3 ? 'current' : ''
                     }`}
                     data-kt-stepper-element="content"
                   >
@@ -389,7 +389,7 @@ const SignupPage = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please check out{" "}
+                          If you need more info, please check out{' '}
                           <Link href="#" className="link-primary fw-bold">
                             Help Page
                           </Link>
@@ -400,16 +400,16 @@ const SignupPage = () => {
                       <div
                         className="mb-10"
                         style={{
-                          display: "flex",
-                          flexDirection: "row",
-                          width: "100%",
-                          justifyContent: "space-between",
-                          gap: "10px",
+                          display: 'flex',
+                          flexDirection: 'row',
+                          width: '100%',
+                          justifyContent: 'space-between',
+                          gap: '10px',
                         }}
                       >
                         <div
                           style={{
-                            width: "100%",
+                            width: '100%',
                           }}
                         >
                           <label className="form-label required">
@@ -418,12 +418,12 @@ const SignupPage = () => {
 
                           <input
                             className="form-control bg-transparent w-100"
-                            {...register("business_name")}
+                            {...register('business_name')}
                           />
                         </div>
                         <div
                           style={{
-                            width: "100%",
+                            width: '100%',
                           }}
                         >
                           <label className="form-label required">
@@ -432,7 +432,7 @@ const SignupPage = () => {
 
                           <input
                             className="form-control bg-transparent"
-                            {...register("business_name")}
+                            {...register('business_name')}
                           />
                         </div>
                       </div>
@@ -466,23 +466,23 @@ const SignupPage = () => {
                         />
                       </div>
 
-                        <div className="col-lg-8 fv-row mb-10 mt-10">
+                      <div className="col-lg-8 fv-row mb-10 mt-10">
                         <label className="form-label required">Country</label>
 
-                          <select
-                            name="country"
-                            aria-label="Select a Country"
-                            data-control="select2"
-                            data-placeholder="Select a country..."
-                            className="form-select bg-transparent"
-                          >
-                            {countries.map((country, index) => (
-                              <option key={index} value={country.value}>
-                                {country.label}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                        <select
+                          name="country"
+                          aria-label="Select a Country"
+                          data-control="select2"
+                          data-placeholder="Select a country..."
+                          className="form-select bg-transparent"
+                        >
+                          {countries.map((country, index) => (
+                            <option key={index} value={country.value}>
+                              {country.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
                       <div className="fv-row mb-10 mt-10">
                         <label className="form-label required">
@@ -511,7 +511,7 @@ const SignupPage = () => {
 
                         <input
                           className="form-control bg-transparent"
-                          {...register("business_descriptor")}
+                          {...register('business_descriptor')}
                         />
 
                         {/* <div className="form-text">
@@ -523,7 +523,7 @@ const SignupPage = () => {
                   </div>
                   <div
                     className={`step-content ${
-                      currentStep === 4 ? "current" : ""
+                      currentStep === 4 ? 'current' : ''
                     }`}
                     data-kt-stepper-element="content"
                   >
@@ -549,7 +549,7 @@ const SignupPage = () => {
 
                         <input
                           className="form-control bg-transparent"
-                          {...register("business_name")}
+                          {...register('business_name')}
                         />
                       </div>
 
@@ -569,7 +569,7 @@ const SignupPage = () => {
 
                         <input
                           className="form-control bg-transparent"
-                          {...register("business_descriptor")}
+                          {...register('business_descriptor')}
                         />
 
                         <div className="form-text">
@@ -589,7 +589,7 @@ const SignupPage = () => {
                           data-placeholder="Select..."
                           data-allow-clear="true"
                           data-hide-search="true"
-                          {...register("business_type")}
+                          {...register('business_type')}
                         >
                           <option></option>
                           <option value="1">S Corporation</option>
@@ -606,7 +606,7 @@ const SignupPage = () => {
                         </label>
                         <textarea
                           className="form-control bg-transparent"
-                          {...register("business_description")}
+                          {...register('business_description')}
                         ></textarea>
                       </div>
 
@@ -617,7 +617,7 @@ const SignupPage = () => {
 
                         <input
                           className="form-control bg-transparent"
-                          {...register("business_email")}
+                          {...register('business_email')}
                         />
                       </div>
                     </div>
@@ -625,7 +625,7 @@ const SignupPage = () => {
 
                   <div
                     className={`step-content ${
-                      currentStep === 5 ? "current" : ""
+                      currentStep === 5 ? 'current' : ''
                     }`}
                     data-kt-stepper-element="content"
                   >
@@ -688,8 +688,8 @@ const SignupPage = () => {
                       )}
                     </div>
                     <div>
-                      {((account === "personal" && currentStep < 3) ||
-                        (account === "corporate" && currentStep < 4)) && (
+                      {((account === 'personal' && currentStep < 3) ||
+                        (account === 'corporate' && currentStep < 4)) && (
                         <Button
                           disabled={isSubmitting}
                           onClick={handleNext}
@@ -699,8 +699,8 @@ const SignupPage = () => {
                         />
                       )}
 
-                      {((account === "personal" && currentStep === 3) ||
-                        (account === "corporate" && currentStep === 4)) && (
+                      {((account === 'personal' && currentStep === 3) ||
+                        (account === 'corporate' && currentStep === 4)) && (
                         <SubmitButton
                           onClick={handleSubmit(onSubmit)}
                           isSubmitting={isSubmitting}
@@ -711,7 +711,7 @@ const SignupPage = () => {
 
                       {currentStep === 5 && (
                         <Button
-                          onClick={() => router.push("/dashboard/welcome")}
+                          onClick={() => router.push('/dashboard/welcome')}
                           text="Continue"
                           iconClass="ki-arrow-right"
                           position="ms-1"
@@ -726,7 +726,7 @@ const SignupPage = () => {
         </div>
       </div>
     </body>
-  );
-};
+  )
+}
 
-export default SignupPage;
+export default SignupPage

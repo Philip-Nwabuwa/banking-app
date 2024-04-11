@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
 interface SubmitButtonProps {
-  isSubmitting?: boolean;
-  disabled?: boolean;
-  text: string;
-  className?: string;
-  onClick?: (data: any) => void;
+  isSubmitting?: boolean
+  disabled?: boolean
+  text: string
+  className?: string
+  onClick?: (data: any) => void
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({
@@ -31,7 +31,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         <span>{text}</span>
       )}
     </button>
-  );
-};
+  )
+}
 
-export default SubmitButton;
+export default SubmitButton

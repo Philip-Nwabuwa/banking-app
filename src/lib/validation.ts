@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 export const LoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6),
-});
+})
 
 export const SignUpSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
@@ -14,4 +14,4 @@ export const SignUpSchema = z.object({
   business_type: z.string().optional(),
   business_description: z.string().optional(),
   accountType: z.enum(['personal', 'corporate']),
-});
+})

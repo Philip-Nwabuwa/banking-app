@@ -1,17 +1,20 @@
-"use client"
+'use client'
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const Transactions = () => {
-  const pathname = usePathname();
+  const pathname = usePathname()
 
   const navItems = [
-    { label: "Bank Transfer", path: "/dashboard/transactions/bank-transfer" },
-    { label: "Paytonic Wallet", path: "/dashboard/transactions/paytonic-wallet" },
-    { label: "Withdraw", path: "/dashboard/transactions/withdraw" },
-    { label: "Deposit", path: "/dashboard/transactions/deposit" },
-  ];
+    { label: 'Bank Transfer', path: '/dashboard/transactions/bank-transfer' },
+    {
+      label: 'Paytonic Wallet',
+      path: '/dashboard/transactions/paytonic-wallet',
+    },
+    { label: 'Withdraw', path: '/dashboard/transactions/withdraw' },
+    { label: 'Deposit', path: '/dashboard/transactions/deposit' },
+  ]
   return (
     <div className="d-flex flex-column flex-column-fluid">
       <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
@@ -48,17 +51,20 @@ const Transactions = () => {
         >
           <div className="card mb-5 mb-xl-10">
             <div className="card-body">
-              <ul style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }} className="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+              <ul
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+                className="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold"
+              >
                 {navItems.map((item, index) => (
                   <li key={index} className="nav-item mt-2">
                     <Link
                       href={item.path}
                       className={`nav-link text-active-primary ms-0 me-10 ${
-                        pathname === item.path ? "active" : ""
+                        pathname === item.path ? 'active' : ''
                       }`}
                     >
                       {item.label}s
@@ -71,7 +77,7 @@ const Transactions = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Transactions;
+export default Transactions

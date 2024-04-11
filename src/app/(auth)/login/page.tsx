@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useState } from "react";
-import Link from "next/link";
-import { toast } from "sonner";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import Image from 'next/image'
+import { useState } from 'react'
+import Link from 'next/link'
+import { toast } from 'sonner'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form'
 
-import Logo from "@/assets/logos/main.png";
-import { LoginSchema } from "@/lib/validation";
-import { useRouter } from "next/navigation";
-import SubmitButton from "@/componets/common/SubmitBtn";
+import Logo from '@/assets/logos/main.png'
+import { LoginSchema } from '@/lib/validation'
+import { useRouter } from 'next/navigation'
+import SubmitButton from '@/componets/common/SubmitBtn'
 
 const LoginPage = () => {
   const {
@@ -19,29 +19,29 @@ const LoginPage = () => {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(LoginSchema),
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [passwordVisible, setPasswordVisible] = useState(false);
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [passwordVisible, setPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
-  const router = useRouter();
+    setPasswordVisible(!passwordVisible)
+  }
+  const router = useRouter()
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
-      setIsSubmitting(false);
-      toast.success("Login successful!");
-      console.log(data);
+      setIsSubmitting(false)
+      toast.success('Login successful!')
+      console.log(data)
       setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
+        router.push('/dashboard')
+      }, 2000)
     } catch (error) {
-      setIsSubmitting(false);
-      toast.error("An error occurred. Please try again later.");
+      setIsSubmitting(false)
+      toast.error('An error occurred. Please try again later.')
     }
-  };
+  }
   return (
     <body className="app-blank signinImage h-100">
       <div className="d-flex flex-column flex-root">
@@ -79,19 +79,19 @@ const LoginPage = () => {
                       type="email"
                       placeholder="Email"
                       className={`form-control bg-transparent ${
-                        errors.password ? "is-invalid" : ""
+                        errors.password ? 'is-invalid' : ''
                       }`}
-                      {...register("email")}
+                      {...register('email')}
                     />
                   </div>
                   <div className="fv-row mb-3 position-relative">
                     <input
-                      type={passwordVisible ? "text" : "password"}
+                      type={passwordVisible ? 'text' : 'password'}
                       placeholder="Password"
                       className={`form-control bg-transparent ${
-                        errors.password ? "is-invalid" : ""
+                        errors.password ? 'is-invalid' : ''
                       }`}
-                      {...register("password")}
+                      {...register('password')}
                     />
                     <span
                       className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
@@ -121,7 +121,7 @@ const LoginPage = () => {
                     />
                   </div>
                   <div className="text-gray-500 text-center fw-semibold fs-6">
-                    Not a Member yet?{" "}
+                    Not a Member yet?{' '}
                     <Link href="/signup" className="link-primary">
                       Sign up
                     </Link>
@@ -149,7 +149,7 @@ const LoginPage = () => {
         </div>
       </div>
     </body>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage
