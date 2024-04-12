@@ -14,9 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Check } from 'lucide-react'
 import Link from 'next/link'
-import RadioButton from '@/componets/common/RadioButton'
-import SubmitButton from '@/componets/common/SubmitBtn'
-import Button from '@/componets/common/Button'
+import RadioButton from '@/components/common/RadioButton'
+import SubmitButton from '@/components/common/SubmitBtn'
+import Button from '@/components/common/Button'
 import { toast } from 'sonner'
 import { SignUpSchema } from '@/lib/validation'
 import { useRouter } from 'next/navigation'
@@ -712,7 +712,7 @@ const SignupPage = () => {
                       {currentStep === 5 && (
                         <Button
                           onClick={() => router.push('/dashboard/welcome')}
-                          text="Continue"
+                          text="Proceed to Dashboard"
                           iconClass="ki-arrow-right"
                           position="ms-1"
                         />

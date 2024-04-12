@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import Navigation from '@/componets/common/Navigation'
+import Navigation from '@/components/common/Navigation'
 
 const BillsLayout = ({
   children,

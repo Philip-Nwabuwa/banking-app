@@ -15,8 +15,7 @@ const Navbar = () => {
   }
 
   const pathname = usePathname()
-  console.log(pathname);
-  
+  console.log(pathname)
 
   const menuItems = [
     { path: '/dashboard', title: 'Dashboard' },

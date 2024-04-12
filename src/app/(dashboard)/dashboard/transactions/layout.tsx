@@ -1,6 +1,6 @@
 'use client'
 
-import Navigation from '@/componets/common/Navigation'
+import Navigation from '@/components/common/Navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

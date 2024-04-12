@@ -1,6 +1,6 @@
-import Footer from '@/componets/common/Footer'
-import Navbar from '@/componets/common/Navbar'
-import Sidebar from '@/componets/common/Sidebar'
+import Footer from '@/components/common/Footer'
+import Navbar from '@/components/common/Navbar'
+import Sidebar from '@/components/common/Sidebar'
 
 const layout = ({
   children,

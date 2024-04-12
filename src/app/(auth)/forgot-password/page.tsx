@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Logo from '@/assets/logos/main.png'
-import SubmitButton from '@/componets/common/SubmitBtn'
+import SubmitButton from '@/components/common/SubmitBtn'
 
 const ForgotPasswordPage = () => {
   return (

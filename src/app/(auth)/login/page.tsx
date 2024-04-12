@@ -10,7 +10,7 @@ import { useForm, SubmitHandler, FieldValues } from 'react-hook-form'
 import Logo from '@/assets/logos/main.png'
 import { LoginSchema } from '@/lib/validation'
 import { useRouter } from 'next/navigation'
-import SubmitButton from '@/componets/common/SubmitBtn'
+import SubmitButton from '@/components/common/SubmitBtn'
 
 const LoginPage = () => {
   const {
