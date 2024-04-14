@@ -85,6 +85,11 @@
   height: max-content;
 }
 
+.erorrBg {
+  background-image: url('../assets/images/404-Error-Page.jpg');
+  height: max-content;
+}
+
 .inputStyle {
   width: 3rem !important;
   height: 3rem;

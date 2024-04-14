@@ -6,29 +6,8 @@ import UserImage from '@/assets/images/user.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { sidebarLinks } from '@/types/sidebar-links'
 
-const links = [
-  {
-    href: '/dashboard/accounts',
-    icon: 'ki-chart-line-up-2',
-    label: 'Accounts',
-  },
-  { href: '/dashboard/transfers', icon: 'ki-calendar', label: 'Transfer' },
-  { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
-  {
-    href: '/dashboard/withdrawals',
-    icon: 'ki-wifi-square',
-    label: 'Withdrawals',
-  },
-  { href: '/dashboard/airtime', icon: 'ki-rocket', label: 'Airtime' },
-  {
-    href: '/dashboard/statements',
-    icon: 'ki-geolocation',
-    label: 'Statements',
-  },
-  { href: '/dashboard/reversal', icon: 'ki-abstract-28', label: 'Reversal' },
-  { href: '/dashboard/pos', icon: 'ki-abstract-28', label: 'POS' },
-]
 
 const Sidebar = () => {
   const pathname = usePathname()
@@ -155,7 +134,7 @@ const Sidebar = () => {
               data-kt-buttons="true"
               data-kt-buttons-target="[data-kt-button]"
             >
-              {links.map((link, index) => (
+              {sidebarLinks.map((link, index) => (
                 <div className="col mb-4" key={index}>
                   <Link
                     href={link.href}

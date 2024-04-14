@@ -17,9 +17,9 @@ const Navbar = () => {
 
   const links = [
     {
-      href: '/dashboard/accounts',
+      href: '/dashboard/transactions/deposit',
       icon: 'ki-chart-line-up-2',
-      label: 'Accounts',
+      label: 'Deposit',
     },
     { href: '/dashboard/transfers', icon: 'ki-calendar', label: 'Transfer' },
     { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
@@ -28,7 +28,7 @@ const Navbar = () => {
       icon: 'ki-wifi-square',
       label: 'Withdrawals',
     },
-    { href: '/dashboard/bills/airtime', icon: 'ki-rocket', label: 'Airtime' },
+    { href: '/dashboard/transactions', icon: 'ki-rocket', label: 'Transactions' },
     {
       href: '/dashboard/statements',
       icon: 'ki-geolocation',
