@@ -1,7 +1,10 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { SetStateAction, useState } from 'react'
+
+import Card from '@/assets/images/credit-card.png'
 
 const transactions = [
   {
@@ -114,6 +117,39 @@ const Dashboard = () => {
           id="kt_app_content_container"
           className="app-container container-xxl"
         >
+          <div className="col-xl-8 mb-5 mb-xl-10">
+            <div className="card card-custom bg-body border-0 h-md-100">
+              <div className="card-body d-flex justify-content-center flex-wrap ps-xl-15 pe-0">
+                <div className="flex-grow-1 mt-2 me-9 me-md-0">
+                  <div className="position-relative text-gray-800 fs-1 z-index-2 fw-bold mb-5">
+                    Upgrade Your Account
+                  </div>
+                  <span className="text-gray-600 fw-semibold fs-6 mb-6 d-block">
+                    Upgrade your account to access all features of Paytonic.
+                    <br />
+                    by submitting your BVN and other details.
+                  </span>
+                  <div className="mb-7">
+                    <Link
+                      href="/welcome"
+                      className="btn btn-sm btn-primary fw-semibold me-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#kt_modal_upgrade_plan"
+                    >
+                      Upgrade Now
+                    </Link>
+                  </div>
+                </div>
+                <Image
+                  src={Card}
+                  className="h-175px me-15"
+                  alt="Card image"
+                  width={175}
+                  height={175}
+                />
+              </div>
+            </div>
+          </div>
           <div className="card pt-4 mb-6 mb-xl-9">
             <div className="card-header border-0">
               <div className="card-title">

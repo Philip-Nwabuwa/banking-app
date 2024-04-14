@@ -105,7 +105,6 @@ const SignupPage = () => {
       : stepsData
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    console.log('Form submitted with data:', data)
     setIsSubmitting(true)
     try {
       setIsSubmitting(false)
@@ -113,7 +112,6 @@ const SignupPage = () => {
       setTimeout(() => {
         setCurrentStep(5)
       }, 2000)
-      console.log(data)
     } catch (error) {
       setIsSubmitting(false)
       console.error(error)

@@ -33,9 +33,8 @@ const LoginPage = () => {
     try {
       setIsSubmitting(false)
       toast.success('Login successful!')
-      console.log(data)
       setTimeout(() => {
-        router.push('/dashboard')
+        router.replace('/dashboard')
       }, 2000)
     } catch (error) {
       setIsSubmitting(false)
@@ -122,7 +121,7 @@ const LoginPage = () => {
                   </div>
                   <div className="text-gray-500 text-center fw-semibold fs-6">
                     Not a Member yet?{' '}
-                    <Link href="/signup" className="link-primary">
+                    <Link href="/signup" replace className="link-primary">
                       Sign up
                     </Link>
                   </div>

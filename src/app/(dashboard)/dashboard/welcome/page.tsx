@@ -13,7 +13,6 @@ const WelcomePage = () => {
   const [authorizationPin, setAuthorizationPin] = useState('')
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  console.log(activeIndex)
 
   const toggleAccordion = (index: number) => {
     setActiveIndex((prevIndex) => (prevIndex === index ? null : index))

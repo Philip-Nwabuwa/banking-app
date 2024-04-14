@@ -66,14 +66,11 @@ const BankTransfer = () => {
   }
 
   const handleBankSelect = (bankName: string) => {
-    console.log(selectedBank)
-
     setSelectedBank(bankName)
   }
 
   const onSubmit = (data: any) => {
     try {
-      console.log('Form data:', data)
       Swal.fire({
         text: 'Transaction Successful.',
         icon: 'success',
@@ -214,7 +211,7 @@ const BankTransfer = () => {
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">Philip Nwabuwa</p>
+                    <p className="tw-font-bold tw-truncate">John Doe</p>
                   </div>
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Bank:</p>
@@ -222,7 +219,7 @@ const BankTransfer = () => {
                   </div>
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Account Number:</p>
-                    <p className="tw-font-bold">2216720747</p>
+                    <p className="tw-font-bold">123456789</p>
                   </div>
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Description:</p>

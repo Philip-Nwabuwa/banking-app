@@ -53,7 +53,7 @@ const Sidebar = () => {
         className="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8"
         id="kt_app_sidebar_logo"
       >
-        <Link href="/dashboard">
+        <Link href="/dashboard" replace>
           <Image
             alt="Logo"
             src={Logo}
@@ -76,7 +76,7 @@ const Sidebar = () => {
             data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end"
           >
-            <Link href={'/dashboard/settings'}>
+            <Link href={'/dashboard/settings'} replace>
               <Image
                 src={UserImage}
                 width={100}
@@ -154,6 +154,7 @@ const Sidebar = () => {
                 <div className="col mb-4" key={index}>
                   <Link
                     href={link.href}
+                    replace
                     className={`btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200 ${
                       isActiveLink(link.href) ? 'active' : ''
                     }`}
@@ -177,6 +178,7 @@ const Sidebar = () => {
         <div className="app-footer-item">
           <Link
             href="/dashboard/settings"
+            replace
             className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
           >
             <i className="ki-outline ki-setting-2 fs-2"></i>

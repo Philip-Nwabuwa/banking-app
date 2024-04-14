@@ -28,6 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({ pathname, navItems }) => {
               <li key={index} className="nav-item mt-2">
                 <Link
                   href={item.path}
+                  replace
                   className={`nav-link text-active-primary ms-0 me-10 ${
                     pathname === item.path ? 'active' : ''
                   }`}

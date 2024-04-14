@@ -21,17 +21,23 @@ import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-const AirtimeNames = [
-  { name: 'Airtel' },
-  { name: 'Mtn' },
-  { name: 'Glo' },
-  { name: '9mobile' },
+const BettingProviders = [
+  { name: 'Bet9ja' },
+  { name: 'NairaBet' },
+  { name: 'SportyBet Nigeria' },
+  { name: 'BetKing' },
+  { name: '1xBet Nigeria' },
+  { name: 'Merrybet' },
+  { name: 'SureBet247' },
+  { name: 'Betway Nigeria' },
+  { name: 'AccessBET' },
+  { name: 'BetBonanza' },
 ] as const
 
-const Airtime = () => {
+const Betting = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [selectedNetwork, setSelectedNetwork] = useState(
-    'Please select a network provider'
+  const [selectedBettingProvider, setSelectedBettingProvider] = useState(
+    'Please select a betting account'
   )
 
   const [otpValue, setOtpValue] = useState('')
@@ -50,8 +56,8 @@ const Airtime = () => {
     }
   }
 
-  const handleBankSelect = (NetworkName: string) => {
-    setSelectedNetwork(NetworkName)
+  const handleBankSelect = (bettingProvider: string) => {
+    setSelectedBettingProvider(bettingProvider)
   }
 
   const onSubmit = (data: any) => {
@@ -89,7 +95,7 @@ const Airtime = () => {
             aria-controls="kt_account_profile_details"
           >
             <div className="card-title m-0">
-              <h3 className="fw-bold m-0">Airtime</h3>
+              <h3 className="fw-bold m-0">Betting</h3>
             </div>
           </div>
 
@@ -108,14 +114,14 @@ const Airtime = () => {
               >
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                    Select Network
+                    Select Provider
                   </label>
 
                   <div className="col-lg-8 fv-row">
                     <Popover>
                       <PopoverTrigger asChild>
                         <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                          {selectedNetwork}
+                          {selectedBettingProvider}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
@@ -125,7 +131,7 @@ const Airtime = () => {
                           <CommandList>
                             <CommandEmpty>No results found.</CommandEmpty>
                             <CommandGroup>
-                              {AirtimeNames.map((item) => (
+                              {BettingProviders.map((item) => (
                                 <CommandItem key={item.name}>
                                   <p
                                     onClick={() => handleBankSelect(item.name)}
@@ -144,14 +150,14 @@ const Airtime = () => {
                 </div>
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                    Phone Number
+                    User ID.
                   </label>
 
                   <div className="col-lg-8 fv-row">
                     <input
                       type="number"
                       className="form-control form-control-lg form-control-solid"
-                      placeholder="Please provide the phone number"
+                      placeholder="Please provide the User ID."
                     />
                   </div>
                 </div>
@@ -174,7 +180,7 @@ const Airtime = () => {
                 data-kt-stepper-element="content"
               >
                 <div className="tw-text-center tw-text-2xl tw-font-bold tw-capitalize">
-                  Confirm the Phone Number before transfer.
+                  Confirm the User ID before transfer.
                 </div>
                 <div className="tw-text-center tw-py-4 text-xl">
                   Amount(NGN):
@@ -182,8 +188,12 @@ const Airtime = () => {
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
-                    <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">08000000000</p>
+                    <p>User ID:</p>
+                    <p className="tw-font-bold tw-truncate">123456789</p>
+                  </div>
+                  <div className="tw-flex tw-justify-between tw-items-center">
+                    <p>Betting Provider:</p>
+                    <p className="tw-font-bold">Betway</p>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
@@ -261,4 +271,4 @@ const Airtime = () => {
   )
 }
 
-export default Airtime
+export default Betting

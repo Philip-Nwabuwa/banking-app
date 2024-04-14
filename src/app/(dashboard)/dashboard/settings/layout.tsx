@@ -35,6 +35,7 @@ const Layout = ({
               <li className="breadcrumb-item text-muted">
                 <Link
                   href="/dashboard"
+                  replace
                   className="text-muted text-hover-primary"
                 >
                   Dashboard
@@ -250,6 +251,7 @@ const Layout = ({
                   <li key={index} className="nav-item mt-2">
                     <Link
                       href={item.path}
+                      replace
                       className={`nav-link text-active-primary ms-0 me-10 py-5 ${pathname === item.path ? 'active' : ''}`}
                     >
                       {item.label}

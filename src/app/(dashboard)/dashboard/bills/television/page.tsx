@@ -21,18 +21,45 @@ import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-const AirtimeNames = [
-  { name: 'Airtel' },
-  { name: 'Mtn' },
-  { name: 'Glo' },
-  { name: '9mobile' },
+const AirtimeNames = [{ name: 'Dstv' }, { name: 'Gotv' }] as const
+
+const Plans = [
+  {
+    plans: [
+      'DStv Access - ₦2,000/month',
+      'DStv Family - ₦4,000/month',
+      'DStv Compact - ₦7,000/month',
+      'DStv Compact Plus - ₦12,000/month',
+      'DStv Premium - ₦18,400/month',
+    ],
+  },
+  {
+    plans: [
+      'GOtv Lite - ₦400/month',
+      'GOtv Value - ₦1,250/month',
+      'GOtv Plus - ₦1,900/month',
+      'GOtv Max - ₦3,200/month',
+    ],
+  },
 ] as const
 
-const Airtime = () => {
+const Television = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [selectedNetwork, setSelectedNetwork] = useState(
-    'Please select a network provider'
+  const [selectedTelevision, setSelectedTelevision] = useState(
+    'Please select a television provider'
   )
+  const [selectedPlan, setSelectedPlan] = useState('Please select a Plan')
+
+  const renderPlans = () => {
+    switch (selectedTelevision) {
+      case 'Dstv':
+        return Plans[0].plans
+      case 'Gotv':
+        return Plans[1].plans
+      default:
+        return []
+    }
+  }
 
   const [otpValue, setOtpValue] = useState('')
 
@@ -50,8 +77,12 @@ const Airtime = () => {
     }
   }
 
-  const handleBankSelect = (NetworkName: string) => {
-    setSelectedNetwork(NetworkName)
+  const handleNetworkSelect = (NetworkName: string) => {
+    setSelectedTelevision(NetworkName)
+  }
+
+  const handlePlanSelect = (NetworkPlanName: string) => {
+    setSelectedPlan(NetworkPlanName)
   }
 
   const onSubmit = (data: any) => {
@@ -89,7 +120,7 @@ const Airtime = () => {
             aria-controls="kt_account_profile_details"
           >
             <div className="card-title m-0">
-              <h3 className="fw-bold m-0">Airtime</h3>
+              <h3 className="fw-bold m-0">Television</h3>
             </div>
           </div>
 
@@ -108,14 +139,14 @@ const Airtime = () => {
               >
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                    Select Network
+                    Select television provider
                   </label>
 
                   <div className="col-lg-8 fv-row">
                     <Popover>
                       <PopoverTrigger asChild>
                         <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                          {selectedNetwork}
+                          {selectedTelevision}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
@@ -128,7 +159,9 @@ const Airtime = () => {
                               {AirtimeNames.map((item) => (
                                 <CommandItem key={item.name}>
                                   <p
-                                    onClick={() => handleBankSelect(item.name)}
+                                    onClick={() =>
+                                      handleNetworkSelect(item.name)
+                                    }
                                     className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                   >
                                     {item.name}
@@ -142,29 +175,55 @@ const Airtime = () => {
                     </Popover>
                   </div>
                 </div>
+                {selectedTelevision !==
+                  'Please select a television provider' && (
+                  <div className="row mb-6">
+                    <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                      Select Plan
+                    </label>
+
+                    <div className="col-lg-8 fv-row">
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                            {selectedPlan}
+                            <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="tw-p-0" align="start">
+                          <Command>
+                            <CommandInput placeholder="Search..." />
+                            <CommandList>
+                              <CommandEmpty>No results found.</CommandEmpty>
+                              <CommandGroup>
+                                {renderPlans().map((item, index) => (
+                                  <CommandItem key={index}>
+                                    <p
+                                      onClick={() => handlePlanSelect(item)}
+                                      className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                    >
+                                      {item}
+                                    </p>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                )}
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                    Phone Number
+                    IUC Number
                   </label>
 
                   <div className="col-lg-8 fv-row">
                     <input
                       type="number"
                       className="form-control form-control-lg form-control-solid"
-                      placeholder="Please provide the phone number"
-                    />
-                  </div>
-                </div>
-                <div className="row mb-6">
-                  <label className="col-lg-4 col-form-label fw-semibold fs-6">
-                    <span className="required">Amount</span>
-                  </label>
-
-                  <div className="col-lg-8 fv-row">
-                    <input
-                      type="number"
-                      className="form-control form-control-lg form-control-solid"
-                      placeholder="Amount to send"
+                      placeholder="Please provide the IUC number"
                     />
                   </div>
                 </div>
@@ -174,16 +233,16 @@ const Airtime = () => {
                 data-kt-stepper-element="content"
               >
                 <div className="tw-text-center tw-text-2xl tw-font-bold tw-capitalize">
-                  Confirm the Phone Number before transfer.
+                  Confirm the IUC Number before transfer.
                 </div>
                 <div className="tw-text-center tw-py-4 text-xl">
                   Amount(NGN):
-                  <span className="tw-text-3xl tw-font-bold">1,000</span>
+                  <span className="tw-text-3xl tw-font-bold">12,000</span>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
-                    <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">08000000000</p>
+                    <p>IUC:</p>
+                    <p className="tw-font-bold tw-truncate">123456789</p>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
@@ -261,4 +320,4 @@ const Airtime = () => {
   )
 }
 
-export default Airtime
+export default Television
