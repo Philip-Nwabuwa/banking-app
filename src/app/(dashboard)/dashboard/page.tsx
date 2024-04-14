@@ -131,10 +131,9 @@ const Dashboard = () => {
                   </span>
                   <div className="mb-7">
                     <Link
-                      href="/welcome"
+                      href="/dashboard/welcome"
+                      replace
                       className="btn btn-sm btn-primary fw-semibold me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#kt_modal_upgrade_plan"
                     >
                       Upgrade Now
                     </Link>
@@ -166,7 +165,7 @@ const Dashboard = () => {
                     <th className="min-w-100px">Order No.</th>
                     <th>Status</th>
                     <th>Amount</th>
-                    <th className="min-w-100px">Date</th>
+                    <th className="min-w-160px">Date</th>
                   </tr>
                 </thead>
                 <tbody className="fs-6 fw-semibold text-gray-600">

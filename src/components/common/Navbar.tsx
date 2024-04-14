@@ -5,14 +5,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import MinLogo from '@/assets/logos/simple.png'
 import Logo from '@/assets/logos/main.png'
 import UserImage from '@/assets/images/user.jpg'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
-
-  console.log(sidebarVisible)
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible)
@@ -122,10 +119,13 @@ const Navbar = () => {
               <i className="ki-outline ki-abstract-14 fs-2"></i>
             </div>
             {sidebarVisible && (
-              <div onClick={toggleSidebar} className="drawer-overlay"></div>
+              <div
+                onClick={toggleSidebar}
+                className="drawer-overlay lg:tw-hidden"
+              ></div>
             )}
             <div
-              className={`${sidebarVisible ? 'tw-w-[275px] tw-fixed tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
+              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
             >
               <div>
                 <div
@@ -137,8 +137,8 @@ const Navbar = () => {
                       alt="Logo"
                       src={Logo}
                       className="h-25px h-lg-30px theme-light-show"
-                      width={226}
-                      height={60}
+                      width={150}
+                      height={50}
                     />
                   </Link>
 
@@ -172,7 +172,7 @@ const Navbar = () => {
                 </div>
 
                 <div
-                  className="flex-column-fluid px-4 px-lg-8 py-4"
+                  className="flex-column-fluid px-5 px-lg-8 py-4"
                   id="kt_app_sidebar_nav"
                 >
                   <div
@@ -257,8 +257,8 @@ const Navbar = () => {
                 alt="Logo"
                 src={Logo}
                 className="h-25px h-lg-30px theme-light-show"
-                width={226}
-                height={60}
+                width={150}
+                height={50}
               />
             </Link>
           </div>

@@ -29,10 +29,11 @@ const WelcomePage = () => {
               <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <li className="breadcrumb-item text-muted">
                   <Link
-                    href="index.html"
+                    href="/dashboard"
+                    replace
                     className="text-muted text-hover-primary"
                   >
-                    Home
+                    Dashboard
                   </Link>
                 </li>
                 <li className="breadcrumb-item">
@@ -60,6 +61,37 @@ const WelcomePage = () => {
                   className="form w-100 accordion accordion-icon-toggle"
                   id="kt_accordion_2"
                 >
+                  <div className="card card-flush py-4">
+                    <div className="card-header">
+                      <div className="card-title">
+                        <h2>Identification</h2>
+                      </div>
+                    </div>
+                    <div className="card-body pt-0">
+                      <div className="fv-row mb-2">
+                        <div
+                          className="dropzone"
+                          id="kt_ecommerce_add_product_media"
+                        >
+                          <div className="dz-message needsclick">
+                            <i className="ki-outline ki-file-up text-primary fs-3x"></i>
+                            <div className="ms-4">
+                              <h3 className="fs-5 fw-bold text-gray-900 mb-1">
+                                Drop file here or click to upload.
+                              </h3>
+                              <span className="fs-7 fw-semibold text-gray-500">
+                                Upload only 1 file at a time.
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-muted fs-7">
+                        image size must be 1000x1000 and format must be jpg or
+                        png.
+                      </div>
+                    </div>
+                  </div>
                   <div className="mb-5">
                     <div
                       className={`accordion-header py-3 d-flex ${

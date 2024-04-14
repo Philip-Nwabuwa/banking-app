@@ -34,7 +34,7 @@ const Sidebar = () => {
   const pathname = usePathname()
 
   const isActiveLink = (href: string) => {
-    return pathname === href
+    return pathname.startsWith(href)
   }
 
   return (
@@ -58,8 +58,8 @@ const Sidebar = () => {
             alt="Logo"
             src={Logo}
             className="h-25px h-lg-30px theme-light-show"
-            width={226}
-            height={60}
+            width={180}
+            height={50}
           />
 
           {/* <img
@@ -83,13 +83,18 @@ const Sidebar = () => {
                 height={100}
                 alt="user"
                 style={{
-                  width: '50px',
-                  height: '50px',
+                  width: '45px',
+                  height: '45px',
                   borderRadius: '100%',
                 }}
               />
             </Link>
-            <div className="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
+            <div
+              className="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px mt-n3"
+              style={{
+                marginLeft: '-0.8rem',
+              }}
+            ></div>
           </div>
         </div>
       </div>
