@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/plugins.bundle.js"
+    "src/app/plugins.bundle.js",
+    "tailwind.config.js"
   ],
   "exclude": ["node_modules"]
 }
