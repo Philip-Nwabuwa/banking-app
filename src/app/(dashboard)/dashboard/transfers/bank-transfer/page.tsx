@@ -17,12 +17,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ArrowDown, CheckIcon, ChevronDownIcon } from 'lucide-react'
+import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 
 const BankNames = [
   { name: 'First Bank of Nigeria' },
@@ -45,23 +43,17 @@ const bankTransferSchema = z.object({
   authorizationPin: z.string(),
 })
 
-type FormFields = z.infer<typeof bankTransferSchema>
-
 const BankTransfer = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [selectedBank, setSelectedBank] = useState(
     'Please select a bank account'
   )
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    control,
-  } = useForm({
-    resolver: zodResolver(bankTransferSchema),
-  })
+  const [otpValue, setOtpValue] = useState('')
+
+  const handleOtpChange = (otp: string) => {
+    setOtpValue(otp)
+  }
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
@@ -72,8 +64,6 @@ const BankTransfer = () => {
       setCurrentStep((prevStep) => prevStep + 1)
     }
   }
-
-  console.log(errors)
 
   const handleBankSelect = (bankName: string) => {
     console.log(selectedBank)
@@ -126,7 +116,7 @@ const BankTransfer = () => {
             className="collapse show"
           >
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={onSubmit}
               id="kt_account_profile_details_form"
               className="form card-body border-top p-9"
             >
@@ -156,7 +146,6 @@ const BankTransfer = () => {
                               {BankNames.map((item) => (
                                 <CommandItem key={item.name}>
                                   <p
-                                    {...register('bankName')}
                                     onClick={() => handleBankSelect(item.name)}
                                     className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                   >
@@ -181,7 +170,6 @@ const BankTransfer = () => {
                       type="number"
                       className="form-control form-control-lg form-control-solid"
                       placeholder="Please provide the account number"
-                      {...register('accountNumber')}
                     />
                   </div>
                 </div>
@@ -195,7 +183,6 @@ const BankTransfer = () => {
                       type="number"
                       className="form-control form-control-lg form-control-solid"
                       placeholder="Amount to send"
-                      {...register('amount')}
                     />
                   </div>
                 </div>
@@ -209,7 +196,6 @@ const BankTransfer = () => {
                       type="text"
                       className="form-control form-control-lg form-control-solid"
                       placeholder="Purpose of this transfer"
-                      {...register('narration')}
                     />
                   </div>
                 </div>
@@ -260,20 +246,14 @@ const BankTransfer = () => {
                   <p className="tw-font-bold tw-text-xl">
                     Provide Pin to authorize payment.
                   </p>
-                  <Controller
-                    name="authorizationPin"
-                    control={control}
-                    defaultValue=""
-                    render={({ field }) => (
-                      <OtpInput
-                        inputStyle="inputStyle"
-                        value={field.value}
-                        onChange={(value) => field.onChange(value)}
-                        inputType="password"
-                        numInputs={4}
-                        renderInput={(props) => <input {...props} />}
-                      />
-                    )}
+
+                  <OtpInput
+                    inputStyle="inputStyle"
+                    value={otpValue}
+                    onChange={handleOtpChange}
+                    inputType="password"
+                    numInputs={4}
+                    renderInput={(props) => <input {...props} />}
                   />
                 </div>
               </div>
