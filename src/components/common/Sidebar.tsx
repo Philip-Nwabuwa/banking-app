@@ -8,7 +8,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/types/sidebar-links'
 
-
 const Sidebar = () => {
   const pathname = usePathname()
 

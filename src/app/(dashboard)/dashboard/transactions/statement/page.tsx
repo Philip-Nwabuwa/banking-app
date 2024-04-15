@@ -1,50 +1,55 @@
-"use client"
+'use client'
 
-import Charts from '@/components/common/Charts';
+import Charts from '@/components/common/Charts'
 import { StatementType, StatementsData } from '@/types/statements'
 import Link from 'next/link'
-import { useState } from 'react';
+import { useState } from 'react'
 
 const Statement = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedStatus, setSelectedStatus] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 5
 
   const sortedStatements = StatementsData.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB.getTime() - dateA.getTime();
-  });
+    const dateA = new Date(a.date)
+    const dateB = new Date(b.date)
+    return dateB.getTime() - dateA.getTime()
+  })
 
-  const filteredStatements: StatementType[]  = sortedStatements.filter((item) => {
-    const matchesSearchTerm =
-      item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.amount.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredStatements: StatementType[] = sortedStatements.filter(
+    (item) => {
+      const matchesSearchTerm =
+        item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.amount.toLowerCase().includes(searchTerm.toLowerCase())
 
-    if (selectedStatus === 'all') {
-      return matchesSearchTerm;
-    } else {
-      return matchesSearchTerm && item.status === selectedStatus;
+      if (selectedStatus === 'all') {
+        return matchesSearchTerm
+      } else {
+        return matchesSearchTerm && item.status === selectedStatus
+      }
     }
-  });
+  )
 
-  const totalPages = Math.ceil(filteredStatements.length / itemsPerPage);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredStatements.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredStatements.length / itemsPerPage)
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentItems = filteredStatements.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  )
 
   const paginate = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
+    setCurrentPage(pageNumber)
+  }
   return (
     <div id="kt_app_content" className="app-content flex-column-fluid">
       <div
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        {/* <Charts/> */}
+        <Charts />
         <div className="card card-flush">
           <div className="card-header align-items-center py-5 gap-2 gap-md-5">
             <div className="card-title">
@@ -70,7 +75,6 @@ const Statement = () => {
                 className="form-control form-control-solid w-100 mw-250px"
                 placeholder="Pick date range"
                 id="kt_ecommerce_report_shipping_daterangepicker"
-
               />
 
               <div className="w-150px">
@@ -186,40 +190,38 @@ const Statement = () => {
             </table>
           </div>
           <ul className="pagination mb-10">
+            <li
+              className={`page-item previous ${
+                currentPage === 1 ? 'disabled' : ''
+              }`}
+              onClick={() => paginate(currentPage - 1)}
+            >
+              <a href="#" className="page-link">
+                <i className="previous"></i>
+              </a>
+            </li>
+            {Array.from({ length: totalPages }, (_, i) => (
               <li
-                className={`page-item previous ${
-                  currentPage === 1 ? 'disabled' : ''
-                }`}
-                onClick={() => paginate(currentPage - 1)}
+                key={i}
+                className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}
+                onClick={() => paginate(i + 1)}
               >
                 <a href="#" className="page-link">
-                  <i className="previous"></i>
+                  {i + 1}
                 </a>
               </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  key={i}
-                  className={`page-item ${
-                    currentPage === i + 1 ? 'active' : ''
-                  }`}
-                  onClick={() => paginate(i + 1)}
-                >
-                  <a href="#" className="page-link">
-                    {i + 1}
-                  </a>
-                </li>
-              ))}
-              <li
-                className={`page-item next ${
-                  currentPage === totalPages ? 'disabled' : ''
-                }`}
-                onClick={() => paginate(currentPage + 1)}
-              >
-                <a href="#" className="page-link">
-                  <i className="next"></i>
-                </a>
-              </li>
-            </ul>
+            ))}
+            <li
+              className={`page-item next ${
+                currentPage === totalPages ? 'disabled' : ''
+              }`}
+              onClick={() => paginate(currentPage + 1)}
+            >
+              <a href="#" className="page-link">
+                <i className="next"></i>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

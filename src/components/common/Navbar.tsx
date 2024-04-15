@@ -28,7 +28,11 @@ const Navbar = () => {
       icon: 'ki-wifi-square',
       label: 'Withdrawals',
     },
-    { href: '/dashboard/transactions', icon: 'ki-rocket', label: 'Transactions' },
+    {
+      href: '/dashboard/transactions',
+      icon: 'ki-rocket',
+      label: 'Transactions',
+    },
     {
       href: '/dashboard/statements',
       icon: 'ki-geolocation',

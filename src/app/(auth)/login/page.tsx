@@ -42,7 +42,7 @@ const LoginPage = () => {
     }
   }
   return (
-    <body className="app-blank signinImage h-100">
+    <body className="app-blank signupBg h-100">
       <div className="d-flex flex-column flex-root">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
@@ -51,7 +51,7 @@ const LoginPage = () => {
                 <Image
                   alt="Logo"
                   src={Logo}
-                  className="h-100 w-100"
+                  className="h-100 w-100 lg:tw-ml-[-15px]"
                   width={226}
                   height={42}
                 />
@@ -67,7 +67,7 @@ const LoginPage = () => {
               <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
                 <form className="form w-100" onSubmit={handleSubmit(onSubmit)}>
                   <div className="text-center mb-11">
-                    <h1 className="text-gray-900 fw-bolder mb-3">Sign In</h1>
+                    <h1 className="text-gray-900 fw-bolder mb-3">Log In</h1>
                     <div className="text-gray-500 fw-semibold fs-6">
                       Welcome back, please login to your account.
                     </div>
@@ -107,7 +107,11 @@ const LoginPage = () => {
 
                   <div className="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
                     <div></div>
-                    <Link href="/forgot-password" className="link-primary">
+                    <Link
+                      href="/forgot-password"
+                      replace
+                      className="link-primary"
+                    >
                       Forgot Password ?
                     </Link>
                   </div>

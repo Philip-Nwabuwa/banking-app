@@ -16,7 +16,7 @@ const NotFound = () => {
               <div className="card-body py-15 py-lg-20">
                 <h1 className="fw-bolder fs-2hx text-gray-900 mb-4">Oops!</h1>
                 <div className="fw-semibold fs-6 text-gray-500 mb-7">
-                  We can't find that page.
+                  We can&apos;t find that page.
                 </div>
                 <div className="tw-w-full tw-flex tw-items-center tw-justify-center mb-3">
                   <Image

@@ -5,7 +5,7 @@ import SubmitButton from '@/components/common/SubmitBtn'
 
 const ForgotPasswordPage = () => {
   return (
-    <div id="kt_body" className="app-blank signinImage h-100">
+    <div className="app-blank signupBg h-100">
       <div className="d-flex flex-column flex-root" id="kt_app_root">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
@@ -36,7 +36,7 @@ const ForgotPasswordPage = () => {
                 >
                   <div className="text-center mb-10">
                     <h1 className="text-gray-900 fw-bolder mb-3">
-                      Forgot Password ?
+                      Forgot Password?
                     </h1>
                     <div className="text-gray-500 fw-semibold fs-6">
                       Enter your email to reset your password.

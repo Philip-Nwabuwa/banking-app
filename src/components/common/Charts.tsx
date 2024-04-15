@@ -1,82 +1,8 @@
 import React, { useEffect } from 'react'
+import ApexCharts from 'apexcharts'
 
 const Charts = () => {
-    useEffect(() => {
-        const initChart = () => {
-          const e = document.getElementById("kt_card_widget_1_chart");
-          if (e) {
-            const t = e.getAttribute("data-kt-chart-color");
-            const a = parseInt(window.getComputedStyle(e).height || '0');
-            const l = getComputedStyle(document.documentElement).getPropertyValue("--bs-gray-500");
-            const r = KTUtil.isHexColor(t) ? t : getComputedStyle(document.documentElement).getPropertyValue("--bs-" + t);
-            const o = getComputedStyle(document.documentElement).getPropertyValue("--bs-gray-300");
-            const i = new ApexCharts(e, {
-              series: [
-                {
-                  name: "Sales",
-                  data: [30, 75, 55, 45, 30, 60, 75, 50],
-                  margin: { left: 5, right: 5 },
-                },
-              ],
-              chart: {
-                fontFamily: "inherit",
-                type: "bar",
-                height: a,
-                toolbar: { show: !1 },
-                sparkline: { enabled: !0 },
-              },
-              plotOptions: {
-                bar: { horizontal: !1, columnWidth: ["35%"], borderRadius: 6 },
-              },
-              legend: { show: !1 },
-              dataLabels: { enabled: !1 },
-              stroke: { show: !0, width: 4, colors: ["transparent"] },
-              xaxis: {
-                axisBorder: { show: !1 },
-                axisTicks: { show: !1 },
-                labels: { show: !1, style: { colors: l, fontSize: "12px" } },
-                crosshairs: { show: !1 },
-              },
-              yaxis: {
-                labels: { show: !1, style: { colors: l, fontSize: "12px" } },
-              },
-              fill: { type: "solid" },
-              states: {
-                normal: { filter: { type: "none", value: 0 } },
-                hover: { filter: { type: "none", value: 0 } },
-                active: {
-                  allowMultipleDataPointsSelection: !1,
-                  filter: { type: "none", value: 0 },
-                },
-              },
-              tooltip: {
-                style: { fontSize: "12px" },
-                x: {
-                  formatter: function (e: string) {
-                    return "Feb: " + e;
-                  },
-                },
-                y: {
-                  formatter: function (e: string) {
-                    return e + "%";
-                  },
-                },
-              },
-              colors: [r, o],
-              grid: {
-                borderColor: !1,
-                strokeDashArray: 4,
-                yaxis: { lines: { show: !0 } },
-                padding: { top: 10, left: 25, right: 25 },
-              },
-            });
-            setTimeout(() => {
-              i.render();
-            }, 300);
-          }
-        };
-        initChart();
-      }, []);
+
   return (
     <div className="row g-5 g-xl-8">
       <div className="col-xl-6">
