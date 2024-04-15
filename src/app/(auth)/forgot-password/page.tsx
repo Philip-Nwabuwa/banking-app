@@ -6,7 +6,10 @@ import SubmitButton from '@/components/common/SubmitBtn'
 const ForgotPasswordPage = () => {
   return (
     <div className="app-blank signupBg h-100">
-      <div className="d-flex flex-column flex-root" id="kt_app_root">
+      <div
+        className="d-flex flex-column flex-root tw-h-screen"
+        id="kt_app_root"
+      >
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
             <div className="d-flex flex-center flex-lg-start flex-column">
@@ -14,7 +17,7 @@ const ForgotPasswordPage = () => {
                 <Image
                   alt="Logo"
                   src={Logo}
-                  className="h-100 w-100"
+                  className="h-100 w-100 lg:tw-ml-[-15px]"
                   width={226}
                   height={42}
                 />
@@ -53,7 +56,7 @@ const ForgotPasswordPage = () => {
                     />
                   </div>
                   <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
-                    <SubmitButton text="Sign In" />
+                    <SubmitButton text="Submit" />
 
                     <Link href="/login" className="btn btn-light">
                       Cancel

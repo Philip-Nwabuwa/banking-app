@@ -49,7 +49,7 @@ const Statement = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        <Charts />
+        {/* <Charts /> */}
         <div className="card card-flush">
           <div className="card-header align-items-center py-5 gap-2 gap-md-5">
             <div className="card-title">
@@ -156,27 +156,27 @@ const Statement = () => {
             >
               <thead>
                 <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                  <th className="min-w-100px">Date</th>
-                  <th className="min-w-100px">Transaction type</th>
+                  <th className="min-w-80px">Date</th>
+                  <th className="tw-hidden md:tw-flex">Transaction type</th>
                   <th className="min-w-100px">Refrence ID</th>
-                  <th className="min-w-100px">Status</th>
-                  <th className="text-end min-w-100px">Amount</th>
+                  <th className="tw-hidden md:tw-flex">Status</th>
+                  <th className="text-end">Amount</th>
                 </tr>
               </thead>
               <tbody className="fw-semibold text-gray-600">
                 {currentItems.map((item, index) => (
                   <tr key={index}>
                     <td>{item.date}</td>
-                    <td>{item.type}</td>
+                    <td className="tw-hidden md:tw-flex">{item.type}</td>
                     <td>
                       <Link
-                        href="/dashboard"
-                        className="text-gray-900 text-hover-primary"
+                        href={`/dashboard/transactions/statement/${item.orderId}`}
+                        className="text-primary"
                       >
                         {item.orderId}
                       </Link>
                     </td>
-                    <td>
+                    <td className="tw-hidden md:tw-flex">
                       <div
                         className={`badge badge-light-${item.status === 'Completed' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
                       >

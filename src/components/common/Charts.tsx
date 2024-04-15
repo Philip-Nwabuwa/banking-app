@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import ApexCharts from 'apexcharts'
 
 const Charts = () => {
-
   return (
     <div className="row g-5 g-xl-8">
       <div className="col-xl-6">

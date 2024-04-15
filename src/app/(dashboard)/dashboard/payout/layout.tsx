@@ -4,7 +4,7 @@ import Navigation from '@/components/common/Navigation'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const TransferLayout = ({
+const PayoutLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -55,4 +55,4 @@ const TransferLayout = ({
   )
 }
 
-export default TransferLayout
+export default PayoutLayout

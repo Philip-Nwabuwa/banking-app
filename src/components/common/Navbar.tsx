@@ -7,6 +7,7 @@ import { useState } from 'react'
 
 import Logo from '@/assets/logos/main.png'
 import UserImage from '@/assets/images/user.jpg'
+import { sidebarLinks } from '@/types/sidebar-links'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
@@ -15,38 +16,11 @@ const Navbar = () => {
     setSidebarVisible(!sidebarVisible)
   }
 
-  const links = [
-    {
-      href: '/dashboard/transactions/deposit',
-      icon: 'ki-chart-line-up-2',
-      label: 'Deposit',
-    },
-    { href: '/dashboard/transfers', icon: 'ki-calendar', label: 'Transfer' },
-    { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
-    {
-      href: '/dashboard/withdrawals',
-      icon: 'ki-wifi-square',
-      label: 'Withdrawals',
-    },
-    {
-      href: '/dashboard/transactions',
-      icon: 'ki-rocket',
-      label: 'Transactions',
-    },
-    {
-      href: '/dashboard/statements',
-      icon: 'ki-geolocation',
-      label: 'Statements',
-    },
-    { href: '/dashboard/reversal', icon: 'ki-abstract-28', label: 'Reversal' },
-    { href: '/dashboard/pos', icon: 'ki-abstract-28', label: 'POS' },
-  ]
-
   const pathname = usePathname()
 
   const menuItems = [
     { path: '/dashboard', title: 'Dashboard' },
-    { path: '/dashboard/transfers', title: 'Transfers' },
+    { path: '/dashboard/payout', title: 'Payout' },
     { path: '/dashboard/bills', title: 'Bills' },
     { path: '/dashboard/transactions', title: 'Transactions' },
   ]
@@ -129,7 +103,7 @@ const Navbar = () => {
               ></div>
             )}
             <div
-              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
+              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-justify-between tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
             >
               <div>
                 <div
@@ -206,7 +180,7 @@ const Navbar = () => {
                         <div className="fs-2 fw-bold text-danger">$0</div>
                       </div>
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-6 mt-6">
                       <h3 className="text-gray-800 fw-bold mb-8">Services</h3>
 
                       <div
@@ -214,7 +188,7 @@ const Navbar = () => {
                         data-kt-buttons="true"
                         data-kt-buttons-target="[data-kt-button]"
                       >
-                        {links.map((link, index) => (
+                        {sidebarLinks.map((link, index) => (
                           <div className="col mb-4" key={index}>
                             <Link
                               href={link.href}

@@ -162,7 +162,7 @@ const Dashboard = () => {
               >
                 <thead className="border-bottom border-gray-200 fs-7 fw-bold">
                   <tr className="text-start text-muted text-uppercase gs-0">
-                    <th className="min-w-100px">Order No.</th>
+                    <th>Order No.</th>
                     <th>Status</th>
                     <th>Amount</th>
                     <th className="min-w-160px">Date</th>

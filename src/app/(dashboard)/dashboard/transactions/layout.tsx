@@ -11,12 +11,16 @@ const TransactionsLayout = ({
 }>) => {
   const pathname = usePathname()
 
+  const statementPathname = pathname.startsWith(
+    '/dashboard/transactions/statement'
+  )
+
   const navItems = [
     { label: 'Deposit', path: '/dashboard/transactions/deposit' },
 
     { label: 'Statement', path: '/dashboard/transactions/statement' },
 
-    { label: 'Withdraw', path: '/dashboard/transactions/withdraw' },
+    { label: 'Withdraw', path: '/dashboard/transactions/withdrawl' },
   ]
   return (
     <div className="d-flex flex-column flex-column-fluid">
@@ -42,6 +46,14 @@ const TransactionsLayout = ({
                 <span className="bullet bg-gray-500 w-5px h-2px"></span>
               </li>
               <li className="breadcrumb-item text-muted">transactions</li>
+              {statementPathname && (
+                <>
+                  <li className="breadcrumb-item">
+                    <span className="bullet bg-gray-500 w-5px h-2px"></span>
+                  </li>
+                  <li className="breadcrumb-item text-muted">statement</li>
+                </>
+              )}
             </ul>
           </div>
         </div>
