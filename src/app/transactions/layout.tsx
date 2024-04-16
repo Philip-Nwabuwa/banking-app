@@ -17,7 +17,7 @@ const TransactionsLayout = ({
   const statementPathname = pathname.startsWith('/transactions/statement')
 
   const navItems = [
-    { label: 'Deposit', path: '/transactions/deposit' },
+    { label: 'Settlements', path: '/transactions/settlements' },
 
     { label: 'Statement', path: '/transactions/statement' },
 

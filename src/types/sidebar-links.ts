@@ -1,24 +1,24 @@
 export const sidebarLinks = [
   {
-    href: '/dashboard/transactions/deposit',
+    href: '/transactions/settlements',
     icon: 'ki-chart-line-up-2',
-    label: 'Deposit',
+    label: 'Settlements',
   },
-  { href: '/dashboard/payout', icon: 'ki-calendar', label: 'Payout' },
-  { href: '/dashboard/bills', icon: 'ki-security-check', label: 'Bills' },
+  { href: '/payout', icon: 'ki-calendar', label: 'Payout' },
+  { href: '/bills', icon: 'ki-security-check', label: 'Bills' },
   {
-    href: '/dashboard/transactions/withdrawal',
+    href: '/transactions/withdrawal',
     icon: 'ki-wifi-square',
     label: 'Withdrawal',
   },
   // { href: '/dashboard/transactions', icon: 'ki-rocket', label: 'Transactions' },
   {
-    href: '/dashboard/transactions/statement',
+    href: '/transactions/statement',
     icon: 'ki-geolocation',
     label: 'Statements',
   },
   {
-    href: '/dashboard/transactions/reversal',
+    href: '/transactions/reversal',
     icon: 'ki-abstract-28',
     label: 'Reversal',
   },

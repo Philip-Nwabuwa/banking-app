@@ -151,7 +151,7 @@ const Sidebar = () => {
       >
         <div className="app-footer-item">
           <Link
-            href="/dashboard/settings"
+            href="/settings"
             replace
             className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
           >

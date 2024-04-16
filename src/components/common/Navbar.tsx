@@ -198,7 +198,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div
-                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mt-16"
+                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mt-auto"
                 id="kt_app_sidebar_footer"
               >
                 <div className="app-footer-item">
