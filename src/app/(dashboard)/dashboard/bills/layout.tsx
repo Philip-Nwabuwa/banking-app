@@ -19,6 +19,7 @@ const BillsLayout = ({
     },
     { label: 'Television', path: '/dashboard/bills/television' },
     { label: 'Betting', path: '/dashboard/bills/betting' },
+    { label: 'Electricity', path: '/dashboard/bills/electricity' },
   ]
   return (
     <div className="d-flex flex-column flex-column-fluid">

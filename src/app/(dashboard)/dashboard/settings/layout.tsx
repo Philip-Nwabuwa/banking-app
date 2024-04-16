@@ -16,8 +16,8 @@ const Layout = ({
   const navItems = [
     { label: 'Settings', path: '/dashboard/settings' },
     { label: 'Security', path: '/dashboard/settings/security' },
-    { label: 'Referrals', path: '/dashboard/settings/referrals' },
-    { label: 'API Keys', path: '/dashboard/settings/api' },
+    { label: 'Referrals', path: '#' },
+    { label: 'API Keys', path: '#' },
   ]
 
   return (

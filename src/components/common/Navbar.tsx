@@ -165,19 +165,15 @@ const Navbar = () => {
                   >
                     <div className="d-flex mb-3 mb-lg-6">
                       <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6">
-                        <span className="fs-6 text-gray-500 fw-bold">
-                          Balance
+                        <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
+                          Balance{' '}
+                          <i className="ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer hover:tw-animate-spin">
+                            <span className="path1"></span>
+                            <span className="path2"></span>
+                          </i>
                         </span>
 
-                        <div className="fs-2 fw-bold text-success">$0</div>
-                      </div>
-
-                      <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4">
-                        <span className="fs-6 text-gray-500 fw-bold">
-                          Legder
-                        </span>
-
-                        <div className="fs-2 fw-bold text-danger">$0</div>
+                        <div className="fs-2x fw-bold text-success">$0</div>
                       </div>
                     </div>
                     <div className="mb-6 mt-6">
@@ -214,7 +210,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div
-                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8"
+                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mb-16"
                 id="kt_app_sidebar_footer"
               >
                 <div className="app-footer-item">
@@ -222,9 +218,9 @@ const Navbar = () => {
                     href="/dashboard/settings"
                     replace
                     onClick={toggleSidebar}
-                    className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
+                    className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-50px h-50px w-md-60px h-md-60px"
                   >
-                    <i className="ki-outline ki-setting-2 fs-2"></i>
+                    <i className="ki-outline ki-setting-2 fs-2tx"></i>
                   </Link>
                 </div>
               </div>

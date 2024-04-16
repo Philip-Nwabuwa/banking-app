@@ -83,10 +83,6 @@ const Dashboard = () => {
     indexOfLastTransaction
   )
 
-  const totalPages = Math.ceil(transactions.length / transactionsPerPage)
-
-  const paginate = (pageNumber: SetStateAction<number>) =>
-    setCurrentPage(pageNumber)
   return (
     <div className="d-flex flex-column flex-column-fluid">
       <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
@@ -172,12 +168,9 @@ const Dashboard = () => {
                   {currentTransactions.map((transaction, index) => (
                     <tr key={index}>
                       <td>
-                        <a
-                          href="apps/ecommerce/sales/details.html"
-                          className="text-gray-600 text-hover-primary mb-1"
-                        >
+                        <span className="text-gray-600 mb-1">
                           {transaction.orderNo}
-                        </a>
+                        </span>
                       </td>
                       <td>
                         <span
@@ -199,41 +192,6 @@ const Dashboard = () => {
                 </tbody>
               </table>
             </div>
-            <ul className="pagination mb-10">
-              <li
-                className={`page-item previous ${
-                  currentPage === 1 ? 'disabled' : ''
-                }`}
-                onClick={() => paginate(currentPage - 1)}
-              >
-                <a href="#" className="page-link">
-                  <i className="previous"></i>
-                </a>
-              </li>
-              {Array.from({ length: totalPages }, (_, i) => (
-                <li
-                  key={i}
-                  className={`page-item ${
-                    currentPage === i + 1 ? 'active' : ''
-                  }`}
-                  onClick={() => paginate(i + 1)}
-                >
-                  <a href="#" className="page-link">
-                    {i + 1}
-                  </a>
-                </li>
-              ))}
-              <li
-                className={`page-item next ${
-                  currentPage === totalPages ? 'disabled' : ''
-                }`}
-                onClick={() => paginate(currentPage + 1)}
-              >
-                <a href="#" className="page-link">
-                  <i className="next"></i>
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
       </div>

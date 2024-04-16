@@ -56,14 +56,14 @@ const LoginPage = () => {
                   height={42}
                 />
               </Link>
-              <h2 className="text-white fw-normal m-0">
+              <h2 className="text-white fw-normal m-0 text-center">
                 A redefined payment service for your business
               </h2>
             </div>
           </div>
 
           <div className="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
-            <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-600px p-10">
+            <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-500px p-10">
               <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
                 <form className="form w-100" onSubmit={handleSubmit(onSubmit)}>
                   <div className="text-center mb-11">

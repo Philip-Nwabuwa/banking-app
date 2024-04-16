@@ -113,16 +113,16 @@ const Sidebar = () => {
             </div>
           </div> */}
           <div className="d-flex mb-3 mb-lg-6">
-            <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6">
-              <span className="fs-6 text-gray-500 fw-bold">Balance</span>
+            <div className="border border-gray-300 border-dashed rounded w-100 py-2 px-4 me-6">
+              <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
+                Balance
+                <i className="ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer hover:tw-animate-spin">
+                  <span className="path1"></span>
+                  <span className="path2"></span>
+                </i>
+              </span>
 
-              <div className="fs-2 fw-bold text-success">$0</div>
-            </div>
-
-            <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4">
-              <span className="fs-6 text-gray-500 fw-bold">Legder</span>
-
-              <div className="fs-2 fw-bold text-danger">$0</div>
+              <div className="fs-2x fw-bold text-success">₦0</div>
             </div>
           </div>
           <div className="mb-6">

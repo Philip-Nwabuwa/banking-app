@@ -6,7 +6,7 @@ const StatementDescription = ({ params }: { params: { slug: string } }) => {
   )
 
   if (!statement) {
-    return <div>No Statement Available.</div>
+    return <div>No Reversal Available.</div>
   }
 
   return (
@@ -20,7 +20,6 @@ const StatementDescription = ({ params }: { params: { slug: string } }) => {
           <div>Date: {statement.date}</div>
           <div>Type: {statement.type}</div>
           <div>Order ID: {statement.orderId}</div>
-          <div>Status: {statement.status}</div>
           {statement.mobile && <div>Mobile: {statement.mobile}</div>}
           {statement.senderName && (
             <div>Sender Name: {statement.senderName}</div>

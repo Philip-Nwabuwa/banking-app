@@ -17,6 +17,10 @@ export const sidebarLinks = [
     icon: 'ki-geolocation',
     label: 'Statements',
   },
-  { href: '/dashboard/reversal', icon: 'ki-abstract-28', label: 'Reversal' },
+  {
+    href: '/dashboard/transactions/reversal',
+    icon: 'ki-abstract-28',
+    label: 'Reversal',
+  },
   // { href: '/dashboard/pos', icon: 'ki-abstract-28', label: 'POS' },
 ]

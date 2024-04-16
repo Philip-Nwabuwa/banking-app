@@ -1,13 +1,11 @@
 'use client'
 
-import Charts from '@/components/common/Charts'
 import { StatementType, StatementsData } from '@/types/statements'
 import Link from 'next/link'
 import { useState } from 'react'
 
-const Statement = () => {
+const Reversal = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatus, setSelectedStatus] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
@@ -24,11 +22,7 @@ const Statement = () => {
         item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.amount.toLowerCase().includes(searchTerm.toLowerCase())
 
-      if (selectedStatus === 'all') {
-        return matchesSearchTerm
-      } else {
-        return matchesSearchTerm && item.status === selectedStatus
-      }
+      return matchesSearchTerm
     }
   )
 
@@ -76,22 +70,6 @@ const Statement = () => {
                 placeholder="Pick date range"
                 id="kt_ecommerce_report_shipping_daterangepicker"
               />
-
-              <div className="w-150px">
-                <select
-                  className="form-select form-select-solid"
-                  data-control="select2"
-                  data-hide-search="true"
-                  data-placeholder="Status"
-                  data-kt-ecommerce-order-filter="status"
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                >
-                  <option value="all">All</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
-              </div>
 
               <button
                 type="button"
@@ -157,9 +135,9 @@ const Statement = () => {
               <thead>
                 <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                   <th className="min-w-100px">Refrence ID</th>
+
                   <th className="tw-hidden md:tw-flex">Transaction type</th>
                   <th className="min-w-80px">Date</th>
-                  <th className="tw-hidden md:tw-flex">Status</th>
                   <th className="text-end">Amount</th>
                 </tr>
               </thead>
@@ -168,22 +146,14 @@ const Statement = () => {
                   <tr key={index}>
                     <td>
                       <Link
-                        href={`/dashboard/transactions/statement/${item.orderId}`}
+                        href={`/dashboard/transactions/reversal/${item.orderId}`}
                         className="text-primary"
                       >
                         {item.orderId}
                       </Link>
                     </td>
                     <td className="tw-hidden md:tw-flex">{item.type}</td>
-
                     <td>{item.date}</td>
-                    <td className="tw-hidden md:tw-flex">
-                      <div
-                        className={`badge badge-light-${item.status === 'Completed' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
-                      >
-                        {item.status}
-                      </div>
-                    </td>
                     <td className="text-end">{item.amount}</td>
                   </tr>
                 ))}
@@ -229,4 +199,4 @@ const Statement = () => {
   )
 }
 
-export default Statement
+export default Reversal

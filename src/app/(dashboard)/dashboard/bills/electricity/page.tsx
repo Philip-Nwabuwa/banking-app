@@ -21,71 +21,30 @@ import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-const AirtimeNames = [
-  { name: 'Airtel' },
-  { name: 'Mtn' },
-  { name: 'Glo' },
-  { name: '9mobile' },
+const ElectricityProduct = [
+  { name: 'Abuja' },
+  { name: 'Eko' },
+  { name: 'Enugu' },
+  { name: 'Jos' },
+  { name: 'Ibadan' },
+  { name: 'Ikeja' },
+  { name: 'Kaduna' },
+  { name: 'Kano' },
+  { name: 'Port Harcourt' },
+  { name: 'Benin' },
+  { name: 'Yola' },
 ] as const
 
-const DataPlans = [
-  {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 1.5GB for ₦300',
-      'Monthly 6GB for ₦1,500',
-      'Monthly 16GB for ₦3,000',
-    ],
-  },
-  {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 1GB for ₦500',
-      'Monthly 2GB for ₦1,000',
-      'Monthly 6GB for ₦2,000',
-    ],
-  },
-  {
-    plans: [
-      'Daily 50MB for ₦50',
-      'Weekly 1.6GB for ₦500',
-      'Monthly 7GB for ₦1,500',
-      'Monthly 12.5GB for ₦2,500',
-    ],
-  },
-  {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 500MB for ₦500',
-      'Monthly 1GB for ₦1,000',
-      'Monthly 4.5GB for ₦2,000',
-    ],
-  },
-] as const
+const MeterType = [{ name: 'Pre-paid' }, { name: 'Post-paid' }] as const
 
-const Airtime = () => {
+const Electricity = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [selectedNetwork, setSelectedNetwork] = useState(
-    'Please select a network provider'
+  const [selectedProduct, setSelectedProduct] = useState(
+    'Please select an Electricity provider'
   )
-  const [selectedDataPlan, setSelectedDataPlan] = useState(
-    'Please select a Plan'
+  const [selectedMeter, setSelectedMeter] = useState(
+    'Please select a meter type'
   )
-
-  const renderDataPlans = () => {
-    switch (selectedNetwork) {
-      case 'Airtel':
-        return DataPlans[0].plans
-      case 'Mtn':
-        return DataPlans[1].plans
-      case 'Glo':
-        return DataPlans[2].plans
-      case '9mobile':
-        return DataPlans[3].plans
-      default:
-        return []
-    }
-  }
 
   const [otpValue, setOtpValue] = useState('')
 
@@ -103,12 +62,11 @@ const Airtime = () => {
     }
   }
 
-  const handleNetworkSelect = (NetworkName: string) => {
-    setSelectedNetwork(NetworkName)
+  const handleProductSelect = (product: string) => {
+    setSelectedProduct(product)
   }
-
-  const handleDataPlanSelect = (NetworkPlanName: string) => {
-    setSelectedDataPlan(NetworkPlanName)
+  const handleMeterSelect = (metertype: string) => {
+    setSelectedMeter(metertype)
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -147,7 +105,7 @@ const Airtime = () => {
             aria-controls="kt_account_profile_details"
           >
             <div className="card-title m-0">
-              <h3 className="fw-bold m-0">Data</h3>
+              <h3 className="fw-bold m-0">Electricity</h3>
             </div>
           </div>
 
@@ -166,14 +124,14 @@ const Airtime = () => {
               >
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                    Select Network
+                    Select Provider
                   </label>
 
                   <div className="col-lg-8 fv-row">
                     <Popover>
                       <PopoverTrigger asChild>
                         <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                          {selectedNetwork}
+                          {selectedProduct}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
@@ -183,11 +141,11 @@ const Airtime = () => {
                           <CommandList>
                             <CommandEmpty>No results found.</CommandEmpty>
                             <CommandGroup>
-                              {AirtimeNames.map((item) => (
+                              {ElectricityProduct.map((item) => (
                                 <CommandItem key={item.name}>
                                   <p
                                     onClick={() =>
-                                      handleNetworkSelect(item.name)
+                                      handleProductSelect(item.name)
                                     }
                                     className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                   >
@@ -202,44 +160,54 @@ const Airtime = () => {
                     </Popover>
                   </div>
                 </div>
-                {selectedNetwork !== 'Please select a network provider' && (
-                  <div className="row mb-6">
-                    <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                      Data Plan
-                    </label>
+                <div className="row mb-6">
+                  <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                    Select Meter Type
+                  </label>
 
-                    <div className="col-lg-8 fv-row">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                            {selectedDataPlan}
-                            <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="tw-p-0" align="start">
-                          <Command>
-                            <CommandInput placeholder="Search..." />
-                            <CommandList>
-                              <CommandEmpty>No results found.</CommandEmpty>
-                              <CommandGroup>
-                                {renderDataPlans().map((item, index) => (
-                                  <CommandItem key={index}>
-                                    <p
-                                      onClick={() => handleDataPlanSelect(item)}
-                                      className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                                    >
-                                      {item}
-                                    </p>
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
+                  <div className="col-lg-8 fv-row">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                          {selectedMeter}
+                          <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="tw-p-0" align="start">
+                        <Command>
+                          <CommandList>
+                            <CommandEmpty>No results found.</CommandEmpty>
+                            <CommandGroup>
+                              {MeterType.map((item) => (
+                                <CommandItem key={item.name}>
+                                  <p
+                                    onClick={() => handleMeterSelect(item.name)}
+                                    className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                  >
+                                    {item.name}
+                                  </p>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
-                )}
+                </div>
+                <div className="row mb-6">
+                  <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                    Meter number
+                  </label>
+
+                  <div className="col-lg-8 fv-row">
+                    <input
+                      type="number"
+                      className="form-control form-control-lg form-control-solid"
+                      placeholder="Please provide the metter number"
+                    />
+                  </div>
+                </div>
                 <div className="row mb-6">
                   <label className="col-lg-4 col-form-label required fw-semibold fs-6">
                     Phone Number
@@ -253,41 +221,45 @@ const Airtime = () => {
                     />
                   </div>
                 </div>
+                <div className="row mb-6">
+                  <label className="col-lg-4 col-form-label fw-semibold fs-6">
+                    <span className="required">Amount</span>
+                  </label>
+
+                  <div className="col-lg-8 fv-row">
+                    <input
+                      type="number"
+                      className="form-control form-control-lg form-control-solid"
+                      placeholder="Amount to send"
+                    />
+                  </div>
+                </div>
               </div>
               <div
                 className={`${currentStep === 2 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
                 data-kt-stepper-element="content"
               >
                 <div className="tw-text-center tw-text-2xl tw-font-bold tw-capitalize">
-                  Confirm the Phone Number before transfer.
+                  Confirm the Meter Number before transfer.
                 </div>
                 <div className="tw-text-center tw-py-4 text-xl">
                   Amount(NGN):
-                  <span className="tw-text-3xl tw-font-bold">1,500</span>
+                  <span className="tw-text-3xl tw-font-bold">1,000</span>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">08000000000</p>
+                    <p className="tw-font-bold tw-truncate">John Doe</p>
                   </div>
                 </div>
-                <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
-                  <div className="tw-flex tw-justify-between tw-items-center">
-                    <p>plan:</p>
-                    <p className="tw-font-bold tw-truncate">
-                      Monthly 6GB for ₦1,500
-                    </p>
-                  </div>
-                </div>
-
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Fee (NGN):</p>
-                    <p className="tw-font-bold">free</p>
+                    <p className="tw-font-bold">10</p>
                   </div>
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Total (NGN):</p>
-                    <p className="tw-font-bold"> 1,000</p>
+                    <p className="tw-font-bold"> 1,010</p>
                   </div>
                 </div>
 
@@ -355,4 +327,4 @@ const Airtime = () => {
   )
 }
 
-export default Airtime
+export default Electricity

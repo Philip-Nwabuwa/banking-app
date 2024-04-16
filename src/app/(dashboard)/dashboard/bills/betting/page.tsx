@@ -60,7 +60,8 @@ const Betting = () => {
     setSelectedBettingProvider(bettingProvider)
   }
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     try {
       Swal.fire({
         text: 'Transaction Successful.',

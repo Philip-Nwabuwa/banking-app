@@ -20,7 +20,9 @@ const TransactionsLayout = ({
 
     { label: 'Statement', path: '/dashboard/transactions/statement' },
 
-    { label: 'Withdraw', path: '/dashboard/transactions/withdrawl' },
+    { label: 'Withdrawal', path: '/dashboard/transactions/withdrawal' },
+
+    { label: 'Reversal', path: '/dashboard/transactions/reversal' },
   ]
   return (
     <div className="d-flex flex-column flex-column-fluid">

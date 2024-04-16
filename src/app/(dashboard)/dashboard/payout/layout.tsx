@@ -12,10 +12,10 @@ const PayoutLayout = ({
   const pathname = usePathname()
 
   const navItems = [
-    { label: 'Bank Transfer', path: '/dashboard/transfers/bank-transfer' },
+    { label: 'Bank Transfer', path: '/dashboard/payout/bank-transfer' },
     {
       label: 'Paytonic Transfer',
-      path: '/dashboard/transfers/paytonic-transfer',
+      path: '/dashboard/payout/paytonic-transfer',
     },
   ]
   return (
