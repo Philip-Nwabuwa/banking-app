@@ -28,7 +28,6 @@ const StatementDescription = ({ params }: { params: { slug: string } }) => {
             <div>Description: {statement.description}</div>
           )}
           {statement.userId && <div>User ID: {statement.userId}</div>}
-          <div>Time: {statement.time}</div>
           <div>Amount: {statement.amount}</div>
         </div>
       </div>

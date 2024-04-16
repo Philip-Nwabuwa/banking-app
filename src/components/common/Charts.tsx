@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import ApexCharts from 'apexcharts'
 
 const Charts = () => {
   return (
