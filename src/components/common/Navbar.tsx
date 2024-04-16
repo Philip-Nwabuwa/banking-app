@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 import Logo from '@/assets/logos/main.png'
+import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import { sidebarLinks } from '@/types/sidebar-links'
 
@@ -20,9 +21,9 @@ const Navbar = () => {
 
   const menuItems = [
     { path: '/dashboard', title: 'Dashboard' },
-    { path: '/dashboard/payout', title: 'Payout' },
-    { path: '/dashboard/bills', title: 'Bills' },
-    { path: '/dashboard/transactions', title: 'Transactions' },
+    { path: '/payout', title: 'Payout' },
+    { path: '/bills', title: 'Bills' },
+    { path: '/transactions', title: 'Transactions' },
   ]
 
   const isActiveLink = (href: string) => {
@@ -103,7 +104,7 @@ const Navbar = () => {
               ></div>
             )}
             <div
-              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-justify-between tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
+              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
             >
               <div>
                 <div
@@ -113,7 +114,7 @@ const Navbar = () => {
                   <Link href="/dashboard" replace>
                     <Image
                       alt="Logo"
-                      src={Logo}
+                      src={DarkLogo}
                       className="h-25px h-lg-30px theme-light-show"
                       width={150}
                       height={50}
@@ -163,19 +164,6 @@ const Navbar = () => {
                     data-kt-scroll-wrappers="#kt_app_sidebar, #kt_app_sidebar_nav"
                     data-kt-scroll-offset="5px"
                   >
-                    <div className="d-flex mb-3 mb-lg-6">
-                      <div className="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6">
-                        <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
-                          Balance{' '}
-                          <i className="ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer hover:tw-animate-spin">
-                            <span className="path1"></span>
-                            <span className="path2"></span>
-                          </i>
-                        </span>
-
-                        <div className="fs-2x fw-bold text-success">$0</div>
-                      </div>
-                    </div>
                     <div className="mb-6 mt-6">
                       <h3 className="text-gray-800 fw-bold mb-8">Services</h3>
 
@@ -210,7 +198,7 @@ const Navbar = () => {
                 </div>
               </div>
               <div
-                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mb-16"
+                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mt-16"
                 id="kt_app_sidebar_footer"
               >
                 <div className="app-footer-item">
@@ -229,7 +217,7 @@ const Navbar = () => {
             <Link href="/dashboard" className="d-flex d-lg-none">
               <Image
                 alt="Logo"
-                src={Logo}
+                src={DarkLogo}
                 className="h-25px h-lg-30px theme-light-show"
                 width={150}
                 height={50}

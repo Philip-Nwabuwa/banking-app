@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 const page = () => {
-  redirect('/dashboard/transactions/deposit')
+  redirect('/transactions/deposit')
 }
 
 export default page

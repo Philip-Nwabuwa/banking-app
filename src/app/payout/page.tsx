@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 const page = () => {
-  redirect('/dashboard/bills/airtime')
+  redirect('/payout/bank-transfer')
 }
 
 export default page

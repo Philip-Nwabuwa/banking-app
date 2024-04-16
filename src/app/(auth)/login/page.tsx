@@ -51,7 +51,7 @@ const LoginPage = () => {
                 <Image
                   alt="Logo"
                   src={Logo}
-                  className="h-100 w-100 lg:tw-ml-[-15px]"
+                  className="h-100 w-100"
                   width={226}
                   height={42}
                 />

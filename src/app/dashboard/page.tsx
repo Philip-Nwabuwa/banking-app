@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { SetStateAction, useState } from 'react'
 
 import Card from '@/assets/images/credit-card.png'
+import Balance from '@/components/common/Balance'
 
 const transactions = [
   {
@@ -113,7 +114,10 @@ const Dashboard = () => {
           id="kt_app_content_container"
           className="app-container container-xxl"
         >
-          <div className="col-xl-8 mb-5 mb-xl-10">
+          <div className="lg:tw-hidden tw-block">
+            <Balance />
+          </div>
+          <div className="mb-5 mb-xl-10">
             <div className="card card-custom bg-body border-0 h-md-100">
               <div className="card-body d-flex justify-content-center flex-wrap ps-xl-15 pe-0">
                 <div className="flex-grow-1 mt-2 me-9 me-md-0">

@@ -1,12 +1,13 @@
 'use client'
 
 import Logo from '@/assets/logos/main.png'
-import MinLogo from '@/assets/logos/simple.png'
+import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/types/sidebar-links'
+import Balance from './Balance'
 
 const Sidebar = () => {
   const pathname = usePathname()
@@ -34,7 +35,7 @@ const Sidebar = () => {
         <Link href="/dashboard" replace>
           <Image
             alt="Logo"
-            src={Logo}
+            src={DarkLogo}
             className="h-25px h-lg-30px theme-light-show"
             width={180}
             height={50}
@@ -112,19 +113,9 @@ const Sidebar = () => {
               <span>reached 0% of your target</span>
             </div>
           </div> */}
-          <div className="d-flex mb-3 mb-lg-6">
-            <div className="border border-gray-300 border-dashed rounded w-100 py-2 px-4 me-6">
-              <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
-                Balance
-                <i className="ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer hover:tw-animate-spin">
-                  <span className="path1"></span>
-                  <span className="path2"></span>
-                </i>
-              </span>
 
-              <div className="fs-2x fw-bold text-success">₦0</div>
-            </div>
-          </div>
+          <Balance />
+
           <div className="mb-6">
             <h3 className="text-gray-800 fw-bold mb-8">Services</h3>
 

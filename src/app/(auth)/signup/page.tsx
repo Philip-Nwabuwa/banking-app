@@ -131,8 +131,8 @@ const SignupPage = () => {
                     alt="Logo"
                     src={Logo}
                     className="h-100 w-100"
-                    height={70}
-                    width={70}
+                    width={166}
+                    height={32}
                   />
                 </Link>
               </div>
