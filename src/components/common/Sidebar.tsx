@@ -136,20 +136,6 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div
-        className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8"
-        id="kt_app_sidebar_footer"
-      >
-        <div className="app-footer-item">
-          <Link
-            href="/settings"
-            replace
-            className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px"
-          >
-            <i className="ki-outline ki-setting-2 fs-2"></i>
-          </Link>
-        </div>
-      </div>
     </div>
   )
 }

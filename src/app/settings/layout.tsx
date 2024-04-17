@@ -2,11 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import UserImage from '@/assets/images/300-1.jpg'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
+import Modal from '@/components/common/Modal'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const SettingsLayout = ({
   children,
@@ -14,12 +17,30 @@ const SettingsLayout = ({
   children: React.ReactNode
 }>) => {
   const pathname = usePathname()
+  const router = useRouter()
 
   const navItems = [
     { label: 'Settings', path: '/settings' },
     { label: 'Security', path: '/settings/security' },
     { label: 'API Keys', path: '#' },
   ]
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
+
+  const handleSubmitOrder = () => {
+    closeModal()
+    try {
+      toast.success('Logged out successfully')
+      setTimeout(() => {
+        router.replace('/login')
+      }, 2000)
+    } catch (error) {
+      console.log(error)
+      toast.error('An error occurred while logging out, please try again later')
+    }
+  }
 
   return (
     <body
@@ -125,19 +146,32 @@ const SettingsLayout = ({
                                 </div>
                               </div>
 
-                              <div className="d-flex my-4">
-                                {/* <a
-                        href="#"
-                        className="btn btn-sm btn-primary me-3"
-                        data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_offer_a_deal"
-                      >
-                        Hire Me
-                      </a> */}
-
-                                <div className="me-0">
+                              <div className="tw-flex my-4 tw-itmes-center tw-justify-center tw-gap-4">
+                                <>
                                   <button
-                                    className="btn btn-sm btn-icon btn-bg-light btn-active-color-primary"
+                                    onClick={openModal}
+                                    className="btn btn-danger fw-semibold"
+                                  >
+                                    Log Out
+                                  </button>
+                                  <Modal
+                                    isOpen={isModalOpen}
+                                    onClose={closeModal}
+                                    title={''}
+                                    buttonText={'Close'}
+                                    onSubmit={handleSubmitOrder}
+                                    submitText="continue"
+                                    submitStyle='btn btn-danger'
+                                  >
+                                    <div className='tw-text-center'>
+                                      <p className='tw-font-bold tw-text-2xl'>Are you sure you want to logout?</p>
+                                    </div>
+                                  </Modal>
+                                </>
+
+                                <div className="tw-w-[43.59px]">
+                                  <button
+                                    className="btn btn-icon btn-bg-light btn-active-color-primary"
                                     data-kt-menu-trigger="click"
                                     data-kt-menu-placement="bottom-end"
                                   >

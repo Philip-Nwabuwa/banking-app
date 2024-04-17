@@ -3,8 +3,11 @@ import React from 'react'
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
+onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   title: string
   buttonText: string
+  submitStyle?: string
+  submitText?: string
   children: React.ReactNode
 }
 
@@ -14,18 +17,21 @@ const Modal: React.FC<ModalProps> = ({
   title,
   buttonText,
   children,
+  onSubmit,
+  submitText,
+  submitStyle,
 }) => {
   return (
     <>
       {isOpen && (
         <div className="modal-backdrop" style={{ display: 'block' }}>
-          <div
+          <form onSubmit={onSubmit}
             className="modal"
             tabIndex={-1}
             role="dialog"
             style={{ display: 'block' }}
           >
-            <div className="modal-dialog" role="document">
+            <div className="modal-dialog modal-dialog-centered" role="document">
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">{title}</h5>
@@ -40,15 +46,21 @@ const Modal: React.FC<ModalProps> = ({
                 <div className="modal-footer">
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-secondary"
                     onClick={onClose}
                   >
                     {buttonText}
                   </button>
+                  <button
+                    type="submit"
+                    className={submitStyle}
+                  >
+                    {submitText}
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       )}
     </>
