@@ -15,6 +15,7 @@ import Modal from '@/components/common/Modal'
 
 const Settlements = () => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
@@ -55,8 +56,6 @@ const Settlements = () => {
   if (!currentItems) {
     return <div>No Settlements data found</div>
   }
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const openModal = () => {
     setIsModalOpen(true)
