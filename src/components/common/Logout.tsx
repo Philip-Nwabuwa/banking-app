@@ -23,7 +23,7 @@ const Logout = () => {
   }
   return (
     <>
-      <button onClick={openModal} className="btn btn-danger fw-semibold tw-flex tw-items-center tw-gap-2">
+      <button onClick={openModal} className="btn btn-primary !tw-py-2 !tw-px-5 fw-semibold tw-flex tw-items-center tw-justify-center tw-gap-2">
         Log Out{' '}
         <i className="ki-solid ki-black-right-line fs-1"></i>
       </button>
@@ -34,7 +34,7 @@ const Logout = () => {
         buttonText={'Close'}
         onSubmit={handleSubmitOrder}
         submitText="continue"
-        submitStyle="btn btn-danger"
+        submitStyle="btn btn-primary"
       >
         <div className="tw-text-center">
           <p className="tw-font-bold tw-text-2xl">

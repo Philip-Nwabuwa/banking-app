@@ -21,7 +21,7 @@ const Sidebar = () => {
   return (
     <div
       id="kt_app_sidebar"
-      className="app-sidebar flex-column"
+      className="app-sidebar flex-column tw-mb-5"
       data-kt-drawer="true"
       data-kt-drawer-name="app-sidebar"
       data-kt-drawer-activate="{default: true, lg: false}"
@@ -31,7 +31,7 @@ const Sidebar = () => {
       data-kt-drawer-toggle="#kt_app_sidebar_toggle"
     >
       <div
-        className="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8"
+        className="d-flex flex-stack px-4 px-lg-6 py-3 pt-lg-8"
         id="kt_app_sidebar_logo"
       >
         <Link href="/dashboard" replace>
@@ -136,10 +136,9 @@ const Sidebar = () => {
             </div>
           </div>
           <div className="app-footer-item tw-flex tw-justify-center">
-          <Logout />
+            <Logout />
+          </div>
         </div>
-        </div>
-        
       </div>
     </div>
   )

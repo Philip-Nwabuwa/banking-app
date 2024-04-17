@@ -130,9 +130,7 @@ const SettingsLayout = ({
                               </div>
 
                               <div className="tw-flex my-4 tw-itmes-center tw-justify-center tw-gap-4">
-                                <Logout/>
-
-                                <div className="tw-w-[43.59px]">
+                                <div>
                                   <button
                                     className="btn btn-icon btn-bg-light btn-active-color-primary"
                                     data-kt-menu-trigger="click"

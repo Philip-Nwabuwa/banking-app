@@ -184,7 +184,7 @@ const Navbar = () => {
                       </div>
                     </div>
                     <div className="app-footer-item tw-flex tw-justify-center tw-mt-4">
-                      <Logout />
+                      <Logout  />
                     </div>
                   </div>
                 </div>

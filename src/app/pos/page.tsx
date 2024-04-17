@@ -1,6 +1,8 @@
 'use client'
 
-import demoImg from '@/assets/images/img-2.jpg'
+import demoImg from '@/assets/images/POS/pos1.jpg'
+import demoImg1 from '@/assets/images/POS/pos2.jpg'
+import demoImg2 from '@/assets/images/POS/pos3.jpg'
 import Modal from '@/components/common/Modal'
 import Image, { StaticImageData } from 'next/image'
 import { useState } from 'react'
@@ -11,28 +13,24 @@ import Swal from 'sweetalert2'
 
 const items = [
   {
-    name: 'T-Bone Stake',
-    cookTime: '16 mins to cook',
-    price: '₦65000',
-    imageSrc: demoImg,
-  },
-  {
-    name: 'Chef’s Salmon',
-    cookTime: '16 mins to cook',
-    price: '₦85000',
-    imageSrc: demoImg,
-  },
-  {
-    name: 'Ramen',
-    cookTime: '16 mins to cook',
+    name: 'Topwise T1',
     price: '₦120000',
     imageSrc: demoImg,
+  },
+  {
+    name: 'Topwise MP35',
+    price: '₦85000',
+    imageSrc: demoImg1,
+  },
+  {
+    name: 'PAX S90',
+    price: '₦65000',
+    imageSrc: demoImg2,
   },
 ]
 
 interface Item {
   name: string
-  cookTime: string
   price: string
   imageSrc: StaticImageData
   quantity: number
@@ -48,7 +46,6 @@ const POS = () => {
   }
   const addToOrder = (item: {
     name: string
-    cookTime: string
     price: string
     imageSrc: StaticImageData
   }) => {
@@ -192,9 +189,9 @@ const POS = () => {
                                   <span className="fw-bold text-gray-800 cursor-pointer text-hover-primary fs-3 fs-xl-1">
                                     {item.name}
                                   </span>
-                                  <span className="text-gray-500 fw-semibold d-block fs-6 mt-n1">
+                                  {/* <span className="text-gray-500 fw-semibold d-block fs-6 mt-n1">
                                     {item.cookTime}
-                                  </span>
+                                  </span> */}
                                 </div>
                                 <span className="text-success text-end fw-bold fs-1">
                                   {item.price}

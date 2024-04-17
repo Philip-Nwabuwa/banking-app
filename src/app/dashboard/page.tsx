@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { SetStateAction, useState } from 'react'
+import { useState } from 'react'
 
 import Card from '@/assets/images/credit-card.png'
 import Balance from '@/components/common/Balance'
@@ -11,65 +11,37 @@ const transactions = [
   {
     orderNo: '#15317',
     status: 'Successful',
-    amount: '$1,200.00',
-    rewards: 120,
+    type: 'airtime',
+    amount: '₦1,200.00',
     date: '14 Dec 2020, 8:43 pm',
   },
   {
     orderNo: '#15998',
     status: 'Successful',
-    amount: '$79.00',
-    rewards: 7,
+    type: 'transfer',
+    amount: '₦7900.00',
     date: '01 Dec 2020, 10:12 am',
   },
   {
     orderNo: '#15046',
     status: 'Successful',
-    amount: '$5,500.00',
-    rewards: 550,
+    type: 'electricity',
+    amount: '₦5,500.00',
     date: '12 Nov 2020, 2:01 pm',
   },
   {
     orderNo: '#15917',
     status: 'Pending',
-    amount: '$880.00',
-    rewards: 88,
+    type: 'betting',
+    amount: '₦880.00',
     date: '21 Oct 2020, 5:54 pm',
   },
   {
     orderNo: '#14404',
-    status: 'Successful',
-    amount: '$7,650.00',
-    rewards: 765,
+    status: 'Failed',
+    type: 'transfer',
+    amount: '₦7,650.00',
     date: '19 Oct 2020, 7:32 am',
-  },
-  {
-    orderNo: '#15238',
-    status: 'Successful',
-    amount: '$375.00',
-    rewards: 37,
-    date: '23 Sep 2020, 12:38 am',
-  },
-  {
-    orderNo: '#15929',
-    status: 'Successful',
-    amount: '$129.00',
-    rewards: 12,
-    date: '11 Sep 2020, 3:18 pm',
-  },
-  {
-    orderNo: '#15445',
-    status: 'Rejected',
-    amount: '$450.00',
-    rewards: 45,
-    date: '03 Sep 2020, 1:08 am',
-  },
-  {
-    orderNo: '#14575',
-    status: 'Pending',
-    amount: '$8,700.00',
-    rewards: 870,
-    date: '01 Sep 2020, 4:58 pm',
   },
 ]
 
@@ -83,6 +55,14 @@ const Dashboard = () => {
     indexOfFirstTransaction,
     indexOfLastTransaction
   )
+
+  const formatTime = (dateString: string) => {
+    const dateObject = new Date(dateString)
+    return dateObject.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  }
 
   return (
     <div className="d-flex flex-column flex-column-fluid">
@@ -152,7 +132,7 @@ const Dashboard = () => {
           <div className="card pt-4 mb-6 mb-xl-9">
             <div className="card-header border-0">
               <div className="card-title">
-                <h2>Transaction History</h2>
+                <h2>Transaction History For Today</h2>
               </div>
             </div>
             <div className="card-body pt-0 pb-5">
@@ -163,9 +143,10 @@ const Dashboard = () => {
                 <thead className="border-bottom border-gray-200 fs-7 fw-bold">
                   <tr className="text-start text-muted text-uppercase gs-0">
                     <th>Order No.</th>
+                    <th>Type</th>
                     <th>Status</th>
                     <th>Amount</th>
-                    <th className="min-w-160px">Date</th>
+                    <th className='tw-hidden sm:tw-flex min-w-160px'>Time</th>
                   </tr>
                 </thead>
                 <tbody className="fs-6 fw-semibold text-gray-600">
@@ -176,9 +157,11 @@ const Dashboard = () => {
                           {transaction.orderNo}
                         </span>
                       </td>
+                      <td>{transaction.type}</td>
+
                       <td>
                         <span
-                          className={`badge badge-light-${
+                          className={`badge tw-text-sm badge-light-${
                             transaction.status === 'Successful'
                               ? 'success'
                               : transaction.status === 'Pending'
@@ -190,7 +173,7 @@ const Dashboard = () => {
                         </span>
                       </td>
                       <td>{transaction.amount}</td>
-                      <td>{transaction.date}</td>
+                      <td className='tw-hidden sm:tw-flex'>{formatTime(transaction.date)}</td>
                     </tr>
                   ))}
                 </tbody>
