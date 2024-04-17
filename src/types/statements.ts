@@ -6,6 +6,16 @@ export interface StatementType {
   amount: string
 }
 
+export interface SettlementsType {
+  date: string
+  account: string
+  accountName: string
+  accountNumber: string
+  id: string
+  status: string
+  amount: string
+}
+
 export const StatementsData = [
   {
     date: 'May 05 2024, 10:00',
@@ -64,5 +74,43 @@ export const StatementsData = [
     status: 'Cancelled',
     description: 'Ut enim ad minim veniam',
     amount: '$210.00',
+  },
+]
+
+export const SettlementsData = [
+  {
+    date: 'April 15 2024, 10:00:30',
+    account: 'Kuda Bank',
+    accountName: 'David Doe',
+    accountNumber: '9876543210',
+    id: '1',
+    status: 'Approved',
+    amount: '₦33000.00',
+  },
+  {
+    date: 'April 15 2024, 13:12:42',
+    account: 'Zenith Bank',
+    accountName: 'John Doe',
+    accountNumber: '1234567890',
+    id: '2',
+    status: 'Approved',
+    amount: '₦28400.00',
+  },
+]
+
+export const AccountData = [
+  {
+    image: 'Logo',
+    account: 'Kuda Bank',
+    accountName: 'David Doe',
+    accountNumber: '9876543210',
+    id: '1',
+  },
+  {
+    image: 'Logo',
+    account: 'Zenith Bank',
+    accountName: 'John Doe',
+    accountNumber: '1234567890',
+    id: '2',
   },
 ]

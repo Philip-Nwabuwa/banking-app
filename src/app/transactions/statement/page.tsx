@@ -1,13 +1,13 @@
 'use client'
 
-import Charts from '@/components/common/Charts'
+import Modal from '@/components/common/Modal'
 import { StatementType, StatementsData } from '@/types/statements'
-import Link from 'next/link'
 import { useState } from 'react'
 
 const Statement = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
@@ -42,6 +42,14 @@ const Statement = () => {
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber)
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
   }
   return (
     <div id="kt_app_content" className="app-content flex-column-fluid">
@@ -156,7 +164,7 @@ const Statement = () => {
             >
               <thead>
                 <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                  <th className="min-w-100px">Refrence ID</th>
+                  <th className="min-w-100px">ID</th>
                   <th className="tw-hidden md:tw-flex">Transaction type</th>
                   <th className="min-w-80px">Date</th>
                   <th className="tw-hidden md:tw-flex">Status</th>
@@ -167,12 +175,34 @@ const Statement = () => {
                 {currentItems.map((item, index) => (
                   <tr key={index}>
                     <td>
-                      <Link
-                        href={`/dashboard/transactions/statement/${item.orderId}`}
-                        className="text-primary"
-                      >
-                        {item.orderId}
-                      </Link>
+                      <>
+                        <button className="text-primary" onClick={openModal}>
+                          {item.orderId}
+                        </button>
+                        <Modal
+                          isOpen={isModalOpen}
+                          onClose={closeModal}
+                          title={`Statement details for id: ${item.orderId}`}
+                          buttonText={'Close'}
+                        >
+                          <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
+                            <div
+                              className={`badge !tw-inline-block tw-w-fit badge-light-${item.status === 'Approved' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
+                            >
+                              {item.status}
+                            </div>
+                            <div>
+                              <span>Type:</span> {item.type}
+                            </div>
+                            <div>
+                              <span>Amount:</span> {item.amount}
+                            </div>
+                            <div>
+                              <span>Date:</span> {item.date}
+                            </div>
+                          </div>
+                        </Modal>
+                      </>
                     </td>
                     <td className="tw-hidden md:tw-flex">{item.type}</td>
 
@@ -193,9 +223,13 @@ const Statement = () => {
           <ul className="pagination mb-10">
             <li
               className={`page-item previous ${
-                currentPage === 1 ? 'disabled' : ''
+                currentPage === 1 ? 'disabled tw-cursor-not-allowed' : ''
               }`}
-              onClick={() => paginate(currentPage - 1)}
+              onClick={() => {
+                if (currentPage > 1) {
+                  paginate(currentPage - 1)
+                }
+              }}
             >
               <a href="#" className="page-link">
                 <i className="previous"></i>
@@ -214,9 +248,15 @@ const Statement = () => {
             ))}
             <li
               className={`page-item next ${
-                currentPage === totalPages ? 'disabled' : ''
+                currentPage === totalPages
+                  ? 'disabled tw-cursor-not-allowed'
+                  : ''
               }`}
-              onClick={() => paginate(currentPage + 1)}
+              onClick={() => {
+                if (currentPage < totalPages) {
+                  paginate(currentPage + 1)
+                }
+              }}
             >
               <a href="#" className="page-link">
                 <i className="next"></i>

@@ -1,10 +1,10 @@
 import React from 'react'
 
 interface ButtonProps {
-  onClick: () => void
+  onClick?: () => void
   text: string
-  iconClass: string
-  position: 'me-1' | 'ms-1'
+  iconClass?: string
+  position?: string
   disabled?: boolean
 }
 

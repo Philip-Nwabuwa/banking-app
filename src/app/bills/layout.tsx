@@ -60,7 +60,6 @@ const BillsLayout = ({
                         <li className="breadcrumb-item text-muted">
                           <Link
                             href="/dashboard"
-                            replace
                             className="text-muted text-hover-primary"
                           >
                             Dashboard

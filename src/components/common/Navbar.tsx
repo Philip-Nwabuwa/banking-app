@@ -9,6 +9,7 @@ import Logo from '@/assets/logos/main.png'
 import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import { sidebarLinks } from '@/types/sidebar-links'
+import SidebarLink from './SidebarLinks'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
@@ -73,7 +74,7 @@ const Navbar = () => {
                   className={`menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2 `}
                 >
                   <span className="menu-link">
-                    <Link href={item.path} replace>
+                    <Link href={item.path}>
                       <span
                         className={`menu-title ${
                           pathname === item.path ? 'text-active' : ''
@@ -130,7 +131,6 @@ const Navbar = () => {
                     >
                       <Link
                         href={'/dashboard/settings'}
-                        replace
                         onClick={toggleSidebar}
                       >
                         <Image
@@ -173,43 +173,16 @@ const Navbar = () => {
                         data-kt-buttons-target="[data-kt-button]"
                       >
                         {sidebarLinks.map((link, index) => (
-                          <div className="col mb-4" key={index}>
-                            <Link
-                              href={link.href}
-                              replace
-                              className={`btn btn-icon btn-outline btn-bg-light btn-active-light-primary btn-flex flex-column flex-center w-lg-90px h-lg-90px w-70px h-70px border-gray-200 ${
-                                isActiveLink(link.href) ? 'active' : ''
-                              }`}
-                              data-kt-button="true"
-                              onClick={toggleSidebar}
-                            >
-                              <span className="mb-2">
-                                <i
-                                  className={`ki-outline ${link.icon} fs-1`}
-                                ></i>
-                              </span>
-                              <span className="fs-7 fw-bold">{link.label}</span>
-                            </Link>
-                          </div>
+                          <SidebarLink
+                            key={index}
+                            link={link}
+                            isActiveLink={isActiveLink}
+                            toggleSidebar={toggleSidebar}
+                          />
                         ))}
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className="flex-column-auto d-flex flex-center px-4 px-lg-8 py-3 py-lg-8 mt-auto"
-                id="kt_app_sidebar_footer"
-              >
-                <div className="app-footer-item">
-                  <Link
-                    href="/dashboard/settings"
-                    replace
-                    onClick={toggleSidebar}
-                    className="btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-50px h-50px w-md-60px h-md-60px"
-                  >
-                    <i className="ki-outline ki-setting-2 fs-2tx"></i>
-                  </Link>
                 </div>
               </div>
             </div>

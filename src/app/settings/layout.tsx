@@ -8,7 +8,7 @@ import UserImage from '@/assets/images/300-1.jpg'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
 
-const Layout = ({
+const SettingsLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -16,8 +16,8 @@ const Layout = ({
   const pathname = usePathname()
 
   const navItems = [
-    { label: 'Settings', path: '/dashboard/settings' },
-    { label: 'Security', path: '/dashboard/settings/security' },
+    { label: 'Settings', path: '/settings' },
+    { label: 'Security', path: '/settings/security' },
     { label: 'API Keys', path: '#' },
   ]
 
@@ -101,39 +101,27 @@ const Layout = ({
                             <div className="d-flex justify-content-between align-items-start flex-wrap mb-2">
                               <div className="d-flex flex-column">
                                 <div className="d-flex align-items-center mb-2">
-                                  <a
-                                    href="#"
-                                    className="text-gray-900 text-hover-primary fs-2 fw-bold me-1"
-                                  >
+                                  <div className="text-gray-900 text-hover-primary fs-2 fw-bold me-1">
                                     Max Smith
-                                  </a>
-                                  <a href="#">
+                                  </div>
+                                  <div>
                                     <i className="ki-outline ki-verify fs-1 text-primary"></i>
-                                  </a>
+                                  </div>
                                 </div>
 
                                 <div className="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
-                                  <a
-                                    href="#"
-                                    className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2"
-                                  >
+                                  <div className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <i className="ki-outline ki-profile-circle fs-4 me-1"></i>
                                     Developer
-                                  </a>
-                                  <a
-                                    href="#"
-                                    className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2"
-                                  >
+                                  </div>
+                                  <div className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <i className="ki-outline ki-geolocation fs-4 me-1"></i>
                                     SF, Bay Area
-                                  </a>
-                                  <a
-                                    href="#"
-                                    className="d-flex align-items-center text-gray-500 text-hover-primary mb-2"
-                                  >
+                                  </div>
+                                  <div className="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
                                     <i className="ki-outline ki-sms fs-4"></i>
                                     max@kt.com
-                                  </a>
+                                  </div>
                                 </div>
                               </div>
 
@@ -315,4 +303,4 @@ const Layout = ({
   )
 }
 
-export default Layout
+export default SettingsLayout

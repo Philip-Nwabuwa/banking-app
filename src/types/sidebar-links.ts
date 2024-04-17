@@ -1,5 +1,10 @@
 export const sidebarLinks = [
   {
+    href: '/dashboard',
+    icon: 'ki-chart-line-up-2',
+    label: 'Dashboard',
+  },
+  {
     href: '/transactions/settlements',
     icon: 'ki-chart-line-up-2',
     label: 'Settlements',
@@ -11,7 +16,6 @@ export const sidebarLinks = [
     icon: 'ki-wifi-square',
     label: 'Withdrawal',
   },
-  // { href: '/dashboard/transactions', icon: 'ki-rocket', label: 'Transactions' },
   {
     href: '/transactions/statement',
     icon: 'ki-geolocation',
@@ -22,5 +26,6 @@ export const sidebarLinks = [
     icon: 'ki-abstract-28',
     label: 'Reversal',
   },
-  // { href: '/dashboard/pos', icon: 'ki-abstract-28', label: 'POS' },
+  { href: '/pos', icon: 'ki-abstract-28', label: 'POS' },
+  { href: '/settings', icon: 'ki-abstract-28', label: 'Settings' },
 ]
