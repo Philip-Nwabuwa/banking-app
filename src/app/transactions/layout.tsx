@@ -17,11 +17,11 @@ const TransactionsLayout = ({
   const statementPathname = pathname.startsWith('/transactions/statement')
 
   const navItems = [
-    { label: 'Settlements', path: '/transactions/settlements' },
+    { label: 'Deposit', path: '/transactions/deposit' },
 
     { label: 'Statement', path: '/transactions/statement' },
 
-    { label: 'Withdrawal', path: '/transactions/withdrawal' },
+    { label: 'Settlement', path: '/transactions/settlement' },
 
     { label: 'Reversal', path: '/transactions/reversal' },
   ]

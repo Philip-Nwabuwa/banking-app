@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/types/sidebar-links'
 import Balance from './Balance'
 import SidebarLink from './SidebarLinks'
+import Logout from './Logout'
 
 const Sidebar = () => {
   const pathname = usePathname()
@@ -134,7 +135,11 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
+          <div className="app-footer-item tw-flex tw-justify-center">
+          <Logout />
         </div>
+        </div>
+        
       </div>
     </div>
   )

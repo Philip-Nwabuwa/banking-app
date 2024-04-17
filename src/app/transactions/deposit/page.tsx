@@ -13,7 +13,7 @@ import MinLogo from '@/assets/logos/simple-black.png'
 import Swal from 'sweetalert2'
 import Modal from '@/components/common/Modal'
 
-const Settlements = () => {
+const Deposit = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState('all')
@@ -250,4 +250,4 @@ const Settlements = () => {
   )
 }
 
-export default Settlements
+export default Deposit

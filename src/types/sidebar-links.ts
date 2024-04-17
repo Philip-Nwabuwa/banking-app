@@ -5,21 +5,21 @@ export const sidebarLinks = [
     label: 'Dashboard',
   },
   {
-    href: '/transactions/settlements',
+    href: '/transactions/deposit',
     icon: 'ki-chart-line-up-2',
-    label: 'Settlements',
+    label: 'Deposit',
   },
   { href: '/payout', icon: 'ki-calendar', label: 'Payout' },
   { href: '/bills', icon: 'ki-security-check', label: 'Bills' },
   {
-    href: '/transactions/withdrawal',
+    href: '/transactions/settlement',
     icon: 'ki-wifi-square',
-    label: 'Withdrawal',
+    label: 'Settlement',
   },
   {
     href: '/transactions/statement',
     icon: 'ki-geolocation',
-    label: 'Statements',
+    label: 'Statement',
   },
   {
     href: '/transactions/reversal',

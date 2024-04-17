@@ -10,6 +10,7 @@ import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import { sidebarLinks } from '@/types/sidebar-links'
 import SidebarLink from './SidebarLinks'
+import Logout from './Logout'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
@@ -181,6 +182,9 @@ const Navbar = () => {
                           />
                         ))}
                       </div>
+                    </div>
+                    <div className="app-footer-item tw-flex tw-justify-center tw-mt-4">
+                      <Logout />
                     </div>
                   </div>
                 </div>
