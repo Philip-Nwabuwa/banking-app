@@ -49,7 +49,7 @@ const TransactionsLayout = ({
               id="kt_app_main"
             >
               <div className="d-flex flex-column flex-column-fluid">
-                <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
+                <div id="kt_app_toolbar" className="app-toolbar !tw-h-16 py-3 py-lg-0">
                   <div
                     id="kt_app_toolbar_container"
                     className="app-container container-xxl d-flex flex-stack"

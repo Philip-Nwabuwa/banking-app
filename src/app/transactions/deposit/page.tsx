@@ -12,11 +12,13 @@ import { useState } from 'react'
 import MinLogo from '@/assets/logos/simple-black.png'
 import Swal from 'sweetalert2'
 import Modal from '@/components/common/Modal'
+import CopyToClipboard from '@/components/common/CopyToClipboard'
 
 const Deposit = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState('all')
+  const [copied, setCopied] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
@@ -65,6 +67,20 @@ const Deposit = () => {
     setIsModalOpen(false)
   }
 
+  const handleCopyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      console.log(text);
+      
+      setCopied(true)
+      setTimeout(() => {
+        setCopied(false)
+      }, 3000)
+    } catch (error) {
+      console.error('Failed to copy:', error)
+    }
+  }
+
   return (
     <div id="kt_app_content" className="app-content flex-column-fluid">
       <div
@@ -97,8 +113,9 @@ const Deposit = () => {
                       <div className="tw-py-2 tw-font-bold tw-text-2xl">
                         {item.accountName}
                       </div>
-                      <div className="tw-pb-2 tw-text-xl">
-                        {item.accountNumber}
+                      <div className="tw-pb-2 tw-text-xl tw-flex tw-items-center tw-gap-2">
+                        {item.accountNumber}{' '}
+                        <CopyToClipboard text={item.accountNumber} />
                       </div>
                       <div>{item.account}</div>
                       {/* <button className="tw-border-[3px] tw-border-solid tw-border-[#1b84ff] tw-rounded-xl tw-px-3 tw-py-2">

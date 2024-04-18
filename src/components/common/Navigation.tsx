@@ -8,7 +8,7 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ pathname, navItems }) => {
   return (
     <div id="kt_app_content_container" className="app-container container-xxl">
-      <div className="card mb-5 mb-xl-10">
+      <div className="card mb-5 mb-xl-5">
         <div
           className="card-body"
           style={{

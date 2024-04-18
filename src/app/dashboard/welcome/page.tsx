@@ -20,7 +20,7 @@ const WelcomePage = () => {
   return (
     <div className="app-main flex-column flex-row-fluid" id="kt_app_main">
       <div className="d-flex flex-column flex-column-fluid">
-        <div id="kt_app_toolbar" className="app-toolbar py-3 py-lg-0">
+        <div id="kt_app_toolbar" className="app-toolbar !tw-h-16 py-3 py-lg-0">
           <div className="app-container container-xxl d-flex flex-stack">
             <div className="page-title d-flex flex-column justify-content-center me-3">
               <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">

@@ -134,6 +134,7 @@ const POS = () => {
     e.preventDefault()
     setIsModalOpen(false)
     try {
+      clearAllOrders()
       Swal.fire({
         text: 'Transaction Successful.',
         icon: 'success',
@@ -377,6 +378,7 @@ const POS = () => {
                         buttonText={'Close'}
                         onSubmit={handleSubmitOrder}
                         submitText='continue'
+                        submitStyle='btn btn-primary'
                       >
                         <div className="tw-flex tw-items-center tw-justify-center">
                           <OtpInput

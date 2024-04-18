@@ -23,16 +23,11 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 const BankNames = [
-  { name: 'First Bank of Nigeria' },
-  { name: 'Guaranty Trust Bank' },
-  { name: 'Zenith Bank' },
-  { name: 'Access Bank' },
-  { name: 'United Bank for Africa (UBA)' },
-  { name: 'Ecobank Nigeria' },
-  { name: 'Fidelity Bank Nigeria' },
-  { name: 'Union Bank of Nigeria' },
-  { name: 'Stanbic IBTC Bank' },
-  { name: 'Sterling Bank' },
+  { name: 'First Bank of Nigeria', label: 'fbn' },
+  { name: 'Guaranty Trust Bank', label: 'gtb' },
+  { name: 'Zenith Bank', label: 'zenith' },
+  { name: 'Access Bank', label: 'access' },
+  { name: 'United Bank for Africa (UBA)', label: 'uba' },
 ] as const
 
 const bankTransferSchema = z.object({
@@ -45,9 +40,11 @@ const bankTransferSchema = z.object({
 
 const BankTransfer = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [selectedBank, setSelectedBank] = useState(
-    'Please select a bank account'
-  )
+  const [open, setOpen] = useState(false)
+  console.log(open)
+
+  const [selectedBank, setSelectedBank] = useState('')
+  console.log(selectedBank)
 
   const [otpValue, setOtpValue] = useState('')
 
@@ -128,10 +125,17 @@ const BankTransfer = () => {
                   </label>
 
                   <div className="col-lg-8 fv-row">
-                    <Popover>
+                    <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
-                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                          {selectedBank}
+                        <button
+                          aria-expanded={open}
+                          className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid"
+                        >
+                          {selectedBank
+                            ? BankNames.find(
+                                (bankname) => bankname.name === selectedBank
+                              )?.name
+                            : 'Select...'}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
@@ -144,7 +148,14 @@ const BankTransfer = () => {
                               {BankNames.map((item) => (
                                 <CommandItem key={item.name}>
                                   <p
-                                    onClick={() => handleBankSelect(item.name)}
+                                    onClick={() => {
+                                      setSelectedBank((prevSelectedBank) =>
+                                        prevSelectedBank === item.name
+                                          ? ''
+                                          : item.name
+                                      )
+                                      setOpen(false)
+                                    }}
                                     className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                   >
                                     {item.name}
