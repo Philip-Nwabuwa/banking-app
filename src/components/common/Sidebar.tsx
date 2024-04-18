@@ -1,6 +1,5 @@
 'use client'
 
-import Logo from '@/assets/logos/main.png'
 import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import Image from 'next/image'

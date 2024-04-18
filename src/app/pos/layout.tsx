@@ -15,11 +15,7 @@ const SettingsLayout = ({
 }>) => {
   const pathname = usePathname()
 
-  const navItems = [
-    { label: 'Settings', path: '/settings' },
-    { label: 'Security', path: '/settings/security' },
-    { label: 'API Keys', path: '#' },
-  ]
+  const BuyPosPage = pathname === '/pos/buy-pos'
 
   return (
     <body
@@ -45,7 +41,10 @@ const SettingsLayout = ({
               id="kt_app_main"
             >
               <div className="d-flex flex-column flex-column-fluid">
-                <div id="kt_app_toolbar" className="app-toolbar !tw-h-16 py-3 py-lg-0">
+                <div
+                  id="kt_app_toolbar"
+                  className="app-toolbar !tw-h-16 py-3 py-lg-0"
+                >
                   <div
                     id="kt_app_toolbar_container"
                     className="app-container container-xxl d-flex flex-stack"
@@ -70,9 +69,28 @@ const SettingsLayout = ({
                         <li className="breadcrumb-item text-muted">POS</li>
                       </ul>
                     </div>
+                    <div className="d-flex align-items-center gap-2 gap-lg-3">
+                      {BuyPosPage ? (
+                        <Link
+                          href="/pos"
+                          replace
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Pos Transactions
+                        </Link>
+                      ) : (
+                        <Link
+                          href="/pos/buy-pos"
+                          replace
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Purchase a POS
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
-                    {children}
+                {children}
               </div>
             </div>
           </div>

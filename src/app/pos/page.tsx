@@ -1,155 +1,85 @@
 'use client'
 
-import demoImg from '@/assets/images/POS/pos1.jpg'
-import demoImg1 from '@/assets/images/POS/pos2.jpg'
-import demoImg2 from '@/assets/images/POS/pos3.jpg'
 import Modal from '@/components/common/Modal'
-import Image, { StaticImageData } from 'next/image'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { PosData } from '@/types/pos'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
-
-import OtpInput from 'react-otp-input'
-import { toast } from 'sonner'
-import Swal from 'sweetalert2'
-
-const items = [
-  {
-    name: 'Topwise T1',
-    price: '₦120000',
-    imageSrc: demoImg,
-  },
-  {
-    name: 'Topwise MP35',
-    price: '₦85000',
-    imageSrc: demoImg1,
-  },
-  {
-    name: 'PAX S90',
-    price: '₦65000',
-    imageSrc: demoImg2,
-  },
-]
-
-interface Item {
-  name: string
-  price: string
-  imageSrc: StaticImageData
-  quantity: number
-}
+import ImagePos from "@/assets/images/NoPos.png"
 
 const POS = () => {
-  const [orderItems, setOrderItems] = useState<Item[]>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [otpValue, setOtpValue] = useState('')
+  const [open, setOpen] = useState(false)
+  const [selectedTerminal, setSelectedTerminal] = useState('all')
+  const [selectedStatus, setSelectedStatus] = useState('all')
 
-  const handleOtpChange = (otp: string) => {
-    setOtpValue(otp)
-  }
-  const addToOrder = (item: {
-    name: string
-    price: string
-    imageSrc: StaticImageData
-  }) => {
-    setOrderItems((prevOrderItems) => {
-      // Find all items with the same name
-      const existingItems = prevOrderItems.filter(
-        (orderItem) => orderItem.name === item.name
-      )
-      // If there are no existing items, add a new item to the array
-      if (existingItems.length === 0) {
-        return [...prevOrderItems, { ...item, quantity: 1 }]
-      }
-      // If there are existing items, update their quantities
-      return prevOrderItems.map((orderItem) => {
-        if (orderItem.name === item.name) {
-          // Increase quantity by 1 for the matching item
-          return { ...orderItem, quantity: orderItem.quantity + 1 }
-        }
-        return orderItem
-      })
+  const sortedTransactions = PosData.sort((a, b) => {
+    const dateA = new Date(a.date)
+    const dateB = new Date(b.date)
+    return dateB.getTime() - dateA.getTime()
+  })
+
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(sortedTransactions)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  const itemsPerPage = 5
+
+  const applyFilter = () => {
+    const newFilteredTransactions = sortedTransactions.filter((item) => {
+      const matchesTerminal =
+        selectedTerminal === 'all' || item.terminal === selectedTerminal
+      const matchesStatus =
+        selectedStatus === 'all' || item.status === selectedStatus
+
+      return matchesTerminal && matchesStatus
     })
+
+    setFilteredTransactions(newFilteredTransactions)
+    setOpen(false)
   }
 
-  const removeOrderItem = (orderItemName: string) => {
-    // Find the item in the orderItems array
-    const item = orderItems.find(
-      (orderItem) => orderItem.name === orderItemName
-    )
-    if (item) {
-      item.quantity -= 1
-      if (item.quantity > 0) {
-        setOrderItems([...orderItems])
-      } else {
-        // Remove the item from the array if the quantity is 0 or less
-        setOrderItems(
-          orderItems.filter((orderItem) => orderItem.name !== orderItemName)
-        )
-      }
-    }
+  const resetFilter = () => {
+    setSelectedTerminal('all')
+    setSelectedStatus('all')
+    setFilteredTransactions(sortedTransactions)
+    setOpen(false)
   }
 
-  const addOrderItem = (orderItemName: string) => {
-    // Find the item in the orderItems array
-    const item = orderItems.find(
-      (orderItem) => orderItem.name === orderItemName
-    )
-    if (item) {
-      item.quantity += 1
-      setOrderItems([...orderItems])
-    }
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage)
+  const indexOfLastItem = currentPage * itemsPerPage
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage
+  const currentItems = filteredTransactions.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  )
+
+  const filterOptions = [
+    { value: 'all', label: 'All' },
+    { value: 'Successful', label: 'Successful' },
+    { value: 'Pending', label: 'Pending' },
+    { value: 'Failed', label: 'Failed' },
+  ]
+
+  const uniqueTerminals = Array.from(
+    new Set(PosData.map((item) => item.terminal))
+  )
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
   }
-
-  const clearAllOrders = () => {
-    setOrderItems([])
-  }
-
-  const subTotal = orderItems.reduce((total, orderItem) => {
-    // Calculate the total price for each item and add it to the running total
-    return (
-      total + parseFloat(orderItem.price.replace('₦', '')) * orderItem.quantity
-    )
-  }, 0)
-
-  // Ensure grandTotal is a number
-  const subTotalNumber = parseFloat(subTotal.toFixed(2))
-
-  // Calculate the discount amount (2% of the grand total)
-  const discount = (subTotalNumber * 0.02).toFixed(2)
-
-  // Ensure discount is a number
-  const discountNumber = parseFloat(discount)
-
-  // Calculate the final total after discount
-  const totalAfterDiscount = (subTotalNumber - discountNumber).toFixed(2)
 
   const openModal = () => {
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
-    setOtpValue("")
     setIsModalOpen(false)
-  }
-
-  const handleSubmitOrder = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsModalOpen(false)
-    try {
-      clearAllOrders()
-      Swal.fire({
-        text: 'Transaction Successful.',
-        icon: 'success',
-        buttonsStyling: !1,
-        confirmButtonText: 'Ok, got it!',
-        customClass: { confirmButton: 'btn btn-primary' },
-      })
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Validation error:', error.message)
-      } else {
-        console.error('An unknown error occurred:', error)
-        toast.error('Something went wrong, pls try again later.')
-      }
-    }
   }
 
   return (
@@ -158,244 +88,339 @@ const POS = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        <div className="d-flex flex-column flex-xl-row">
-          <div className="tw-flex md:tw-flex-row tw-flex-col tw-gap-3 flex-row-fluid me-xl-9 mb-10 mb-xl-0">
-            <div className="card card-flush card-p-0 bg-transparent border-0">
-              <div className="card-body">
-                <div className="tab-content">
-                  <div
-                    className="tab-pane fade show active"
-                    id="kt_pos_food_content_1"
-                  >
-                    <div className="d-flex flex-wrap d-grid gap-5 gap-xxl-9">
-                      {items.map((item, index) => (
-                        <div
-                          key={index}
-                          className="card card-flush flex-row-fluid p-6 pb-5 mw-100"
-                        >
-                          <div className="card-body tw-flex tw-flex-col tw-items-center">
-                            <Image
-                              src={item.imageSrc}
-                              className="rounded-3 mb-4 w-150px h-150px w-xxl-200px h-xxl-200px"
-                              alt=""
-                              width={200}
-                              height={200}
-                            />
+        {PosData.length > 0 ? (
+          <div className="card card-flush tw-mt-10">
+            <div className="card-header align-items-center py-5 gap-2 gap-md-5">
+              <div className="card-title">
+                <div className="d-flex align-items-center position-relative my-1">
+                  <i className="ki-outline ki-magnifier fs-3 position-absolute ms-4"></i>
+                  <input
+                    type="text"
+                    data-kt-ecommerce-order-filter="search"
+                    className="form-control form-control-solid w-250px ps-12"
+                    placeholder="Search for ID or Amount.."
+                    onChange={(e) => {
+                      const searchTerm = e.target.value.toLowerCase()
+                      const newFilteredTransactions = sortedTransactions.filter(
+                        (item) =>
+                          item.ID.toLowerCase().includes(searchTerm) ||
+                          item.amount.toLowerCase().includes(searchTerm)
+                      )
+                      setFilteredTransactions(newFilteredTransactions)
+                    }}
+                  />
+                </div>
 
-                            <div className="tw-flex tw-items-center tw-gap-4">
-                              <div className="mb-2">
-                                <div>
-                                  <span className="fw-bold text-gray-800 cursor-pointer text-hover-primary fs-3 fs-xl-1">
-                                    {item.name}
-                                  </span>
-                                  {/* <span className="text-gray-500 fw-semibold d-block fs-6 mt-n1">
-                                    {item.cookTime}
-                                  </span> */}
-                                </div>
-                                <span className="text-success text-end fw-bold fs-1">
-                                  {item.price}
-                                </span>
-                              </div>
-                              <button
-                                type="button"
-                                className="btn btn-icon btn-sm btn-light btn-icon-gray-500"
-                                data-kt-dialer-control="increase"
-                                onClick={() => addToOrder(item)}
+                <div
+                  id="kt_ecommerce_report_shipping_export"
+                  className="d-none"
+                ></div>
+              </div>
+
+              <div className="card-toolbar flex-row-fluid justify-content-end gap-5">
+                <input
+                  className="form-control form-control-solid w-100 mw-250px"
+                  placeholder="Pick date range"
+                  id="kt_ecommerce_report_shipping_daterangepicker"
+                />
+
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      aria-expanded={open}
+                      className="btn btn-md btn-flex btn-secondary fw-bold"
+                    >
+                      <i className="ki-outline ki-filter fs-6 text-muted me-1"></i>
+                      Filter
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-250px w-md-300px">
+                    <div>
+                      <div className="px-7 py-5">
+                        <div className="fs-5 text-gray-900 fw-bold">
+                          Filter Options
+                        </div>
+                      </div>
+                      <div className="separator border-gray-200"></div>
+                      <div className="px-7 py-5">
+                        <div className="mb-10">
+                          <label className="form-label fw-semibold">
+                            Devices:
+                          </label>
+                          <select
+                            className="form-select form-select-solid"
+                            data-control="select2"
+                            data-hide-search="true"
+                            data-placeholder="Status"
+                            data-kt-ecommerce-order-filter="status"
+                            onChange={(e) =>
+                              setSelectedTerminal(e.target.value)
+                            }
+                            value={selectedTerminal}
+                          >
+                            <option value="all">All</option>
+                            {uniqueTerminals.map((terminal) => (
+                              <option key={terminal} value={terminal}>
+                                {terminal}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="mb-10">
+                          <label className="form-label fw-semibold">
+                            Status:
+                          </label>
+                          <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
+                            {filterOptions.map((option) => (
+                              <label
+                                key={option.value}
+                                className="form-check form-check-sm form-check-custom form-check-solid me-5"
                               >
-                                <i className="ki-outline ki-plus fs-3x"></i>
-                              </button>
-                            </div>
+                                <input
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  value={option.value}
+                                  onChange={(e) =>
+                                    setSelectedStatus(e.target.value)
+                                  }
+                                  checked={selectedStatus === option.value}
+                                />
+                                <span className="form-check-label">
+                                  {option.label}
+                                </span>
+                              </label>
+                            ))}
                           </div>
                         </div>
-                      ))}
+                        <div className="d-flex justify-content-end">
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-light btn-active-light-primary me-2"
+                            onClick={resetFilter}
+                          >
+                            Reset
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-primary"
+                            onClick={applyFilter}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                      </div>
                     </div>
+                  </PopoverContent>
+                </Popover>
+
+                <button
+                  type="button"
+                  className="btn btn-light-primary"
+                  data-kt-menu-trigger="click"
+                  data-kt-menu-placement="bottom-end"
+                >
+                  <i className="ki-outline ki-exit-up fs-2"></i>Export Report
+                </button>
+                <div
+                  id="kt_ecommerce_report_shipping_export_menu"
+                  className="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4"
+                  data-kt-menu="true"
+                >
+                  <div className="menu-item px-3">
+                    <a
+                      href="#"
+                      className="menu-link px-3"
+                      data-kt-ecommerce-export="copy"
+                    >
+                      Copy to clipboard
+                    </a>
+                  </div>
+
+                  <div className="menu-item px-3">
+                    <a
+                      href="#"
+                      className="menu-link px-3"
+                      data-kt-ecommerce-export="excel"
+                    >
+                      Export as Excel
+                    </a>
+                  </div>
+
+                  <div className="menu-item px-3">
+                    <a
+                      href="#"
+                      className="menu-link px-3"
+                      data-kt-ecommerce-export="csv"
+                    >
+                      Export as CSV
+                    </a>
+                  </div>
+
+                  <div className="menu-item px-3">
+                    <a
+                      href="#"
+                      className="menu-link px-3"
+                      data-kt-ecommerce-export="pdf"
+                    >
+                      Export as PDF
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
-            {orderItems.length > 0 && (
-              <div className="flex-row-auto w-xl-450px">
-                <div className="card card-flush bg-body" id="kt_pos_form">
-                  <div className="card-header pt-5">
-                    <h3 className="card-title fw-bold text-gray-800 fs-2qx">
-                      Current Order
-                    </h3>
-                    <div className="card-toolbar">
-                      <button
-                        className="btn btn-light-primary fs-4 fw-bold py-4"
-                        onClick={clearAllOrders}
-                      >
-                        Clear All
-                      </button>
-                    </div>
-                  </div>
-                  <div className="card-body pt-0">
-                    <div className="table-responsive mb-8">
-                      <table className="table align-middle gs-0 gy-4 my-0">
-                        <thead>
-                          <tr>
-                            <th className="min-w-175px"></th>
-                            <th className="w-125px"></th>
-                            <th className="w-60px"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {orderItems.map((orderItem, index) => (
-                            <tr key={index}>
-                              <td className="pe-0">
-                                <div className="d-flex align-items-center">
-                                  <Image
-                                    src={orderItem.imageSrc}
-                                    className="w-50px h-50px rounded-3 me-3"
-                                    alt=""
-                                    width={50}
-                                    height={50}
-                                  />
-                                  <span className="fw-bold text-gray-800 cursor-pointer text-hover-primary fs-6 me-1">
-                                    {orderItem.name}
-                                  </span>
-                                </div>
-                              </td>
-                              <td className="pe-0">
-                                <div
-                                  className="position-relative d-flex align-items-center"
-                                  data-kt-dialer="true"
-                                  data-kt-dialer-min="1"
-                                  data-kt-dialer-max="10"
-                                  data-kt-dialer-step="1"
-                                  data-kt-dialer-decimals="0"
-                                >
-                                  <button
-                                    type="button"
-                                    className="btn btn-icon btn-sm btn-light btn-icon-gray-500"
-                                    onClick={() =>
-                                      removeOrderItem(orderItem.name)
-                                    }
-                                  >
-                                    <i className="ki-outline ki-minus fs-3x"></i>
-                                  </button>
-                                  <input
-                                    type="text"
-                                    className="form-control border-0 text-center px-0 fs-3 fw-bold text-gray-800 w-30px"
-                                    data-kt-dialer-control="input"
-                                    placeholder="Amount"
-                                    name="manageBudget"
-                                    readOnly={true}
-                                    value={orderItem.quantity}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-icon btn-sm btn-light btn-icon-gray-500"
-                                    onClick={() => addOrderItem(orderItem.name)}
-                                  >
-                                    <i className="ki-outline ki-plus fs-3x"></i>
-                                  </button>
-                                </div>
-                              </td>
-                              <td className="text-end">
-                                <span
-                                  className="fw-bold text-primary fs-2"
-                                  data-kt-pos-element="item-total"
-                                >
-                                  ₦
-                                  {(
-                                    parseFloat(
-                                      orderItem.price.replace('₦', '')
-                                    ) * orderItem.quantity
-                                  ).toFixed(2)}
-                                </span>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="d-flex flex-stack bg-success rounded-3 p-6 mb-11">
-                      <div className="fs-6 fw-bold text-white">
-                        <span className="d-block lh-1 mb-2">Subtotal</span>
-                        <span className="d-block mb-2">Discounts(2%)</span>
-                        <span className="d-block mb-9">Tax(0%)</span>
-                        <span className="d-block fs-2qx lh-1">Total</span>
-                      </div>
-                      <div className="fs-6 fw-bold text-white text-end">
-                        <span
-                          className="d-block lh-1 mb-2"
-                          data-kt-pos-element="total"
-                        >
-                          ₦{subTotal}
-                        </span>
-                        <span
-                          className="d-block mb-2"
-                          data-kt-pos-element="discount"
-                        >
-                          -₦{discountNumber}
-                        </span>
-                        <span
-                          className="d-block mb-9"
-                          data-kt-pos-element="tax"
-                        >
-                          ₦0.00
-                        </span>
-                        <span
-                          className="d-block fs-2qx lh-1"
-                          data-kt-pos-element="grant-total"
-                        >
-                          ₦{totalAfterDiscount}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="mb-8">
-                      <h3 className="fw-bold text-gray-800 mb-3">Address</h3>
 
-                      <textarea
-                        className="form-control form-control form-control-solid"
-                        data-kt-autosize="true"
-                      ></textarea>
-                    </div>
-                    <div className="mb-5">
-                      <h3 className="fw-bold text-gray-800 mb-3">
-                        Apply Discout Code
-                      </h3>
+            <div className="card-body pt-0">
+              {filteredTransactions.length > 0 ? (
+                <>
+                  <table
+                    className="table align-middle table-row-dashed fs-6 gy-5"
+                    id="kt_ecommerce_report_shipping_table"
+                  >
+                    <thead>
+                      <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                        <th className="min-w-100px">ID</th>
+                        <th className="tw-hidden md:tw-flex">Terminal</th>
+                        <th className="min-w-80px">Date</th>
+                        <th className="tw-hidden md:tw-flex">Status</th>
+                        <th className="text-end">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody className="fw-semibold text-gray-600">
+                      {currentItems.map((item, index) => (
+                        <tr key={index}>
+                          <td>
+                            <>
+                              <button
+                                className="text-primary"
+                                onClick={openModal}
+                              >
+                                {item.ID}
+                              </button>
+                              <Modal
+                                isOpen={isModalOpen}
+                                onClose={closeModal}
+                                title={`POS details for id: ${item.ID}`}
+                                buttonText={'Close'}
+                              >
+                                <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
+                                  <div
+                                    className={`badge !tw-inline-block tw-w-fit badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
+                                  >
+                                    {item.status}
+                                  </div>
+                                  <div>
+                                    <span>Terminal:</span> {item.terminal}
+                                  </div>
+                                  <div>
+                                    <span>Amount:</span> {item.amount}
+                                  </div>
+                                  <div>
+                                    <span>Date:</span> {item.date}
+                                  </div>
+                                </div>
+                              </Modal>
+                            </>
+                          </td>
+                          <td className="tw-hidden md:tw-flex">
+                            {item.terminal}
+                          </td>
 
-                      <textarea
-                        className="form-control form-control form-control-solid"
-                        data-kt-autosize="true"
-                      ></textarea>
-                    </div>
-                    <>
-                      <button
-                        className="btn btn-primary fs-1 w-100 py-4"
-                        onClick={openModal}
+                          <td>{item.date}</td>
+                          <td className="tw-hidden md:tw-flex">
+                            <div
+                              className={`badge !tw-inline-block tw-w-fit badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
+                            >
+                              {item.status}
+                            </div>
+                          </td>
+                          <td className="text-end">{item.amount}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <ul className="pagination">
+                    <li
+                      className={`page-item previous ${
+                        currentPage === 1
+                          ? 'disabled tw-cursor-not-allowed'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        if (currentPage > 1) {
+                          paginate(currentPage - 1)
+                        }
+                      }}
+                    >
+                      <a href="#" className="page-link">
+                        <i className="previous"></i>
+                      </a>
+                    </li>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <li
+                        key={i}
+                        className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}
+                        onClick={() => paginate(i + 1)}
                       >
-                        Proceed to Checkout
-                      </button>
-                      <Modal
-                        isOpen={isModalOpen}
-                        onClose={closeModal}
-                        title={'Provide Authorization PIN to proceed.'}
-                        buttonText={'Close'}
-                        onSubmit={handleSubmitOrder}
-                        submitText='continue'
-                        submitStyle='btn btn-primary'
-                      >
-                        <div className="tw-flex tw-items-center tw-justify-center">
-                          <OtpInput
-                            inputStyle="inputStyle"
-                            value={otpValue}
-                            onChange={handleOtpChange}
-                            inputType="password"
-                            numInputs={4}
-                            renderInput={(props) => <input {...props} />}
-                          />
-                        </div>
-                      </Modal>
-                    </>
-                  </div>
+                        <a href="#" className="page-link">
+                          {i + 1}
+                        </a>
+                      </li>
+                    ))}
+                    <li
+                      className={`page-item next ${
+                        currentPage === totalPages
+                          ? 'disabled tw-cursor-not-allowed'
+                          : ''
+                      }`}
+                      onClick={() => {
+                        if (currentPage < totalPages) {
+                          paginate(currentPage + 1)
+                        }
+                      }}
+                    >
+                      <a href="#" className="page-link">
+                        <i className="next"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <div className="tw-my-10 tw-text-center tw-text-xl tw-font-bold">
+                  No transactions found.
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="card">
+            <div className="card-body">
+              <div className="card-px text-center pt-15 pb-15">
+                <h2 className="fs-2x fw-bold mb-0">POS transactions</h2>
+                <p className="text-gray-500 fs-4 fw-semibold py-7">
+                  No POS transaction found <br /> click bellow to purchase a POS
+                </p>
+                <Link
+                  href="/pos/buy-pos"
+                  replace
+                  className="btn btn-primary er fs-6 px-8 py-4"
+                  data-bs-toggle="modal"
+                  data-bs-target="#kt_modal_create_api_key"
+                >
+                  Purchase A POS
+                </Link>
+              </div>
+              <div className="tw-flex tw-items-center tw-justify-center pb-15 px-5">
+                <Image
+                  src={ImagePos}
+                  alt=""
+                  className="!mw-100 !h-200px !h-sm-325px"
+                  width={250}
+                  height={250}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -43,7 +43,6 @@ const Reversal = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        {/* <Charts /> */}
         <div className="card card-flush">
           <div className="card-header align-items-center py-5 gap-2 gap-md-5">
             <div className="card-title">
