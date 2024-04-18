@@ -31,7 +31,7 @@ const CopyToClipboard = ({ text }: { text: string }) => {
           onClick={copyToClipboard}
         ></i>
       )}
-      {showSuccess && <i className="ki-solid ki-copy-success fs-1"></i>}
+      {showSuccess && <i className="ki-solid ki-copy-success fs-1 text-success"></i>}
     </div>
   );
 };

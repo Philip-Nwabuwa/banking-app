@@ -67,20 +67,6 @@ const Deposit = () => {
     setIsModalOpen(false)
   }
 
-  const handleCopyToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      console.log(text);
-      
-      setCopied(true)
-      setTimeout(() => {
-        setCopied(false)
-      }, 3000)
-    } catch (error) {
-      console.error('Failed to copy:', error)
-    }
-  }
-
   return (
     <div id="kt_app_content" className="app-content flex-column-fluid">
       <div
@@ -110,10 +96,10 @@ const Deposit = () => {
                   >
                     <Image src={MinLogo} alt={''} height={40} width={40} />
                     <div className="tw-flex tw-flex-col tw-gap-1">
-                      <div className="tw-py-2 tw-font-bold tw-text-2xl">
+                      <div className="tw-font-bold tw-text-2xl">
                         {item.accountName}
                       </div>
-                      <div className="tw-pb-2 tw-text-xl tw-flex tw-items-center tw-gap-2">
+                      <div className="tw-text-xl tw-flex tw-items-center tw-gap-2">
                         {item.accountNumber}{' '}
                         <CopyToClipboard text={item.accountNumber} />
                       </div>
