@@ -45,28 +45,6 @@ const Statement = () => {
     setCurrentPage(pageNumber)
   }
 
-  const series = [
-    { name: 'Out', data: [1100, 42000, 5500, 7000, 190000, 57000, 0] },
-  ];
-  const categories = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const height = 300
-
-  const baseColor = '#17C653'
-  const lightColor = '#DFFFEA'
-  const labelColor = '#6e707e'
-  const borderColor = '#ebedf2'
-
-  const series1 = [
-    { name: 'Out', data: [1100, 42000, 5500, 7000, 190000, 57000, 0] },
-  ];
-  const categories1 = ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-  const height1 = 300
-
-  const baseColor1 = '#F8285A'
-  const lightColor1 = '#FFEEF3'
-  const labelColor1 = '#6e707e'
-  const borderColor1 = '#ebedf2'
-
   const openModal = () => {
     setIsModalOpen(true)
   }
@@ -80,26 +58,6 @@ const Statement = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        <div className='tw-grid md:tw-grid-cols-2 tw-gap-4'>
-        <LineChart
-          series={series}
-          categories={categories}
-          height={height}
-          baseColor={baseColor}
-          lightColor={lightColor}
-          labelColor={labelColor}
-          borderColor={borderColor}
-        />
-        <LineChart
-          series={series1}
-          categories={categories1}
-          height={height1}
-          baseColor={baseColor1}
-          lightColor={lightColor1}
-          labelColor={labelColor1}
-          borderColor={borderColor1}
-        />
-        </div>
         <div className="card card-flush tw-mt-10">
           <div className="card-header align-items-center py-5 gap-2 gap-md-5">
             <div className="card-title">

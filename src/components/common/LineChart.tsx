@@ -2,13 +2,9 @@
 
 import React, { useEffect, useRef } from 'react'
 
-interface SeriesData {
+interface ChartProps {
   name: string
   data: number[]
-}
-
-interface ChartProps {
-  series: SeriesData[]
   categories: string[]
   height: number
   baseColor: string
@@ -18,7 +14,8 @@ interface ChartProps {
 }
 
 const LineChart: React.FC<ChartProps> = ({
-  series,
+  name,
+  data,
   categories,
   height,
   baseColor,
@@ -36,7 +33,12 @@ const LineChart: React.FC<ChartProps> = ({
       const ApexCharts = module.default
 
       const options = {
-        series: series,
+        series: [
+          {
+            name,
+            data,
+          },
+        ],
         chart: {
           fontFamily: 'inherit',
           type: 'area',
@@ -156,7 +158,8 @@ const LineChart: React.FC<ChartProps> = ({
       }
     })
   }, [
-    series,
+    name,
+    data,
     categories,
     height,
     baseColor,

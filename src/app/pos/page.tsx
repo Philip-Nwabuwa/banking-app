@@ -152,8 +152,6 @@ const POS = () => {
     }
   }
 
-  console.log(orderItems)
-
   return (
     <div id="kt_app_content" className="app-content flex-column-fluid">
       <div

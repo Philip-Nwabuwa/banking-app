@@ -23,3 +23,11 @@ export const getPasswordStrength = (password: string) => {
 
   return strength
 }
+
+export const formatTime = (dateString: string) => {
+  const dateObject = new Date(dateString)
+  return dateObject.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}

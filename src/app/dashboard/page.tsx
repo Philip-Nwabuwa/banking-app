@@ -6,44 +6,9 @@ import { useState } from 'react'
 
 import Card from '@/assets/images/credit-card.png'
 import Balance from '@/components/common/Balance'
-
-const transactions = [
-  {
-    orderNo: '#15317',
-    status: 'Successful',
-    type: 'airtime',
-    amount: '₦1,200.00',
-    date: '14 Dec 2020, 8:43 pm',
-  },
-  {
-    orderNo: '#15998',
-    status: 'Successful',
-    type: 'transfer',
-    amount: '₦7900.00',
-    date: '01 Dec 2020, 10:12 am',
-  },
-  {
-    orderNo: '#15046',
-    status: 'Successful',
-    type: 'electricity',
-    amount: '₦5,500.00',
-    date: '12 Nov 2020, 2:01 pm',
-  },
-  {
-    orderNo: '#15917',
-    status: 'Pending',
-    type: 'betting',
-    amount: '₦880.00',
-    date: '21 Oct 2020, 5:54 pm',
-  },
-  {
-    orderNo: '#14404',
-    status: 'Failed',
-    type: 'transfer',
-    amount: '₦7,650.00',
-    date: '19 Oct 2020, 7:32 am',
-  },
-]
+import LineChart from '@/components/common/LineChart'
+import { formatTime } from '@/lib/utils'
+import { transactions } from '@/types/transactions'
 
 const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -56,13 +21,64 @@ const Dashboard = () => {
     indexOfLastTransaction
   )
 
-  const formatTime = (dateString: string) => {
-    const dateObject = new Date(dateString)
-    return dateObject.toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  }
+  const seriesName = 'Money In'
+  const categories = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const seriesData: number[] = Array(categories.length).fill(0)
+  const height = 250
+
+  const baseColor = '#17C653'
+  const lightColor = '#DFFFEA'
+  const labelColor = '#6e707e'
+  const borderColor = '#ebedf2'
+
+  categories.forEach((day, index) => {
+    // Filter transactions for the current day with status 'Successful' and types 'deposit' and 'received'
+    const transactionsForDay = transactions.filter(
+      (transaction) =>
+        new Date(transaction.date).toLocaleDateString('en-US', {
+          weekday: 'short',
+        }) === day &&
+        transaction.status === 'Successful' &&
+        (transaction.type === 'deposit' || transaction.type === 'received')
+    )
+
+    // Sum the amounts of successful transactions for the day
+    const sumForDay = transactionsForDay.reduce((sum, transaction) => {
+      // Extract the numeric value from the amount string (remove '₦' and ',' and parse as float)
+      const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
+      return sum + amount
+    }, 0)
+
+    // Add the sum to the corresponding index of the 'seriesData' array
+    seriesData[index] = sumForDay
+  })
+
+  const seriesName1 = 'Money Out'
+  const seriesData1: number[] = Array(categories.length).fill(0)
+
+  const baseColor1 = '#F8285A'
+  const lightColor1 = '#FFEEF3'
+
+  categories.forEach((day, index) => {
+    const transactionsForDay = transactions.filter(
+      (transaction) =>
+        new Date(transaction.date).toLocaleDateString('en-US', {
+          weekday: 'short',
+        }) === day &&
+        transaction.status === 'Successful' &&
+        (transaction.type === 'airtime' ||
+          transaction.type === 'transfer' ||
+          transaction.type === 'betting' ||
+          transaction.type === 'settlement' ||
+          transaction.type === 'television' ||
+          transaction.type === 'electricity')
+    )
+    const sumForDay = transactionsForDay.reduce((sum, transaction) => {
+      const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
+      return sum + amount
+    }, 0)
+    seriesData1[index] = sumForDay
+  })
 
   return (
     <div className="d-flex flex-column flex-column-fluid">
@@ -129,6 +145,28 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          <div className="tw-grid md:tw-grid-cols-2 tw-gap-4 mb-5 mb-xl-10">
+            <LineChart
+              name={seriesName}
+              categories={categories}
+              height={height}
+              baseColor={baseColor}
+              lightColor={lightColor}
+              labelColor={labelColor}
+              borderColor={borderColor}
+              data={seriesData}
+            />
+            <LineChart
+              data={seriesData1}
+              name={seriesName1}
+              categories={categories}
+              height={height}
+              baseColor={baseColor1}
+              lightColor={lightColor1}
+              labelColor={labelColor}
+              borderColor={borderColor}
+            />
+          </div>
           <div className="card pt-4 mb-6 mb-xl-9">
             <div className="card-header border-0">
               <div className="card-title">
@@ -136,48 +174,54 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="card-body pt-0 pb-5">
-              <table
-                className="table align-middle table-row-dashed gy-5"
-                id="kt_table_customers_payment"
-              >
-                <thead className="border-bottom border-gray-200 fs-7 fw-bold">
-                  <tr className="text-start text-muted text-uppercase gs-0">
-                    <th>Order No.</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Amount</th>
-                    <th className='tw-hidden sm:tw-flex min-w-160px'>Time</th>
-                  </tr>
-                </thead>
-                <tbody className="fs-6 fw-semibold text-gray-600">
-                  {currentTransactions.map((transaction, index) => (
-                    <tr key={index}>
-                      <td>
-                        <span className="text-gray-600 mb-1">
-                          {transaction.orderNo}
-                        </span>
-                      </td>
-                      <td>{transaction.type}</td>
-
-                      <td>
-                        <span
-                          className={`badge tw-text-sm badge-light-${
-                            transaction.status === 'Successful'
-                              ? 'success'
-                              : transaction.status === 'Pending'
-                                ? 'warning'
-                                : 'danger'
-                          }`}
-                        >
-                          {transaction.status}
-                        </span>
-                      </td>
-                      <td>{transaction.amount}</td>
-                      <td className='tw-hidden sm:tw-flex'>{formatTime(transaction.date)}</td>
+              {currentTransactions.length === 0 ? (
+                <p>No transactions yet</p>
+              ) : (
+                <table
+                  className="table align-middle table-row-dashed gy-5"
+                  id="kt_table_customers_payment"
+                >
+                  <thead className="border-bottom border-gray-200 fs-7 fw-bold">
+                    <tr className="text-start text-muted text-uppercase gs-0">
+                      <th>Order No.</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                      <th className="tw-hidden sm:tw-flex min-w-160px">Time</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="fs-6 fw-semibold text-gray-600">
+                    {currentTransactions.map((transaction, index) => (
+                      <tr key={index}>
+                        <td>
+                          <span className="text-gray-600 mb-1">
+                            {transaction.orderNo}
+                          </span>
+                        </td>
+                        <td>{transaction.type}</td>
+
+                        <td>
+                          <span
+                            className={`badge tw-text-sm badge-light-${
+                              transaction.status === 'Successful'
+                                ? 'success'
+                                : transaction.status === 'Pending'
+                                  ? 'warning'
+                                  : 'danger'
+                            }`}
+                          >
+                            {transaction.status}
+                          </span>
+                        </td>
+                        <td>{transaction.amount}</td>
+                        <td className="tw-hidden sm:tw-flex">
+                          {formatTime(transaction.date)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>

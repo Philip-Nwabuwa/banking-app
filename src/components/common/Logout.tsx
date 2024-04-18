@@ -17,7 +17,6 @@ const Logout = () => {
         router.replace('/login')
       }, 2000)
     } catch (error) {
-      console.log(error)
       toast.error('An error occurred while logging out, please try again later')
     }
   }

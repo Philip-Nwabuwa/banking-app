@@ -41,10 +41,7 @@ const bankTransferSchema = z.object({
 const BankTransfer = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [open, setOpen] = useState(false)
-  console.log(open)
-
   const [selectedBank, setSelectedBank] = useState('')
-  console.log(selectedBank)
 
   const [otpValue, setOtpValue] = useState('')
 
