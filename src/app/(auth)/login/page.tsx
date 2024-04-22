@@ -6,7 +6,7 @@ import LoginModule from '@/components/modules/auth/Login'
 
 const LoginPage = () => {
   return (
-    <body className="app-blank signupBg h-100">
+    <div className="body app-blank signupBg !tw-h-screen">
       <div className="d-flex flex-column flex-root">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
@@ -51,7 +51,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

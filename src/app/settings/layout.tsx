@@ -23,8 +23,8 @@ const SettingsLayout = ({
   ]
 
   return (
-    <body
-      className="app-default"
+    <div
+      className="body app-default"
       id="kt_app_body"
       data-kt-app-sidebar-enabled="true"
       data-kt-app-sidebar-fixed="true"
@@ -189,7 +189,7 @@ const SettingsLayout = ({
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

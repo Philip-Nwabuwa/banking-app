@@ -120,7 +120,7 @@ const SignupPage = () => {
   }
 
   return (
-    <body className="app-blank">
+    <div className="body app-blank !tw-h-screen">
       <div className="d-flex flex-column flex-root">
         <div className="d-flex flex-column flex-lg-row flex-column-fluid stepper stepper-pills stepper-column stepper-multistep">
           <div className="d-flex flex-column flex-lg-row-auto w-lg-350px w-xl-500px">
@@ -705,7 +705,7 @@ const SignupPage = () => {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

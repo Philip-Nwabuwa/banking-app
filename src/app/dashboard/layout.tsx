@@ -8,8 +8,8 @@ const layout = ({
   children: React.ReactNode
 }>) => {
   return (
-    <body
-      className="app-default"
+    <div
+      className="body app-default"
       id="kt_app_body"
       data-kt-app-sidebar-enabled="true"
       data-kt-app-sidebar-fixed="true"
@@ -36,7 +36,7 @@ const layout = ({
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

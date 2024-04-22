@@ -37,9 +37,10 @@ const Sidebar = () => {
           <Image
             alt="Logo"
             src={DarkLogo}
-            className="h-25px h-lg-30px theme-light-show"
-            width={180}
-            height={50}
+            priority
+            className="tw-w-[130px] tw-h-[30] theme-light-show"
+            width={0}
+            height={0}
           />
 
           {/* <img

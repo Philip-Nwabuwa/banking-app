@@ -290,7 +290,7 @@
 ::before {
   box-sizing: border-box;
 }
-body {
+.body {
   margin: 0;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
@@ -46634,7 +46634,7 @@ code:not([class*='language-']).code-dark {
   }
 }
 @media (max-width: 991.98px) {
-  body[data-kt-drawer='on'] {
+  .body[data-kt-drawer='on'] {
     overflow: hidden;
   }
 }
@@ -50526,7 +50526,7 @@ a:hover {
 [data-kt-sticky-landing-header='on'] .landing-header .logo-default {
   display: none;
 }
-body[data-kt-sticky-landing-header='on'] {
+.body[data-kt-sticky-landing-header='on'] {
   padding-top: 100px;
 }
 @media (max-width: 991.98px) {
@@ -50544,7 +50544,7 @@ body[data-kt-sticky-landing-header='on'] {
     color: #1b84ff;
     background-color: rgba(239, 242, 245, 0.4);
   }
-  body[data-kt-sticky-landing-header='on'] {
+  .body[data-kt-sticky-landing-header='on'] {
     padding-top: 70px;
   }
 }
@@ -50569,7 +50569,7 @@ html {
   font-family: sans-serif;
   text-size-adjust: 100%;
 }
-body,
+.body,
 html {
   height: 100%;
   margin: 0;
@@ -50581,24 +50581,24 @@ html {
   font-family: Inter, Helvetica, sans-serif;
 }
 @media (max-width: 991.98px) {
-  body,
+  .body,
   html {
     font-size: 12px !important;
   }
 }
 @media (max-width: 767.98px) {
-  body,
+  .body,
   html {
     font-size: 12px !important;
   }
 }
-body {
+.body {
   display: flex;
   flex-direction: column;
 }
-body a:active,
-body a:focus,
-body a:hover {
+.body a:active,
+.body a:focus,
+.body a:hover {
   text-decoration: none !important;
 }
 canvas {
@@ -50608,7 +50608,7 @@ router-outlet {
   display: none;
 }
 .app-default,
-body {
+.body {
   background-color: var(--bs-app-bg-color);
 }
 .app-blank {
@@ -50787,11 +50787,11 @@ body {
         var(--bs-app-sidebar-gap-end, 0px)
     );
   }
-  body:not(
+  .body:not(
       [data-kt-app-header-fixed='true']
     )[data-kt-app-sidebar-fixed='true'][data-kt-app-sidebar-push-header='true']
     .app-header,
-  body:not(
+  .body:not(
       [data-kt-app-header-fixed='true']
     )[data-kt-app-sidebar-sticky='on'][data-kt-app-sidebar-push-header='true']
     .app-header {
@@ -52487,7 +52487,7 @@ body {
   }
 }
 @media (max-width: 991.98px) {
-  body {
+  .body {
     --bs-app-footer-height: auto;
   }
   .app-footer {

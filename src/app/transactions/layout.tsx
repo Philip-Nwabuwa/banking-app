@@ -26,8 +26,8 @@ const TransactionsLayout = ({
     { label: 'Reversal', path: '/transactions/reversal' },
   ]
   return (
-    <body
-      className="app-default"
+    <div
+      className="body app-default"
       id="kt_app_body"
       data-kt-app-sidebar-enabled="true"
       data-kt-app-sidebar-fixed="true"
@@ -100,7 +100,7 @@ const TransactionsLayout = ({
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

@@ -116,10 +116,11 @@ const Navbar = () => {
                   <Link href="/dashboard" replace>
                     <Image
                       alt="Logo"
+                      priority
                       src={DarkLogo}
-                      className="h-25px h-lg-30px theme-light-show"
-                      width={150}
-                      height={50}
+                      className="tw-w-[150px] tw-h-[25px] theme-light-show"
+                      width={0}
+                      height={0}
                     />
                   </Link>
 
@@ -194,10 +195,11 @@ const Navbar = () => {
             <Link href="/dashboard" className="d-flex d-lg-none">
               <Image
                 alt="Logo"
+                priority
                 src={DarkLogo}
-                className="h-25px h-lg-30px theme-light-show"
-                width={150}
-                height={50}
+                className="tw-w-[150px] tw-h-[25px] theme-light-show"
+                width={0}
+                height={0}
               />
             </Link>
           </div>

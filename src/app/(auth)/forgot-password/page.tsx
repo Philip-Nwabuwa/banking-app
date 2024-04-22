@@ -7,7 +7,7 @@ import ForgotPasswordMoules from '@/components/modules/auth/ForgotPassword'
 const ForgotPasswordPage = () => {
   
   return (
-    <body className="app-blank signupBg h-100">
+    <div className="body app-blank signupBg !tw-h-screen">
       <div
         className="d-flex flex-column flex-root tw-h-screen"
         id="kt_app_root"
@@ -55,7 +55,7 @@ const ForgotPasswordPage = () => {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 

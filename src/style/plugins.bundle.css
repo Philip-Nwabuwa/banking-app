@@ -42633,7 +42633,7 @@ body.swal2-height-auto {
 .tns-hide-disabled-nav [disabled] {
   display: none !important;
 }
-body {
+.body {
   --fc-event-border-color: var(--bs-primary);
   --fc-event-bg-color: var(--bs-primary);
   --fc-event-text-color: var(--bs-primary-inverse);

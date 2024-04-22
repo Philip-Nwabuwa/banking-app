@@ -24,8 +24,8 @@ const BillsLayout = ({
     { label: 'Electricity', path: '/bills/electricity' },
   ]
   return (
-    <body
-      className="app-default"
+    <div
+      className="body app-default"
       id="kt_app_body"
       data-kt-app-sidebar-enabled="true"
       data-kt-app-sidebar-fixed="true"
@@ -86,7 +86,7 @@ const BillsLayout = ({
           </div>
         </div>
       </div>
-    </body>
+    </div>
   )
 }
 
