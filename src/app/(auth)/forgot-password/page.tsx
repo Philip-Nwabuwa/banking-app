@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import Image from 'next/image'
+
 import Logo from '@/assets/logos/main.png'
-import SubmitButton from '@/components/common/SubmitBtn'
+import ForgotPasswordMoules from '@/components/modules/auth/ForgotPassword'
 
 const ForgotPasswordPage = () => {
+  
   return (
     <body className="app-blank signupBg h-100">
       <div
@@ -29,55 +31,23 @@ const ForgotPasswordPage = () => {
           </div>
           <div className="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
             <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-500px p-10">
-              <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-15 pb-lg-20">
-                <form
-                  className="form w-100"
-                  noValidate
-                  id="kt_password_reset_form"
-                  data-kt-redirect-url="authentication/layouts/creative/new-password.html"
-                  action="#"
-                >
-                  <div className="text-center mb-10">
-                    <h1 className="text-gray-900 fw-bolder mb-3">
-                      Forgot Password?
-                    </h1>
-                    <div className="text-gray-500 fw-semibold fs-6">
-                      Enter your email to reset your password.
-                    </div>
-                  </div>
-
-                  <div className="fv-row mb-8">
-                    <input
-                      type="text"
-                      placeholder="Email"
-                      name="email"
-                      autoComplete="off"
-                      className="form-control bg-transparent"
-                    />
-                  </div>
-                  <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
-                    <SubmitButton text="Submit" />
-
-                    <Link href="/login" className="btn btn-light">
-                      Cancel
-                    </Link>
-                  </div>
-                </form>
+              <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-10 pb-lg-15">
+                <ForgotPasswordMoules/>
               </div>
 
               <div className="d-flex flex-stack px-lg-10">
                 <div></div>
 
                 <div className="d-flex fw-semibold text-primary fs-base gap-5">
-                  <a href="pages/team.html" target="_blank">
+                  <Link href="pages/team.html" target="_blank">
                     Terms
-                  </a>
-                  <a href="pages/pricing/column.html" target="_blank">
+                  </Link>
+                  <Link href="pages/pricing/column.html" target="_blank">
                     Plans
-                  </a>
-                  <a href="pages/contact.html" target="_blank">
+                  </Link>
+                  <Link href="pages/contact.html" target="_blank">
                     Contact Us
-                  </a>
+                  </Link>
                 </div>
                 <div></div>
               </div>

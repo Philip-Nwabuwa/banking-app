@@ -333,34 +333,16 @@ const SignupPage = () => {
                                 className="d-flex align-items-center mb-3"
                                 data-kt-password-meter-control="highlight"
                               >
-                                <div
-                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                    passwordStrengthScore >= 1
-                                      ? 'bg-success'
-                                      : ''
-                                  }`}
-                                ></div>
-                                <div
-                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                    passwordStrengthScore >= 2
-                                      ? 'bg-success'
-                                      : ''
-                                  }`}
-                                ></div>
-                                <div
-                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
-                                    passwordStrengthScore >= 3
-                                      ? 'bg-success'
-                                      : ''
-                                  }`}
-                                ></div>
-                                <div
-                                  className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px ${
-                                    passwordStrengthScore === 4
-                                      ? 'bg-success'
-                                      : ''
-                                  }`}
-                                ></div>
+                                {[...Array(4)].map((_, index) => (
+                                  <div
+                                    key={index}
+                                    className={`flex-grow-1 bg-secondary bg-active-success rounded h-5px me-2 ${
+                                      passwordStrengthScore >= index + 1
+                                        ? 'bg-success'
+                                        : ''
+                                    }`}
+                                  ></div>
+                                ))}
                               </div>
                             )}
                           </div>
