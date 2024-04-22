@@ -35,15 +35,15 @@ const LoginPage = () => {
               <div className="d-flex flex-stack px-lg-10">
                 <div></div>
                 <div className="d-flex fw-semibold text-primary fs-base gap-5">
-                  <a href="#" target="_blank">
+                  <Link href="#" target="_blank">
                     Terms
-                  </a>
-                  <a href="#" target="_blank">
+                  </Link>
+                  <Link href="#" target="_blank">
                     Plans
-                  </a>
-                  <a href="#" target="_blank">
+                  </Link>
+                  <Link href="#" target="_blank">
                     Contact Us
-                  </a>
+                  </Link>
                 </div>
                 <div></div>
               </div>

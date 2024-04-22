@@ -124,12 +124,9 @@ const BankTransferModule = () => {
           className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
         >
           <div className="row mb-6">
-            <div className="tw-flex tw-justify-between tw-items-center">
               <label className="col-lg-4 col-form-label required fw-semibold fs-6">
                 Select bank
               </label>
-              <div className='text-primary'>Choose a beneficiary</div>
-            </div>
 
             <div className="col-lg-8 fv-row">
               <Controller
@@ -207,12 +204,9 @@ const BankTransferModule = () => {
             </div>
           </div>
           <div className="row mb-6">
-            <div className="tw-flex tw-justify-between tw-items-center">
               <label className="col-lg-4 col-form-label fw-semibold fs-6">
                 <span className="required">Amount</span>
               </label>
-              <div>balance: ₦0</div>
-            </div>
 
             <div className="col-lg-8 fv-row">
               <input
