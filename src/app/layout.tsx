@@ -18,8 +18,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ThemeProvider>
-        <body>
+      <body>
+        <ThemeProvider>
           <NextTopLoader
             color="#2299DD"
             crawlSpeed={200}
@@ -33,9 +33,9 @@ export default function RootLayout({
             showAtBottom={false}
           />
           <TanstackProvider>{children}</TanstackProvider>
-        </body>
-        <Toaster richColors position="top-center" />
-      </ThemeProvider>
+          <Toaster richColors position="top-center" />
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

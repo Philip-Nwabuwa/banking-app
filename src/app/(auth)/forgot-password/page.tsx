@@ -5,7 +5,7 @@ import SubmitButton from '@/components/common/SubmitBtn'
 
 const ForgotPasswordPage = () => {
   return (
-    <div className="app-blank signupBg h-100">
+    <body className="app-blank signupBg h-100">
       <div
         className="d-flex flex-column flex-root tw-h-screen"
         id="kt_app_root"
@@ -85,7 +85,7 @@ const ForgotPasswordPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </body>
   )
 }
 

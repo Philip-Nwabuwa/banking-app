@@ -29,7 +29,7 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [])
 
-  return <div> {children}</div>
+  return <>{children}</>
 }
 
 export default ThemeProvider

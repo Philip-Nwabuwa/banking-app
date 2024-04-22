@@ -1,3 +1,5 @@
+import BankSettlementModule from "@/components/modules/transactions/BankSettlement"
+
 const Settlement = () => {
   return <div id="kt_app_content" className="app-content flex-column-fluid">
   <div
@@ -18,7 +20,7 @@ const Settlement = () => {
         </div>
       </div>
 
-      
+      <BankSettlementModule/>
     </div>
   </div>
 </div>
