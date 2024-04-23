@@ -2,6 +2,7 @@
 
 import Navbar from '@/components/common/Navbar'
 import Navigation from '@/components/common/Navigation'
+import ScrollToTop from '@/components/common/ScrollToTop'
 import Sidebar from '@/components/common/Sidebar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -84,6 +85,8 @@ const PayoutLayout = ({
             </div>
           </div>
         </div>
+        <ScrollToTop />
+
       </div>
     </div>
   )

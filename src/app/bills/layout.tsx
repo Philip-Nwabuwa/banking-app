@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Navigation from '@/components/common/Navigation'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
+import ScrollToTop from '@/components/common/ScrollToTop'
 
 const BillsLayout = ({
   children,
@@ -85,6 +86,8 @@ const BillsLayout = ({
             </div>
           </div>
         </div>
+        <ScrollToTop />
+
       </div>
     </div>
   )

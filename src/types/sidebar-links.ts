@@ -1,16 +1,16 @@
 export const sidebarLinks = [
   {
     href: '/dashboard',
-    icon: 'ki-chart-line-up-2',
+    icon: 'ki-home',
     label: 'Dashboard',
   },
   {
     href: '/transactions/deposit',
-    icon: 'ki-chart-line-up-2',
+    icon: 'ki-save-deposit',
     label: 'Deposit',
   },
-  { href: '/payout', icon: 'ki-calendar', label: 'Payout' },
-  { href: '/bills', icon: 'ki-security-check', label: 'Bills' },
+  { href: '/payout', icon: 'ki-bank ', label: 'Payout' },
+  { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
   {
     href: '/transactions/settlement',
     icon: 'ki-wifi-square',
@@ -18,14 +18,14 @@ export const sidebarLinks = [
   },
   {
     href: '/transactions/statement',
-    icon: 'ki-geolocation',
+    icon: 'ki-scroll',
     label: 'Statement',
   },
   {
     href: '/transactions/reversal',
-    icon: 'ki-abstract-28',
+    icon: 'ki-information-3',
     label: 'Reversal',
   },
-  { href: '/pos', icon: 'ki-abstract-28', label: 'POS' },
-  { href: '/settings', icon: 'ki-abstract-28', label: 'Settings' },
+  { href: '/pos', icon: 'ki-shop', label: 'POS' },
+  { href: '/settings', icon: 'ki-setting-4', label: 'Settings' },
 ]

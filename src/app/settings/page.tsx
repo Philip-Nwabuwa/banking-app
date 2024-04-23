@@ -1,4 +1,29 @@
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import defaultAvatar from '@/assets/images/blank.svg'
+
 const Settings = () => {
+  const [avatarImage, setAvatarImage] = useState<string>(defaultAvatar)
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const newImage = reader.result as string
+        setAvatarImage(newImage)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleRemoveAvatar = () => {
+    console.log(defaultAvatar)
+    setAvatarImage(defaultAvatar)
+  }
+
   return (
     <div className="card mb-5 mb-xl-10">
       <div
@@ -26,18 +51,14 @@ const Settings = () => {
                 <div
                   className="image-input image-input-outline"
                   data-kt-image-input="true"
-                  style={{
-                    backgroundImage:
-                      "url('assets/media/svg/avatars/blank.svg')",
-                  }}
                 >
-                  <div
+                  <Image
                     className="image-input-wrapper w-125px h-125px"
-                    style={{
-                      backgroundImage:
-                        "url('assets/media/svg/avatars/blank.svg')",
-                    }}
-                  ></div>
+                    width={125}
+                    height={125}
+                    src={avatarImage}
+                    alt={'Default Avatar'}
+                  />
 
                   <label
                     className="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
@@ -51,24 +72,16 @@ const Settings = () => {
                       type="file"
                       name="avatar"
                       accept=".png, .jpg, .jpeg"
+                      onChange={handleImageChange}
                     />
-                    <input type="hidden" name="avatar_remove" />
                   </label>
-
-                  <span
-                    className="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                    data-kt-image-input-action="cancel"
-                    data-bs-toggle="tooltip"
-                    title="Cancel avatar"
-                  >
-                    <i className="ki-outline ki-cross fs-2"></i>
-                  </span>
 
                   <span
                     className="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
                     data-kt-image-input-action="remove"
                     data-bs-toggle="tooltip"
                     title="Remove avatar"
+                    onClick={handleRemoveAvatar}
                   >
                     <i className="ki-outline ki-cross fs-2"></i>
                   </span>
@@ -173,9 +186,6 @@ const Settings = () => {
             </button>
           </div>
         </form>
-        <div id="kt_scrolltop" className="scrolltop" data-kt-scrolltop="true">
-          <i className="ki-outline ki-arrow-up"></i>
-        </div>
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 import Footer from '@/components/common/Footer'
 import Navbar from '@/components/common/Navbar'
+import ScrollToTop from '@/components/common/ScrollToTop'
 import Sidebar from '@/components/common/Sidebar'
 
 const layout = ({
@@ -35,6 +36,8 @@ const layout = ({
             </div>
           </div>
         </div>
+        <ScrollToTop />
+
       </div>
     </div>
   )

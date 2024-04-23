@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
+import ScrollToTop from '@/components/common/ScrollToTop'
 
 const TransactionsLayout = ({
   children,
@@ -99,6 +100,8 @@ const TransactionsLayout = ({
             </div>
           </div>
         </div>
+        <ScrollToTop />
+
       </div>
     </div>
   )

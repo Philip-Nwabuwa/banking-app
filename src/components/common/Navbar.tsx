@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
-import Logo from '@/assets/logos/main.png'
 import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
 import { sidebarLinks } from '@/types/sidebar-links'
@@ -29,7 +28,7 @@ const Navbar = () => {
   ]
 
   const isActiveLink = (href: string) => {
-    return pathname === href
+    return pathname.startsWith(href);
   }
 
   return (
@@ -78,7 +77,7 @@ const Navbar = () => {
                     <Link href={item.path}>
                       <span
                         className={`menu-title ${
-                          pathname === item.path ? 'text-active' : ''
+                          isActiveLink(item.path) ? 'text-active' : ''
                         }`}
                       >
                         {item.title}
