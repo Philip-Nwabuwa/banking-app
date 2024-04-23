@@ -7,10 +7,9 @@ import ForgotPasswordMoules from '@/components/modules/auth/ForgotPassword'
 const ForgotPasswordPage = () => {
   
   return (
-    <div className="body app-blank signupBg !tw-h-screen">
+    <div className="body app-blank signupBg !tw-min-h-screen">
       <div
         className="d-flex flex-column flex-root tw-h-screen"
-        id="kt_app_root"
       >
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
@@ -31,7 +30,7 @@ const ForgotPasswordPage = () => {
           </div>
           <div className="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
             <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-500px p-10">
-              <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-10 pb-lg-15">
+              <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-5 pb-lg-8">
                 <ForgotPasswordMoules/>
               </div>
 

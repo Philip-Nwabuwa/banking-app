@@ -5,71 +5,111 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import OtpInput from 'react-otp-input'
-
-import PhoneImg from '@/assets/images/smartphone-2.svg'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+
+import PhoneImg from '@/assets/images/smartphone-2.svg'
 import { getPasswordStrength } from '@/lib/utils'
+import { forgotPasswordSchema } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  Controller,
+  FieldValues,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form'
 
 const ForgotPasswordMoules = () => {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [otpValue, setOtpValue] = useState<number | null>(null)
   const [passwordVisible, setPasswordVisible] = useState(false)
-  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isChecked, setIsChecked] = useState(false)
 
-  const passwordStrengthScore = getPasswordStrength(password)
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked)
+  }
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevState) => !prevState)
   }
 
-  const handleOtpChange = (otp: string) => {
-    const parsedOtp = parseInt(otp, 10)
-    if (!isNaN(parsedOtp)) {
-      setOtpValue(parsedOtp)
-    } else {
-      setOtpValue(null)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    control,
+  } = useForm({
+    resolver: zodResolver(forgotPasswordSchema),
+  })
+
+  console.log(errors);
+  
+
+  const handleResendOTP = (e: any) => {
+    e.preventDefault()
+    try {
+      toast.success('OTP resent.')
+    } catch (error) {
+      toast.error('Failed to resend OTP.')
     }
   }
 
-  const handleSubmit = (e: any) => {
+  const handlePrevious = () => {
+    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
+  }
+
+  const emailValue = watch('email')
+  const password = watch('password')
+  const otp = watch('otp');
+
+  const passwordStrengthScore = getPasswordStrength(password)
+  const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue)
+  const isOtpValid = otp ? otp.length === 6 : false
+  const isConfirmPasswordValid = confirmPassword && confirmPassword === password
+
+  const handleSendOTP = (e: any) => {
     e.preventDefault()
     try {
-      toast.success('OTP sent to johndoe@email.com')
+      toast.success(`OTP sent to ${emailValue}`)
       setTimeout(() => {
         setCurrentStep(2)
       }, 1000)
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Failed to send OTP.')
+    }
   }
 
   const verifyOTP = (e: any) => {
     e.preventDefault()
-    if (otpValue === null) {
-      toast.error('Please enter a valid OTP')
-      return
-    }
     try {
       toast.success('OTP verified successfully.')
       setTimeout(() => {
         setCurrentStep(3)
       }, 1000)
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Failed to verify OTP.')
+    }
   }
 
-  const handleChangePassword = (e:any) => {
-    e.preventDefault()
+  const handleChangePassword: SubmitHandler<FieldValues> = async (data) => {
+    console.log(data)
     try {
       toast.success('Password changed successfully.')
       setTimeout(() => {
         router.replace('/login')
       }, 1000)
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Failed to change password.')
+      console.error('Error:', error)
+    }
   }
   return (
-    <form className="form w-100" noValidate>
-      <div
-        className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
+    <>
+      <form
+        className={`${currentStep === 1 ? 'tw-flex tw-flex-col form w-100' : 'tw-hidden'}`}
+        noValidate
       >
         <div className="text-center mb-10">
           <h1 className="text-gray-900 fw-bolder mb-3">Forgot Password?</h1>
@@ -80,24 +120,27 @@ const ForgotPasswordMoules = () => {
 
         <div className="fv-row mb-8">
           <input
-            type="text"
+            type="email"
+            {...register('email')}
             placeholder="Email"
-            name="email"
-            autoComplete="off"
             className="form-control bg-transparent"
           />
         </div>
         <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
-          <SubmitButton onClick={handleSubmit} text="Submit" />
-
           <Link href="/login" className="btn btn-light">
-            Cancel
+            Back
           </Link>
-        </div>
-      </div>
 
-      <div
-        className={`${currentStep === 2 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
+          <SubmitButton
+            disabled={!isEmailValid}
+            onClick={handleSendOTP}
+            text="Request OTP"
+          />
+        </div>
+      </form>
+      <form
+        className={`${currentStep === 2 ? 'tw-flex tw-flex-col form w-100' : 'tw-hidden'}`}
+        noValidate
       >
         <div className="tw-flex tw-justify-center tw-items-center mb-10">
           <Image
@@ -113,55 +156,62 @@ const ForgotPasswordMoules = () => {
           <div className="text-muted fw-semibold fs-5 mb-5">
             Enter the verification code we sent to
           </div>
-          <div className="fw-bold text-gray-900 fs-3">johndoe@email.com</div>
+          <div className="fw-bold text-gray-900 fs-3">{emailValue}</div>
         </div>
         <div className="mb-10">
           <div className="tw-flex tw-items-center tw-justify-center">
-            <OtpInput
-              inputStyle="inputStyle"
-              value={otpValue !== null ? otpValue.toString() : ''}
-              onChange={(otp) => {
-                handleOtpChange(otp)
-              }}
-              inputType="password"
-              numInputs={4}
-              renderInput={(props) => <input {...props} />}
+            <Controller
+              name="otp"
+              control={control}
+              render={({ field }) => (
+                <OtpInput
+                  inputStyle="inputStyleOTP"
+                  value={field.value}
+                  onChange={(otp) => {
+                    field.onChange(otp)
+                  }}
+                  inputType="password"
+                  numInputs={6}
+                  renderInput={(props) => (
+                    <input {...props} />
+                  )}
+                />
+              )}
             />
           </div>
         </div>
-        <div className="d-flex flex-center">
-          <button
-            type="button"
-            onClick={verifyOTP}
-            className="btn btn-lg btn-primary fw-bold"
-          >
-            <span className="indicator-label">Submit</span>
+        <div className="d-flex flex-wrap justify-content-center gap-10 pb-lg-0">
+          <button onClick={handlePrevious} className="btn btn-light">
+            Back
           </button>
+          <SubmitButton
+            disabled={!isOtpValid}
+            onClick={verifyOTP}
+            text="Verify OTP"
+          />
         </div>
         <div className="text-center fw-semibold fs-5 tw-mt-10">
-          <span className="text-muted me-1">Didn’t get the code ?</span>
-          <a href="#" className="link-primary fs-5 me-1">
+          <span className="text-muted me-1">Didn’t get the code?</span>
+          <button onClick={handleResendOTP} className="link-primary fs-5">
             Resend
-          </a>
+          </button>{' '}
           <span className="text-muted me-1">or</span>
           <a href="#" className="link-primary fs-5">
             Call Us
           </a>
         </div>
-      </div>
-
-      <div
-        className={`${currentStep === 3 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
+      </form>
+      <form
+        onSubmit={handleSubmit(handleChangePassword)}
+        className={`${currentStep === 3 ? 'tw-flex tw-flex-col form w-100' : 'tw-hidden'}`}
+        noValidate
       >
         <div className="text-center mb-10">
           <h1 className="text-gray-900 fw-bolder mb-3">Setup New Password</h1>
           <div className="text-gray-500 fw-semibold fs-6">
-            Have you already reset the password ?
-            <Link
-              href="/login"
-              className="link-primary fw-bold"
-            >
-              Login in
+            Have you already reset the password?{' '}
+            <Link href="/login" className="link-primary fw-bold">
+              Login
             </Link>
           </div>
         </div>
@@ -175,7 +225,7 @@ const ForgotPasswordMoules = () => {
                 placeholder="Password"
                 autoComplete="off"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register('password')}
               />
               <span
                 className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
@@ -215,6 +265,7 @@ const ForgotPasswordMoules = () => {
           <input
             type="password"
             placeholder="Repeat Password"
+            onChange={(e) => setConfirmPassword(e.target.value)}
             name="confirm-password"
             autoComplete="off"
             className="form-control bg-transparent"
@@ -228,6 +279,7 @@ const ForgotPasswordMoules = () => {
               type="checkbox"
               name="toc"
               value="1"
+              onChange={handleCheckboxChange}
             />
             <span className="form-check-label fw-semibold text-gray-700 fs-6 ms-1">
               I Agree &{' '}
@@ -239,15 +291,17 @@ const ForgotPasswordMoules = () => {
           </label>
         </div>
 
-        <div className="d-grid mb-10">
-          <SubmitButton
-            className="btn btn-primary"
-            onClick={handleChangePassword}
-            text='Change Password'
-          />
-        </div>
-      </div>
-    </form>
+        <button
+          type="submit"
+          disabled={
+            passwordStrengthScore < 4 || !isConfirmPasswordValid || !isChecked
+          }
+          className="btn btn-primary d-grid mb-10"
+        >
+          Change Password
+        </button>
+      </form>
+    </>
   )
 }
 

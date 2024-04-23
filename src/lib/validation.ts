@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const LoginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
 export type LoginType = z.infer<typeof LoginSchema>
@@ -35,3 +35,11 @@ export const bankTransferSchema = z.object({
 })
 
 export type BankTransferType = z.infer<typeof bankTransferSchema>
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  otp: z.string().min(6, 'OTP must be 6 digits long'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+})
+
+export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>
