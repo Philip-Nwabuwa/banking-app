@@ -16,6 +16,7 @@ const LoginModule = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
   })
@@ -26,9 +27,12 @@ const LoginModule = () => {
     setPasswordVisible(!passwordVisible)
   }
 
+  const password = watch('password')
+  const isPasswordValid = password ? password.length >= 8 : false
+
   const onSubmit: SubmitHandler<LoginType> = async (formData) => {
     setIsSubmitting(true)
-    console.log(formData.email, formData.password)
+    console.log(formData)
 
     try {
       setIsSubmitting(false)
@@ -94,7 +98,7 @@ const LoginModule = () => {
       <div className="d-grid mb-10">
         <SubmitButton
           isSubmitting={isSubmitting}
-          disabled={isSubmitting}
+          disabled={isSubmitting || !isPasswordValid}
           text="Sign In"
         />
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { StatementType, StatementsData } from '@/types/statements'
+import { StatementsData } from '@/types/statements'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -15,7 +15,7 @@ const Reversal = () => {
     return dateB.getTime() - dateA.getTime()
   })
 
-  const filteredStatements: StatementType[] = sortedStatements.filter(
+  const filteredStatements = sortedStatements.filter(
     (item) => {
       const matchesSearchTerm =
         item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,7 +43,8 @@ const Reversal = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        <div className="card card-flush">
+        {StatementsData.length > 0 ? (
+          <div className="card card-flush">
           <div className="card-header align-items-center py-5 gap-2 gap-md-5">
             <div className="card-title">
               <div className="d-flex align-items-center position-relative my-1">
@@ -193,6 +194,9 @@ const Reversal = () => {
             </li>
           </ul>
         </div>
+        ) : (
+          <div>No data found.</div>
+        )}
       </div>
     </div>
   )

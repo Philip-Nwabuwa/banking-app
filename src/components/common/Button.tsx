@@ -6,6 +6,7 @@ interface ButtonProps {
   iconClass?: string
   position?: string
   disabled?: boolean
+  className?: string
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,6 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   iconClass,
   position,
   disabled,
+  className
 }) => {
   return (
     <button

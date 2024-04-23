@@ -172,7 +172,7 @@ const LineChart: React.FC<ChartProps> = ({
     <div className="card card-bordered">
       <div className="tw-p-3">
         <div>
-          <h2 className="card-title">{name}</h2>
+          <h2 className="card-title tw-pt-2 tw-pl-2">{name}</h2>
         </div>
         <div
           id="kt_apexcharts_3"

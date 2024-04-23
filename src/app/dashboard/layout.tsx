@@ -9,7 +9,7 @@ const layout = ({
 }>) => {
   return (
     <div
-      className="body app-default"
+      className="body app-default tw-min-h-screen"
       id="kt_app_body"
       data-kt-app-sidebar-enabled="true"
       data-kt-app-sidebar-fixed="true"

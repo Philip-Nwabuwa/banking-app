@@ -145,35 +145,37 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="tw-grid md:tw-grid-cols-2 tw-gap-4 mb-5 mb-xl-10">
-            <LineChart
-              name={seriesName}
-              categories={categories}
-              height={height}
-              baseColor={baseColor}
-              lightColor={lightColor}
-              labelColor={labelColor}
-              borderColor={borderColor}
-              data={seriesData}
-            />
-            <LineChart
-              data={seriesData1}
-              name={seriesName1}
-              categories={categories}
-              height={height}
-              baseColor={baseColor1}
-              lightColor={lightColor1}
-              labelColor={labelColor}
-              borderColor={borderColor}
-            />
-          </div>
+          {currentTransactions.length === 0 ? null : (
+            <div className="tw-grid md:tw-grid-cols-2 tw-gap-4 mb-5 mb-xl-10">
+              <LineChart
+                name={seriesName}
+                categories={categories}
+                height={height}
+                baseColor={baseColor}
+                lightColor={lightColor}
+                labelColor={labelColor}
+                borderColor={borderColor}
+                data={seriesData}
+              />
+              <LineChart
+                data={seriesData1}
+                name={seriesName1}
+                categories={categories}
+                height={height}
+                baseColor={baseColor1}
+                lightColor={lightColor1}
+                labelColor={labelColor}
+                borderColor={borderColor}
+              />
+            </div>
+          )}
           <div className="card pt-4 mb-6 mb-xl-9">
             <div className="card-header border-0">
               <div className="card-title">
                 <h2>Transaction History For Today</h2>
               </div>
             </div>
-            <div className="card-body pt-0 pb-5">
+            <div className="card-body table-responsive pt-0 pb-5">
               {currentTransactions.length === 0 ? (
                 <p>No transactions yet</p>
               ) : (
@@ -187,7 +189,7 @@ const Dashboard = () => {
                       <th>Type</th>
                       <th>Status</th>
                       <th>Amount</th>
-                      <th className="tw-hidden sm:tw-flex min-w-160px">Time</th>
+                      <th>Time</th>
                     </tr>
                   </thead>
                   <tbody className="fs-6 fw-semibold text-gray-600">
@@ -214,9 +216,7 @@ const Dashboard = () => {
                           </span>
                         </td>
                         <td>{transaction.amount}</td>
-                        <td className="tw-hidden sm:tw-flex">
-                          {formatTime(transaction.date)}
-                        </td>
+                        <td>{formatTime(transaction.date)}</td>
                       </tr>
                     ))}
                   </tbody>
