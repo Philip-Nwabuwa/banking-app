@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/types/sidebar-links'
-import Balance from './Balance'
+import {Balance} from './Balance'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
 

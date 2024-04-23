@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import Card from '@/assets/images/credit-card.png'
-import Balance from '@/components/common/Balance'
+import {Balance} from '@/components/common/Balance'
 import LineChart from '@/components/common/LineChart'
 import { formatTime } from '@/lib/utils'
 import { transactions } from '@/types/transactions'

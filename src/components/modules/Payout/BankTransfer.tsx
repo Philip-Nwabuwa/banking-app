@@ -20,10 +20,11 @@ import {
 import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { BankNames } from '@/types/bank'
+import { BankNames, Beneficiary, beneficiaryType } from '@/types/bank'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BankTransferType, bankTransferSchema } from '@/lib/validation'
+import { SubBalance, useBalanceStore } from '@/components/common/Balance'
 
 const steps = [
   {
@@ -41,6 +42,10 @@ const steps = [
 const BankTransferModule = () => {
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [open, setOpen] = useState(false)
+  const [openBen, setOpenBen] = useState(false)
+  const [selectedBank, setSelectedBank] = useState('')
+  const [otpValue, setOtpValue] = useState<string>("")
+  const { balance } = useBalanceStore()
 
   const {
     register,
@@ -48,23 +53,30 @@ const BankTransferModule = () => {
     watch,
     trigger,
     reset,
+    setValue,
     formState: { errors },
     control,
   } = useForm<BankTransferType>({
     resolver: zodResolver(bankTransferSchema),
   })
 
-  const [selectedBank, setSelectedBank] = useState('')
+  const bankValue = watch('bankName')
+  const accountNumberValue = watch('accountNumber')
+  const amountValue = watch('amount')
+  const narrationValue = watch('narration')
 
-  const [otpValue, setOtpValue] = useState<number | null>(null)
+  const beneficiary = Beneficiary.find(
+    (beneficiary) => beneficiary.accountNumber === accountNumberValue
+  )
 
   const handleOtpChange = (otp: string) => {
-    const parsedOtp = parseInt(otp, 10)
-    if (!isNaN(parsedOtp)) {
-      setOtpValue(parsedOtp)
-    } else {
-      setOtpValue(null)
-    }
+      setOtpValue(otp)
+  }
+
+  const handleClick = (item: beneficiaryType) => {
+    setValue('bankName', item.bankName)
+    setSelectedBank(item.bankName)
+    setValue('accountNumber', item.accountNumber)
   }
 
   const onSubmit: SubmitHandler<BankTransferType> = async (formData) => {
@@ -77,7 +89,7 @@ const BankTransferModule = () => {
         customClass: { confirmButton: 'btn btn-primary' },
       })
       reset()
-      setOtpValue(null)
+      setOtpValue("")
       setSelectedBank('')
       setCurrentStep(1)
     } catch (error: unknown) {
@@ -94,6 +106,8 @@ const BankTransferModule = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
   }
 
+  console.log(errors.amount)
+
   type FieldName =
     | 'bankName'
     | 'accountNumber'
@@ -108,7 +122,9 @@ const BankTransferModule = () => {
     if (!output) return
 
     if (currentStep === 1) {
-      console.log('submit')
+      if (amountValue > balance + 10) {
+        return toast.error('amount balance is not sufficient')
+      }
     }
     console.log(fields)
     setCurrentStep(currentStep + 1)
@@ -124,9 +140,9 @@ const BankTransferModule = () => {
           className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
         >
           <div className="row mb-6">
-              <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                Select bank
-              </label>
+            <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+              Select bank
+            </label>
 
             <div className="col-lg-8 fv-row">
               <Controller
@@ -185,17 +201,56 @@ const BankTransferModule = () => {
             </div>
           </div>
           <div className="row mb-6">
-            <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+            <label className="col-lg-4 lg:tw-flex tw-justify-start tw-items-center tw-hidden col-form-label required fw-semibold fs-6">
               Account number
             </label>
 
             <div className="col-lg-8 fv-row">
+              <div className="tw-flex tw-items-center tw-justify-between lg:tw-justify-end tw-pb-[10px]">
+                <div className="lg:tw-hidden tw-flex">
+                  <span className="required">Account number</span>
+                </div>
+                <Popover open={openBen} onOpenChange={setOpenBen}>
+                  <PopoverTrigger asChild>
+                    <div className="text-primary tw-cursor-pointer">
+                      Choose beneficiary
+                    </div>
+                  </PopoverTrigger>
+                  <PopoverContent className="tw-p-0" align="end">
+                    <Command>
+                      <CommandInput placeholder="Search..." />
+                      <CommandList>
+                        <CommandEmpty>No beneficiary found.</CommandEmpty>
+                        <CommandGroup>
+                          {Beneficiary.map((item) => (
+                            <CommandItem key={item.name}>
+                              <p
+                                onClick={() => {
+                                  handleClick(item)
+                                  setOpenBen(false)
+                                }}
+                                className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                              >
+                                {item.name}
+                              </p>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </div>
               <input
                 type="number"
                 {...register('accountNumber', { valueAsNumber: true })}
-                className="form-control form-control-lg form-control-solid"
+                className="form-control form-control-lg form-control-solid tw-mb-2.5"
                 placeholder="Please provide the account number"
               />
+              {beneficiary && (
+                <span className="tw-ml-2">{beneficiary.name}</span>
+              )}
+
               {errors.accountNumber && (
                 <span className="text-danger">
                   {errors.accountNumber.message}
@@ -204,11 +259,17 @@ const BankTransferModule = () => {
             </div>
           </div>
           <div className="row mb-6">
-              <label className="col-lg-4 col-form-label fw-semibold fs-6">
-                <span className="required">Amount</span>
-              </label>
+            <label className="col-lg-4 lg:tw-flex tw-justify-start tw-items-center tw-hidden col-form-label fw-semibold fs-6">
+              <span className="required">Amount</span>
+            </label>
 
             <div className="col-lg-8 fv-row">
+              <div className="tw-flex tw-items-center tw-justify-between lg:tw-justify-end tw-pb-[10px]">
+                <div className="lg:tw-hidden tw-flex">
+                  <span className="required">Amount</span>
+                </div>
+                <SubBalance />
+              </div>
               <input
                 type="number"
                 {...register('amount', { valueAsNumber: true })}
@@ -246,7 +307,7 @@ const BankTransferModule = () => {
           </div>
           <div className="tw-text-center tw-py-4 text-xl">
             Amount(NGN):
-            <span className="tw-text-3xl tw-font-bold">1,000</span>
+            <span className="tw-text-3xl tw-font-bold">{amountValue}</span>
           </div>
           <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
             <div className="tw-flex tw-justify-between tw-items-center">
@@ -255,15 +316,15 @@ const BankTransferModule = () => {
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Bank:</p>
-              <p className="tw-font-bold">Zenith</p>
+              <p className="tw-font-bold">{bankValue}</p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Account Number:</p>
-              <p className="tw-font-bold">123456789</p>
+              <p className="tw-font-bold">{accountNumberValue}</p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Description:</p>
-              <p className="tw-font-bold tw-truncate">Payment for food.</p>
+              <p className="tw-font-bold tw-truncate">{narrationValue}</p>
             </div>
           </div>
           <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
@@ -273,7 +334,7 @@ const BankTransferModule = () => {
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Total (NGN):</p>
-              <p className="tw-font-bold"> 1,010</p>
+              <p className="tw-font-bold">{amountValue + 10}</p>
             </div>
           </div>
 
@@ -316,6 +377,7 @@ const BankTransferModule = () => {
           {currentStep === 1 && (
             <button
               type="reset"
+              onClick={() => setSelectedBank('')}
               className="btn btn-light btn-active-light-primary me-2"
             >
               Reset
