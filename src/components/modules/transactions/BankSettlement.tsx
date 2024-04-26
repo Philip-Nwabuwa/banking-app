@@ -93,11 +93,7 @@ const BankSettlementModule = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
   }
 
-  type FieldName =
-    | 'bankName'
-    | 'amount'
-    | 'narration'
-    | 'authPin'
+  type FieldName = 'bankName' | 'amount' | 'narration' | 'authPin'
 
   const handleNext = async () => {
     const fields = steps[currentStep - 1].fields
@@ -122,9 +118,9 @@ const BankSettlementModule = () => {
           className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
         >
           <div className="row mb-6">
-              <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-                Select Account
-              </label>
+            <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+              Select Account
+            </label>
 
             <div className="col-lg-8 fv-row">
               <Controller
@@ -183,9 +179,9 @@ const BankSettlementModule = () => {
             </div>
           </div>
           <div className="row mb-6">
-              <label className="col-lg-4 col-form-label fw-semibold fs-6">
-                <span className="required">Amount</span>
-              </label>
+            <label className="col-lg-4 col-form-label fw-semibold fs-6">
+              <span className="required">Amount</span>
+            </label>
 
             <div className="col-lg-8 fv-row">
               <input

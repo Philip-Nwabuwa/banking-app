@@ -1,27 +1,30 @@
 'use client'
 
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const CopyToClipboard = ({ text }: { text: string }) => {
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [copiedValue, setCopiedValue] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [copiedValue, setCopiedValue] = useState('')
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(text);
-      setShowSuccess(true);
-      setCopiedValue(text);
+      await navigator.clipboard.writeText(text)
+      setShowSuccess(true)
+      setCopiedValue(text)
+      setTimeout(
+        () => {
+          setCopiedValue('')
+        },
+        10 * 60 * 1000
+      )
       setTimeout(() => {
-        setCopiedValue('');
-      }, 10 * 60 * 1000);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
+        setShowSuccess(false)
+      }, 3000)
     } catch (error) {
-      toast.error('Failed to copy, try again.');
+      toast.error('Failed to copy, try again.')
     }
-  };
+  }
 
   return (
     <div>
@@ -31,9 +34,11 @@ const CopyToClipboard = ({ text }: { text: string }) => {
           onClick={copyToClipboard}
         ></i>
       )}
-      {showSuccess && <i className="ki-solid ki-copy-success fs-1 text-success"></i>}
+      {showSuccess && (
+        <i className="ki-solid ki-copy-success fs-1 text-success"></i>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default CopyToClipboard;
+export default CopyToClipboard

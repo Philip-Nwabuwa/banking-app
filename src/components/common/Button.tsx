@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   iconClass,
   position,
   disabled,
-  className
+  className,
 }) => {
   return (
     <button

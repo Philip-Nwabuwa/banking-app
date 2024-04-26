@@ -17,20 +17,18 @@ const Statement = () => {
     return dateB.getTime() - dateA.getTime()
   })
 
-  const filteredStatements = sortedStatements.filter(
-    (item) => {
-      const matchesSearchTerm =
-        item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.amount.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredStatements = sortedStatements.filter((item) => {
+    const matchesSearchTerm =
+      item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.amount.toLowerCase().includes(searchTerm.toLowerCase())
 
-      if (selectedStatus === 'all') {
-        return matchesSearchTerm
-      } else {
-        return matchesSearchTerm && item.status === selectedStatus
-      }
+    if (selectedStatus === 'all') {
+      return matchesSearchTerm
+    } else {
+      return matchesSearchTerm && item.status === selectedStatus
     }
-  )
+  })
 
   const totalPages = Math.ceil(filteredStatements.length / itemsPerPage)
   const indexOfLastItem = currentPage * itemsPerPage
@@ -157,7 +155,7 @@ const Statement = () => {
               </div>
             </div>
 
-            <div className="card-body pt-0">
+            <div className="card-body table-responsive pt-0">
               <table
                 className="table align-middle table-row-dashed fs-6 gy-5"
                 id="kt_ecommerce_report_shipping_table"
@@ -165,9 +163,9 @@ const Statement = () => {
                 <thead>
                   <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                     <th className="min-w-100px">ID</th>
-                    <th className="tw-hidden md:tw-flex">Transaction type</th>
+                    <th>Transaction type</th>
                     <th className="min-w-80px">Date</th>
-                    <th className="tw-hidden md:tw-flex">Status</th>
+                    <th>Status</th>
                     <th className="text-end">Amount</th>
                   </tr>
                 </thead>
@@ -204,10 +202,10 @@ const Statement = () => {
                           </Modal>
                         </>
                       </td>
-                      <td className="tw-hidden md:tw-flex">{item.type}</td>
+                      <td>{item.type}</td>
 
                       <td>{item.date}</td>
-                      <td className="tw-hidden md:tw-flex">
+                      <td>
                         <div
                           className={`badge badge-light-${item.status === 'Completed' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
                         >

@@ -16,6 +16,7 @@ const LoginPage = () => {
                   alt="Logo"
                   src={Logo}
                   className="h-100 w-100"
+                  priority
                   width={226}
                   height={42}
                 />

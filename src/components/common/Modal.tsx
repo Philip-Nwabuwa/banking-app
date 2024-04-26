@@ -2,8 +2,8 @@ import React from 'react'
 
 interface ModalProps {
   isOpen: boolean
-  onClose: () => void
-onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  onClose: () => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
   title: string
   buttonText: string
   submitStyle?: string
@@ -25,7 +25,8 @@ const Modal: React.FC<ModalProps> = ({
     <>
       {isOpen && (
         <div className="modal-backdrop" style={{ display: 'block' }}>
-          <form onSubmit={onSubmit}
+          <form
+            onSubmit={onSubmit}
             className="modal"
             tabIndex={-1}
             role="dialog"
@@ -51,10 +52,7 @@ const Modal: React.FC<ModalProps> = ({
                   >
                     {buttonText}
                   </button>
-                  <button
-                    type="submit"
-                    className={submitStyle}
-                  >
+                  <button type="submit" className={submitStyle}>
                     {submitText}
                   </button>
                 </div>

@@ -112,12 +112,12 @@ const Deposit = () => {
                 <div className="card card-custom bg-body border-0">
                   <div className="tw-flex tw-items-center tw-justify-center pt-0 tw-min-h-[100px] tw-h-full">
                     <button className="!tw-flex tw-items-center tw-justify-center btn btn-primary !tw-py-4 !tw-px-5 fw-semibold tw-gap-4">
-                      <p className='tw-mb-0'>Create Deposit Account</p>
-                        <i className="ki-duotone ki-plus-square fs-2">
-                          <span className="path1"></span>
-                          <span className="path2"></span>
-                          <span className="path3"></span>
-                        </i>
+                      <p className="tw-mb-0">Create Deposit Account</p>
+                      <i className="ki-duotone ki-plus-square fs-2">
+                        <span className="path1"></span>
+                        <span className="path2"></span>
+                        <span className="path3"></span>
+                      </i>
                     </button>
                   </div>
                 </div>

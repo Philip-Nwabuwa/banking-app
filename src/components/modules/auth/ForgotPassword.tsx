@@ -44,8 +44,7 @@ const ForgotPasswordMoules = () => {
     resolver: zodResolver(forgotPasswordSchema),
   })
 
-  console.log(errors);
-  
+  console.log(errors)
 
   const handleResendOTP = (e: any) => {
     e.preventDefault()
@@ -62,7 +61,7 @@ const ForgotPasswordMoules = () => {
 
   const emailValue = watch('email')
   const password = watch('password')
-  const otp = watch('otp');
+  const otp = watch('otp')
 
   const passwordStrengthScore = getPasswordStrength(password)
   const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue)
@@ -172,9 +171,7 @@ const ForgotPasswordMoules = () => {
                   }}
                   inputType="password"
                   numInputs={6}
-                  renderInput={(props) => (
-                    <input {...props} />
-                  )}
+                  renderInput={(props) => <input {...props} />}
                 />
               )}
             />

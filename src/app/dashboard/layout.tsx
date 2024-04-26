@@ -37,7 +37,6 @@ const layout = ({
           </div>
         </div>
         <ScrollToTop />
-
       </div>
     </div>
   )

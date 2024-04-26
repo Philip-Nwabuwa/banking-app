@@ -97,7 +97,6 @@ const SettingsLayout = ({
           </div>
         </div>
         <ScrollToTop />
-
       </div>
     </div>
   )

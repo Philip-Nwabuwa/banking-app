@@ -7,9 +7,9 @@ import { useState } from 'react'
 
 import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/user.jpg'
-import { sidebarLinks } from '@/types/sidebar-links'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
+import useSidebarLinks from '@/types/sidebar-links'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
@@ -19,6 +19,7 @@ const Navbar = () => {
   }
 
   const pathname = usePathname()
+  const { sidebarLinks } = useSidebarLinks()
 
   const menuItems = [
     { path: '/dashboard', title: 'Dashboard' },
@@ -28,7 +29,7 @@ const Navbar = () => {
   ]
 
   const isActiveLink = (href: string) => {
-    return pathname.startsWith(href);
+    return pathname.startsWith(href)
   }
 
   return (
@@ -166,13 +167,7 @@ const Navbar = () => {
                     data-kt-scroll-offset="5px"
                   >
                     <div className="mb-6 mt-6">
-                      <h3 className="text-gray-800 fw-bold mb-8">Services</h3>
-
-                      <div
-                        className="row row-cols-3"
-                        data-kt-buttons="true"
-                        data-kt-buttons-target="[data-kt-button]"
-                      >
+                      <div className="tw-w-full grid tw-grid-cols-3 tw-gap-4 tw-items-center">
                         {sidebarLinks.map((link, index) => (
                           <SidebarLink
                             key={index}
@@ -184,7 +179,7 @@ const Navbar = () => {
                       </div>
                     </div>
                     <div className="app-footer-item tw-flex tw-justify-center tw-mt-4">
-                      <Logout  />
+                      <Logout />
                     </div>
                   </div>
                 </div>

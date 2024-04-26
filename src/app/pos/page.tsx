@@ -10,7 +10,7 @@ import { PosData } from '@/types/pos'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import ImagePos from "@/assets/images/NoPos.png"
+import ImagePos from '@/assets/images/NoPos.png'
 
 const POS = () => {
   const [open, setOpen] = useState(false)
@@ -89,7 +89,7 @@ const POS = () => {
         className="app-container container-xxl"
       >
         {PosData.length > 0 ? (
-          <div className="card card-flush tw-mt-10">
+          <div className="card card-flush table-responsive tw-mt-10">
             <div className="card-header align-items-center py-5 gap-2 gap-md-5">
               <div className="card-title">
                 <div className="d-flex align-items-center position-relative my-1">
@@ -279,9 +279,9 @@ const POS = () => {
                     <thead>
                       <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
                         <th className="min-w-100px">ID</th>
-                        <th className="tw-hidden md:tw-flex">Terminal</th>
+                        <th>Terminal</th>
                         <th className="min-w-80px">Date</th>
-                        <th className="tw-hidden md:tw-flex">Status</th>
+                        <th>Status</th>
                         <th className="text-end">Amount</th>
                       </tr>
                     </thead>
@@ -321,12 +321,10 @@ const POS = () => {
                               </Modal>
                             </>
                           </td>
-                          <td className="tw-hidden md:tw-flex">
-                            {item.terminal}
-                          </td>
+                          <td>{item.terminal}</td>
 
                           <td>{item.date}</td>
-                          <td className="tw-hidden md:tw-flex">
+                          <td>
                             <div
                               className={`badge !tw-inline-block tw-w-fit badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
                             >

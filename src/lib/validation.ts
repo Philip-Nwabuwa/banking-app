@@ -36,6 +36,16 @@ export const bankTransferSchema = z.object({
 
 export type BankTransferType = z.infer<typeof bankTransferSchema>
 
+export const airtimeTransferSchema = z.object({
+  network: z.string().min(1, 'Network is required'),
+  amount: z.number().min(50, "Amount must be at least 50"),
+  phoneNumber: z.string().min(1, 'Phone number is required'),
+  authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
+})
+
+export type AirtimeTransferType = z.infer<typeof airtimeTransferSchema>
+
+
 export const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
   otp: z.string().min(6, 'OTP must be 6 digits long'),

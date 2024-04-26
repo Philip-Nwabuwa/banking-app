@@ -35,7 +35,7 @@ const Balance = () => {
   const { loading, balance, hideBalance, handleRefresh, setHideBalance } =
     useBalanceStore()
   return (
-    <div className="d-flex mb-3 mb-lg-6">
+    <div className="d-flex mb-3 mb-lg-2">
       <div className="tw-bg-white border border-gray-300 border-dashed rounded w-100 py-2 px-4">
         <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
           Balance{' '}
@@ -85,11 +85,11 @@ const SubBalance = () => {
 
   return (
     <div>
-      {
-        loading ? (<>Loading...</>) : (
-          <span>Balance: ₦{balance.toLocaleString()}</span>
-        )
-      }
+      {loading ? (
+        <>Loading...</>
+      ) : (
+        <span>Balance: ₦{balance.toLocaleString()}</span>
+      )}
     </div>
   )
 }

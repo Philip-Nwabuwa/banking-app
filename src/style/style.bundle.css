@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -147,7 +153,7 @@
   --bs-danger: #f8285a;
   --bs-dark: #1e2129;
   --bs-light-rgb: 249, 249, 249;
-  --bs-primary-rgb: 27, 132, 255;
+  --bs-primary-rgb: #216fd0;
   --bs-secondary-rgb: 241, 241, 244;
   --bs-success-rgb: 23, 198, 83;
   --bs-info-rgb: 114, 57, 234;
@@ -27403,7 +27409,7 @@ fieldset:disabled .btn {
   --bs-dark-clarity: rgba(30, 33, 41, 0.2);
   --bs-light-clarity: rgba(255, 255, 255, 0.2);
   --bs-light-rgb: 249, 249, 249;
-  --bs-primary-rgb: 27, 132, 255;
+  --bs-primary-rgb: #216fd0;
   --bs-secondary-rgb: 241, 241, 244;
   --bs-success-rgb: 23, 198, 83;
   --bs-info-rgb: 114, 57, 234;
@@ -27411,7 +27417,7 @@ fieldset:disabled .btn {
   --bs-danger-rgb: 248, 40, 90;
   --bs-dark-rgb: 30, 33, 41;
   --bs-text-white: #ffffff;
-  --bs-text-primary: #1b84ff;
+  --bs-text-primary: #216fd0;
   --bs-text-secondary: #f1f1f4;
   --bs-text-light: #f9f9f9;
   --bs-text-success: #17c653;
@@ -27563,7 +27569,7 @@ fieldset:disabled .btn {
   --bs-dark-clarity: rgba(39, 42, 52, 0.2);
   --bs-light-clarity: rgba(31, 33, 42, 0.2);
   --bs-light-rgb: 27, 28, 34;
-  --bs-primary-rgb: 0, 106, 230;
+  --bs-primary-rgb: #216fd0;
   --bs-secondary-rgb: 54, 56, 67;
   --bs-success-rgb: 0, 162, 97;
   --bs-info-rgb: 136, 63, 255;
@@ -51356,10 +51362,10 @@ router-outlet {
     display: flex;
     flex-shrink: 0;
     width: var(--bs-app-sidebar-width);
-    margin-left: 30px;
+    margin-left: 20px;
     margin-right: 0;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   :root {
     --bs-app-sidebar-width: 350px;

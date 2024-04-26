@@ -22,9 +22,11 @@ const Logout = () => {
   }
   return (
     <>
-      <button onClick={openModal} className="btn btn-primary !tw-py-2 !tw-px-5 fw-semibold tw-flex tw-items-center tw-justify-center tw-gap-2">
-        Log Out{' '}
-        <i className="ki-solid ki-black-right-line fs-1"></i>
+      <button
+        onClick={openModal}
+        className="btn btn-light-danger !tw-py-2 !tw-px-5 fw-semibold tw-flex tw-items-center tw-justify-center tw-gap-2"
+      >
+        Log Out <i className="ki-solid ki-black-right-line fs-1"></i>
       </button>
       <Modal
         isOpen={isModalOpen}
