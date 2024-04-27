@@ -1,9 +1,8 @@
 'use client'
 
-import { SetStateAction, useState } from 'react'
+import { useState } from 'react'
 
 import Modal from '@/components/common/Modal'
-import { StatementsData } from '@/types/statements'
 import { transactions } from '@/types/transactions'
 
 const Airtime = () => {
@@ -61,7 +60,7 @@ const Airtime = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        {StatementsData.length > 0 ? (
+        {sortedStatements.length > 0 ? (
           <div className="card card-flush tw-mt-10">
             <div className="card-header align-items-center py-5 gap-2 gap-md-5">
               <div className="card-title">
@@ -160,84 +159,81 @@ const Airtime = () => {
               </div>
             </div>
 
-            {currentItems.length > 0 ? (
-              <div className="card-body table-responsive pt-0">
-                <table
-                  className="table align-middle table-row-dashed fs-6 gy-5"
-                  id="kt_ecommerce_report_shipping_table"
-                >
-                  <thead>
-                    <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                      <th className="min-w-100px">ID</th>
-                      <th>Transaction type</th>
-                      <th className="min-w-80px">Date</th>
-                      <th>Status</th>
-                      <th className="text-end">Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody className="fw-semibold text-gray-600">
-                    {currentItems.map((item, index) => (
-                      <tr key={item.orderNo}>
-                        <td>
-                          <>
-                            <button
-                              className="text-primary"
-                              onClick={() => openModal(index)}
-                            >
-                              {item.orderNo}
-                            </button>
-                            {modalIndex === index && (
-                              <Modal
-                                isOpen={true}
-                                onClose={closeModal}
-                                title={`Statement details for id: ${item.orderNo}`}
-                                buttonText={'Close'}
-                              >
-                                <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
-                                  <div
-                                    className={`badge !tw-inline-block tw-w-fit badge-light-${
-                                      item.status === 'Successful'
-                                        ? 'success'
-                                        : item.status === 'Failed'
-                                          ? 'danger'
-                                          : 'warning'
-                                    }`}
-                                  >
-                                    {item.status}
-                                  </div>
-                                  <div>
-                                    <span>Type:</span> {item.type}
-                                  </div>
-                                  <div>
-                                    <span>Amount:</span> {item.amount}
-                                  </div>
-                                  <div>
-                                    <span>Date:</span> {item.date}
-                                  </div>
-                                </div>
-                              </Modal>
-                            )}
-                          </>
-                        </td>
-                        <td>{item.type}</td>
-
-                        <td>{item.date}</td>
-                        <td>
-                          <div
-                            className={`badge badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
+            <div className="card-body table-responsive pt-0">
+              <table
+                className="table align-middle table-row-dashed fs-6 gy-5"
+                id="kt_ecommerce_report_shipping_table"
+              >
+                <thead>
+                  <tr className="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                    <th className="min-w-100px">ID</th>
+                    <th>Transaction type</th>
+                    <th className="min-w-80px">Date</th>
+                    <th>Status</th>
+                    <th className="text-end">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="fw-semibold text-gray-600">
+                  {currentItems.map((item, index) => (
+                    <tr key={item.orderNo}>
+                      <td>
+                        <>
+                          <button
+                            className="text-primary"
+                            onClick={() => openModal(index)}
                           >
-                            {item.status}
-                          </div>
-                        </td>
-                        <td className="text-end">{item.amount}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <div className='tw-flex tw-justify-center tw-items-center tw-text-2xl tw-font-bold tw-py-10'>No data available</div>
-            )}
+                            {item.orderNo}
+                          </button>
+                          {modalIndex === index && (
+                            <Modal
+                              isOpen={true}
+                              onClose={closeModal}
+                              title={`Statement details for id: ${item.orderNo}`}
+                              buttonText={'Close'}
+                            >
+                              <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
+                                <div
+                                  className={`badge !tw-inline-block tw-w-fit badge-light-${
+                                    item.status === 'Successful'
+                                      ? 'success'
+                                      : item.status === 'Failed'
+                                        ? 'danger'
+                                        : 'warning'
+                                  }`}
+                                >
+                                  {item.status}
+                                </div>
+                                <div>
+                                  <span>Type:</span> {item.type}
+                                </div>
+                                <div>
+                                  <span>Amount:</span> {item.amount}
+                                </div>
+                                <div>
+                                  <span>Date:</span> {item.date}
+                                </div>
+                              </div>
+                            </Modal>
+                          )}
+                        </>
+                      </td>
+                      <td>{item.type}</td>
+
+                      <td>{item.date}</td>
+                      <td>
+                        <div
+                          className={`badge badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
+                        >
+                          {item.status}
+                        </div>
+                      </td>
+                      <td className="text-end">{item.amount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
             <ul className="pagination mb-10">
               <li
                 className={`page-item previous ${

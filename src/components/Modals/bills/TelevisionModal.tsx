@@ -20,8 +20,11 @@ import {
 import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { TvTransferType, tvTransferSchema } from '@/lib/validation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
-const AirtimeNames = [{ name: 'Dstv' }, { name: 'Gotv' }] as const
+const ProviderNames = [{ name: 'Dstv' }, { name: 'Gotv' }] as const
 
 const Plans = [
   {
@@ -43,10 +46,43 @@ const Plans = [
   },
 ] as const
 
+const steps = [
+  {
+    id: 'Step 1',
+    name: 'Fill in reciver details',
+    fields: ['provider', 'tvPlan', 'iucNumber'],
+  },
+  {
+    id: 'Step 2',
+    name: 'Verify and provide Auth Pin',
+    fields: ['authPin'],
+  },
+]
+
 const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
-  const [currentStep, setCurrentStep] = useState<number>(1)
+  const [previousStep, setPreviousStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+  const [open, setOpen] = useState(false)
+  const [openTvPlan, setTvPlanOpen] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    trigger,
+    setValue,
+    formState: { errors },
+  } = useForm<TvTransferType>({
+    resolver: zodResolver(tvTransferSchema),
+  })
+
+  const providerValue = watch('provider')
+  const tvPlanValue = watch('tvPlan')
+  const iucNumberValue = watch('iucNumber')
+
   const [selectedTelevision, setSelectedTelevision] = useState(
-    'Please select a television provider'
+    'Please select a tv provider'
   )
   const [selectedPlan, setSelectedPlan] = useState('Please select a Plan')
 
@@ -61,31 +97,8 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
     }
   }
 
-  const [otpValue, setOtpValue] = useState('')
-
-  const handleOtpChange = (otp: string) => {
-    setOtpValue(otp)
-  }
-
-  const handlePrevious = () => {
-    setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
-  }
-
-  const handleNext = () => {
-    if (currentStep === 1) {
-      setCurrentStep((prevStep) => prevStep + 1)
-    }
-  }
-
-  const handleNetworkSelect = (NetworkName: string) => {
-    setSelectedTelevision(NetworkName)
-  }
-
-  const handlePlanSelect = (NetworkPlanName: string) => {
-    setSelectedPlan(NetworkPlanName)
-  }
-
-  const onSubmit = (data: any) => {
+  const processForm: SubmitHandler<TvTransferType> = (data) => {
+    console.log(data)
     try {
       Swal.fire({
         text: 'Transaction Successful.',
@@ -94,6 +107,8 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
         confirmButtonText: 'Ok, got it!',
         customClass: { confirmButton: 'btn btn-primary' },
       })
+      onClose()
+      reset()
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.error('Validation error:', error.message)
@@ -103,182 +118,269 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
       }
     }
   }
+
+  type FieldName = keyof TvTransferType
+
+  const handleNext = async () => {
+    const fields = steps[currentStep].fields
+    const output = await trigger(fields as FieldName[], { shouldFocus: true })
+
+    if (!output) return
+
+    if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 2) {
+        await handleSubmit(processForm)()
+      }
+      setPreviousStep(currentStep)
+      setCurrentStep((step) => step + 1)
+    }
+  }
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setPreviousStep(currentStep)
+      setCurrentStep((step) => step - 1)
+    }
+  }
+
+  const [otpValue, setOtpValue] = useState('')
+
+  const handleOtpChange = (otp: string) => {
+    setValue('authPin', otp)
+    setOtpValue(otp)
+  }
+
+  const handleNetworkSelect = (NetworkName: string) => {
+    setValue('provider', NetworkName)
+    setOpen(false)
+    setSelectedTelevision(NetworkName)
+  }
+
+  const handlePlanSelect = (NetworkPlanName: string) => {
+    setValue('tvPlan', NetworkPlanName)
+    setTvPlanOpen(false)
+    setSelectedPlan(NetworkPlanName)
+  }
+
   return (
-    <form
-      onSubmit={onSubmit}
-      id="kt_account_profile_details_form"
-      className="form card-body border-top p-9"
-    >
-      <div
-        className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
-        data-kt-stepper-element="content"
+    <div className="modal-backdrop" style={{ display: 'block' }}>
+      <form
+        onSubmit={handleSubmit(processForm)}
+        className="modal"
+        tabIndex={-1}
+        role="dialog"
+        style={{ display: 'block' }}
       >
-        <div className="row mb-6">
-          <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-            Select television provider
-          </label>
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Television</h5>
+              <button
+                type="button"
+                className="btn-close"
+                aria-label="Close"
+                onClick={onClose}
+              ></button>
+            </div>
+            <div className="modal-body">
+              {' '}
+              <div
+                className={`${currentStep === 0 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
+                data-kt-stepper-element="content"
+              >
+                <div className="row mb-6">
+                  <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                    Select television provider
+                  </label>
 
-          <div className="col-lg-8 fv-row">
-            <Popover>
-              <PopoverTrigger asChild>
-                <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                  {selectedTelevision}
-                  <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                  <div className="col-lg-8 fv-row">
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                          {selectedTelevision}
+                          <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                        <Command>
+                          <CommandInput placeholder="Search..." />
+                          <CommandList>
+                            <CommandEmpty>No results found.</CommandEmpty>
+                            <CommandGroup>
+                              {ProviderNames.map((item) => (
+                                <CommandItem key={item.name}>
+                                  <p
+                                    onClick={() =>
+                                      handleNetworkSelect(item.name)
+                                    }
+                                    className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                  >
+                                    {item.name}
+                                  </p>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
+                {selectedTelevision !==
+                  'Please select a tv provider' && (
+                  <div className="row mb-6">
+                    <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                      Select Plan
+                    </label>
+
+                    <div className="col-lg-8 fv-row">
+                      <Popover open={openTvPlan} onOpenChange={setTvPlanOpen}>
+                        <PopoverTrigger asChild>
+                          <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                            {selectedPlan}
+                            <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                          <Command>
+                            <CommandInput placeholder="Search..." />
+                            <CommandList>
+                              <CommandEmpty>No results found.</CommandEmpty>
+                              <CommandGroup>
+                                {renderPlans().map((item, index) => (
+                                  <CommandItem key={index}>
+                                    <p
+                                      onClick={() => handlePlanSelect(item)}
+                                      className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                    >
+                                      {item}
+                                    </p>
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                )}
+                <div className="row mb-6">
+                  <label className="col-lg-4 col-form-label required fw-semibold fs-6">
+                    IUC Number
+                  </label>
+
+                  <div className="col-lg-8 fv-row">
+                    <input
+                      {...register('iucNumber')}
+                      type="number"
+                      pattern="[0-9]+"
+                      min={0}
+                      className="form-control form-control-lg form-control-solid"
+                      placeholder="Please provide the phone number"
+                    />
+                    {errors.iucNumber?.message && (
+                      <p className="tw-mt-2 tw-text-sm tw-text-red-400">
+                        {errors.iucNumber.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
+                data-kt-stepper-element="content"
+              >
+                <div className="tw-text-center tw-text-2xl tw-font-bold tw-capitalize">
+                  Confirm the Phone Number before transfer.
+                </div>
+                <div className="tw-text-center tw-py-4 text-xl">
+                  Type:
+                  <span className="tw-text-3xl tw-font-bold">
+                    {tvPlanValue}
+                  </span>
+                </div>
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
+                  <div className="tw-flex tw-justify-between tw-items-center">
+                    <p>Provider:</p>
+                    <p className="tw-font-bold tw-truncate">{providerValue}</p>
+                  </div>
+                </div>
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
+                  <div className="tw-flex tw-justify-between tw-items-center">
+                    <p>IUC Number:</p>
+                    <p className="tw-font-bold tw-truncate">{iucNumberValue}</p>
+                  </div>
+                </div>
+                <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
+                  <div className="tw-flex tw-justify-between tw-items-center">
+                    <p>Fee (NGN):</p>
+                    <p className="tw-font-bold">free</p>
+                  </div>
+                  <div className="tw-flex tw-justify-between tw-items-center">
+                    <p>Total (NGN):</p>
+                    <p className="tw-font-bold"> 1,000</p>
+                  </div>
+                </div>
+
+                <div className="tw-flex tw-flex-col tw-w-full tw-justify-center tw-items-center tw-gap-2 tw-mt-4 tw-mb-8">
+                  <p className="tw-font-bold tw-text-xl">
+                    Provide Pin to authorize payment.
+                  </p>
+
+                  <OtpInput
+                    inputStyle="inputStyle"
+                    value={otpValue}
+                    onChange={(otp) => {
+                      setOtpValue(otp)
+                      handleOtpChange(otp)
+                    }}
+                    inputType="password"
+                    numInputs={4}
+                    renderInput={(props) => <input {...props} />}
+                  />
+                  {errors.authPin?.message && (
+                    <p className="tw-mt-2 tw-text-sm tw-text-red-400">
+                      {errors.authPin.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              {currentStep === 1 && (
+                <button
+                  onClick={handlePrevious}
+                  type="reset"
+                  className="btn btn-light btn-active-light-primary me-2"
+                >
+                  Previous
                 </button>
-              </PopoverTrigger>
-              <PopoverContent className="tw-p-0" align="start">
-                <Command>
-                  <CommandInput placeholder="Search..." />
-                  <CommandList>
-                    <CommandEmpty>No results found.</CommandEmpty>
-                    <CommandGroup>
-                      {AirtimeNames.map((item) => (
-                        <CommandItem key={item.name}>
-                          <p
-                            onClick={() => handleNetworkSelect(item.name)}
-                            className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                          >
-                            {item.name}
-                          </p>
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        {selectedTelevision !== 'Please select a television provider' && (
-          <div className="row mb-6">
-            <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-              Select Plan
-            </label>
+              )}
+              {currentStep === 0 && (
+                <button
+                  onClick={onClose}
+                  type="reset"
+                  className="btn btn-light btn-active-light-primary me-2"
+                >
+                  Close
+                </button>
+              )}
+              {currentStep === 0 && (
+                <Button
+                  onClick={handleNext}
+                  text="Continue"
+                  iconClass="ki-arrow-right"
+                  position="ms-1"
+                />
+              )}
 
-            <div className="col-lg-8 fv-row">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                    {selectedPlan}
-                    <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="tw-p-0" align="start">
-                  <Command>
-                    <CommandInput placeholder="Search..." />
-                    <CommandList>
-                      <CommandEmpty>No results found.</CommandEmpty>
-                      <CommandGroup>
-                        {renderPlans().map((item, index) => (
-                          <CommandItem key={index}>
-                            <p
-                              onClick={() => handlePlanSelect(item)}
-                              className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                            >
-                              {item}
-                            </p>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+              {currentStep === 1 && <SubmitButton text="Transfer" />}
             </div>
           </div>
-        )}
-        <div className="row mb-6">
-          <label className="col-lg-4 col-form-label required fw-semibold fs-6">
-            IUC Number
-          </label>
-
-          <div className="col-lg-8 fv-row">
-            <input
-              type="number"
-              className="form-control form-control-lg form-control-solid"
-              placeholder="Please provide the IUC number"
-            />
-          </div>
         </div>
-      </div>
-      <div
-        className={`${currentStep === 2 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
-        data-kt-stepper-element="content"
-      >
-        <div className="tw-text-center tw-text-2xl tw-font-bold tw-capitalize">
-          Confirm the IUC Number before transfer.
-        </div>
-        <div className="tw-text-center tw-py-4 text-xl">
-          Amount(NGN):
-          <span className="tw-text-3xl tw-font-bold">12,000</span>
-        </div>
-        <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
-          <div className="tw-flex tw-justify-between tw-items-center">
-            <p>IUC:</p>
-            <p className="tw-font-bold tw-truncate">123456789</p>
-          </div>
-        </div>
-        <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
-          <div className="tw-flex tw-justify-between tw-items-center">
-            <p>Fee (NGN):</p>
-            <p className="tw-font-bold">free</p>
-          </div>
-          <div className="tw-flex tw-justify-between tw-items-center">
-            <p>Total (NGN):</p>
-            <p className="tw-font-bold"> 1,000</p>
-          </div>
-        </div>
-
-        <div className="tw-flex tw-flex-col tw-w-full tw-justify-center tw-items-center tw-gap-2 tw-mt-4 tw-mb-8">
-          <p className="tw-font-bold tw-text-xl">
-            Provide Pin to authorize payment.
-          </p>
-
-          <OtpInput
-            inputStyle="inputStyle"
-            value={otpValue}
-            onChange={handleOtpChange}
-            inputType="password"
-            numInputs={4}
-            renderInput={(props) => <input {...props} />}
-          />
-        </div>
-      </div>
-
-      <div className="card-footer d-flex justify-content-end py-6 px-9">
-        <div className="mr-2">
-          {currentStep === 2 && (
-            <button
-              onClick={handlePrevious}
-              type="reset"
-              className="btn btn-light btn-active-light-primary me-2"
-            >
-              Previous
-            </button>
-          )}
-        </div>
-        {currentStep === 1 && (
-          <button
-            type="reset"
-            className="btn btn-light btn-active-light-primary me-2"
-          >
-            Reset
-          </button>
-        )}
-        <div className="mr-2">
-          {currentStep === 1 && (
-            <Button
-              onClick={handleNext}
-              text="Continue"
-              iconClass="ki-arrow-right"
-              position="ms-1"
-            />
-          )}
-
-          {currentStep === 2 && <SubmitButton text="Transfer" />}
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   )
 }
 

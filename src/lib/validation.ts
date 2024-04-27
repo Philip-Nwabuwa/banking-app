@@ -38,13 +38,62 @@ export type BankTransferType = z.infer<typeof bankTransferSchema>
 
 export const airtimeTransferSchema = z.object({
   network: z.string().min(1, 'Network is required'),
-  amount: z.number().min(50, "Amount must be at least 50"),
-  phoneNumber: z.string().min(1, 'Phone number is required'),
+  amount: z
+    .number({ invalid_type_error: 'Amount is required' })
+    .int()
+    .positive()
+    .min(50, 'Amount must be at least 50'),
+  phoneNumber: z.string().min(10, 'Phone number is required'),
   authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
 })
 
 export type AirtimeTransferType = z.infer<typeof airtimeTransferSchema>
 
+export const dataTransferSchema = z.object({
+  network: z.string().min(1, 'Network is required'),
+  dataPlan: z.string().min(1, 'Data plan is required'),
+  phoneNumber: z.string().min(10, 'Phone number is required'),
+  authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
+})
+
+export type DataTransferType = z.infer<typeof dataTransferSchema>
+
+export const tvTransferSchema = z.object({
+  provider: z.string().min(1, 'Provider is required'),
+  tvPlan: z.string().min(1, 'Tv plan is required'),
+  iucNumber: z.string().min(10, 'IUC number is required'),
+  authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
+})
+
+export type TvTransferType = z.infer<typeof tvTransferSchema>
+
+export const electricityTransferSchema = z.object({
+  provider: z.string().min(1, 'Provider is required'),
+  meterType: z.string().min(1, 'Meter type is required'),
+  meterNumber: z.string().min(1, 'Meter number is required'),
+  phoneNumber: z.string().min(10, 'Phone number is required'),
+  amount: z
+    .number({ invalid_type_error: 'Amount is required' })
+    .int()
+    .positive()
+    .min(50, 'Amount must be at least 50'),
+  authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
+})
+
+export type ElectricityTransferType = z.infer<typeof electricityTransferSchema>
+
+export const bettingTransferSchema = z.object({
+  provider: z.string().min(1, 'betting provider is required'),
+  amount: z
+    .number({ invalid_type_error: 'Amount is required' })
+    .int()
+    .positive()
+    .min(100, 'amount must be at least 100'),
+  userId: z.string().min(1, 'User ID is required'),
+  authPin: z.string().min(4, 'Auth pin must be 4 digits long'),
+})
+
+export type BettingTransferType = z.infer<typeof bettingTransferSchema>
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email('Invalid email address').min(1, 'Email is required'),
@@ -52,4 +101,4 @@ export const forgotPasswordSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
-export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>
+export type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>

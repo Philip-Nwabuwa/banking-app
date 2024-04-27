@@ -3,25 +3,26 @@
 import { useState } from 'react'
 
 import Modal from '@/components/common/Modal'
-import { StatementsData } from '@/types/statements'
+import { transactions } from '@/types/transactions'
 
 const Betting = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('all')
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 5
 
-  const sortedStatements = StatementsData.sort((a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB.getTime() - dateA.getTime()
-  })
+  const sortedStatements = transactions
+    .filter((statement) => statement.type === 'betting')
+    .sort((a, b) => {
+      const dateA = new Date(a.date)
+      const dateB = new Date(b.date)
+      return dateB.getTime() - dateA.getTime()
+    })
 
   const filteredStatements = sortedStatements.filter((item) => {
     const matchesSearchTerm =
       item.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.orderNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.amount.toLowerCase().includes(searchTerm.toLowerCase())
 
     if (selectedStatus === 'all') {
@@ -43,12 +44,14 @@ const Betting = () => {
     setCurrentPage(pageNumber)
   }
 
-  const openModal = () => {
-    setIsModalOpen(true)
+  const [modalIndex, setModalIndex] = useState<number | null>(null)
+
+  const openModal = (index: number) => {
+    setModalIndex(index)
   }
 
   const closeModal = () => {
-    setIsModalOpen(false)
+    setModalIndex(null)
   }
 
   return (
@@ -57,7 +60,7 @@ const Betting = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        {StatementsData.length > 0 ? (
+        {sortedStatements.length > 0 ? (
           <div className="card card-flush tw-mt-10">
             <div className="card-header align-items-center py-5 gap-2 gap-md-5">
               <div className="card-title">
@@ -95,9 +98,9 @@ const Betting = () => {
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="all">All</option>
-                    <option value="Completed">Completed</option>
+                    <option value="Successful">Successful</option>
                     <option value="Pending">Pending</option>
-                    <option value="Cancelled">Cancelled</option>
+                    <option value="Failed">Failed</option>
                   </select>
                 </div>
 
@@ -176,32 +179,43 @@ const Betting = () => {
                     <tr key={index}>
                       <td>
                         <>
-                          <button className="text-primary" onClick={openModal}>
-                            {item.orderId}
-                          </button>
-                          <Modal
-                            isOpen={isModalOpen}
-                            onClose={closeModal}
-                            title={`Statement details for id: ${item.orderId}`}
-                            buttonText={'Close'}
+                          <button
+                            className="text-primary"
+                            onClick={() => openModal(index)}
                           >
-                            <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
-                              <div
-                                className={`badge !tw-inline-block tw-w-fit badge-light-${item.status === 'Approved' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
-                              >
-                                {item.status}
+                            {item.orderNo}
+                          </button>
+                          {modalIndex === index && (
+                            <Modal
+                              isOpen={true}
+                              onClose={closeModal}
+                              title={`Statement details for id: ${item.orderNo}`}
+                              buttonText={'Close'}
+                            >
+                              <div className="tw-flex tw-flex-col tw-gap-2 tw-text-lg">
+                                <div
+                                  className={`badge !tw-inline-block tw-w-fit badge-light-${
+                                    item.status === 'Successful'
+                                      ? 'success'
+                                      : item.status === 'Failed'
+                                        ? 'danger'
+                                        : 'warning'
+                                  }`}
+                                >
+                                  {item.status}
+                                </div>
+                                <div>
+                                  <span>Type:</span> {item.type}
+                                </div>
+                                <div>
+                                  <span>Amount:</span> {item.amount}
+                                </div>
+                                <div>
+                                  <span>Date:</span> {item.date}
+                                </div>
                               </div>
-                              <div>
-                                <span>Type:</span> {item.type}
-                              </div>
-                              <div>
-                                <span>Amount:</span> {item.amount}
-                              </div>
-                              <div>
-                                <span>Date:</span> {item.date}
-                              </div>
-                            </div>
-                          </Modal>
+                            </Modal>
+                          )}
                         </>
                       </td>
                       <td>{item.type}</td>
@@ -209,7 +223,7 @@ const Betting = () => {
                       <td>{item.date}</td>
                       <td>
                         <div
-                          className={`badge badge-light-${item.status === 'Completed' ? 'success' : item.status === 'Cancelled' ? 'danger' : 'warning'}`}
+                          className={`badge badge-light-${item.status === 'Successful' ? 'success' : item.status === 'Failed' ? 'danger' : 'warning'}`}
                         >
                           {item.status}
                         </div>

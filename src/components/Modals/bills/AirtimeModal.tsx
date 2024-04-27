@@ -40,7 +40,7 @@ const steps = [
   },
   {
     id: 'Step 2',
-    name: 'Address',
+    name: 'Verify and provide Auth Pin',
     fields: ['authPin'],
   },
 ]
@@ -61,9 +61,6 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
   } = useForm<AirtimeTransferType>({
     resolver: zodResolver(airtimeTransferSchema),
   })
-
-  console.log(errors);
-  
 
   const networkValue = watch('network')
   const amountValue = watch('amount')
@@ -159,9 +156,7 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                 data-kt-stepper-element="content"
               >
                 <div className="row mb-6">
-                  <label
-                    className="col-lg-4 col-form-label required fw-semibold fs-6"
-                  >
+                  <label className="col-lg-4 col-form-label required fw-semibold fs-6">
                     Select Network
                   </label>
 
@@ -186,7 +181,6 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                                 <CommandItem key={item.name}>
                                   <p
                                     onClick={() =>
-                                      
                                       handleNetworkSelect(item.name)
                                     }
                                     className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
@@ -215,7 +209,9 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                   <div className="col-lg-8 fv-row">
                     <input
                       {...register('phoneNumber')}
-                      type="text"
+                      type="tel"
+                      pattern="[0-9]+"
+                      min={0}
                       className="form-control form-control-lg form-control-solid"
                       placeholder="Please provide the phone number"
                     />
@@ -261,7 +257,9 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                 </div>
                 <div className="tw-text-center tw-py-4 text-xl">
                   Amount:
-                  <span className="tw-text-3xl tw-font-bold">₦{amountValue}</span>
+                  <span className="tw-text-3xl tw-font-bold">
+                    ₦{amountValue}
+                  </span>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
@@ -272,7 +270,9 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">{phoneNumberValue}</p>
+                    <p className="tw-font-bold tw-truncate">
+                      {phoneNumberValue}
+                    </p>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-pt-8 tw-text-xl">
@@ -295,13 +295,18 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
                     inputStyle="inputStyle"
                     value={otpValue}
                     onChange={(otp) => {
-                      setOtpValue(otp); 
-                      handleOtpChange(otp); 
+                      setOtpValue(otp)
+                      handleOtpChange(otp)
                     }}
                     inputType="password"
                     numInputs={4}
                     renderInput={(props) => <input {...props} />}
                   />
+                  {errors.authPin?.message && (
+                    <p className="tw-mt-2 tw-text-sm tw-text-red-400">
+                      {errors.authPin.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -343,33 +348,3 @@ const AirtimeModal = ({ onClose }: { onClose: () => void }) => {
 }
 
 export default AirtimeModal
-
-{
-  /* <div className="modal-backdrop" style={{ display: 'block' }}>
-      <form
-        onSubmit={onSubmit}
-        className="form modal card-body border-top p-9"
-        tabIndex={-1}
-        role="dialog"
-      >
-       
-
-        <div className="card-footer d-flex justify-content-end py-6 px-9">
-          <div className="mr-2">
-            
-          </div>
-          {currentStep === 1 && (
-            <button
-              type="reset"
-              className="btn btn-light btn-active-light-primary me-2"
-            >
-              Reset
-            </button>
-          )}
-          <div className="mr-2">
-            
-          </div>
-        </div>
-      </form>
-    </div> */
-}

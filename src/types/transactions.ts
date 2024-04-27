@@ -1,13 +1,15 @@
 type TransactionStatus = 'Successful' | 'Pending' | 'Failed'
 type TransactionType =
   | 'airtime'
-  | 'transfer'
+  | 'bank-transfer'
+  | "paytonic-transfer"
   | 'deposit'
   | 'received'
   | 'betting'
   | 'settlement'
   | 'television'
   | 'electricity'
+  | 'data'
 
 interface Transaction {
   orderNo: string
@@ -35,7 +37,7 @@ export const transactions: Transaction[] = [
   {
     orderNo: '#18572',
     status: 'Successful',
-    type: 'transfer',
+    type: 'bank-transfer',
     amount: '₦9,200.00',
     date: '15 Apr 2024, 12:15 pm',
   },
@@ -43,6 +45,20 @@ export const transactions: Transaction[] = [
     orderNo: '#18698',
     status: 'Failed',
     type: 'deposit',
+    amount: '₦3,300.00',
+    date: '15 Apr 2024, 6:20 pm',
+  },
+  {
+    orderNo: '#12898',
+    status: 'Successful',
+    type: 'data',
+    amount: '₦3,300.00',
+    date: '15 Apr 2024, 6:20 pm',
+  },
+  {
+    orderNo: '#11298',
+    status: 'Successful',
+    type: 'data',
     amount: '₦3,300.00',
     date: '15 Apr 2024, 6:20 pm',
   },
@@ -62,7 +78,7 @@ export const transactions: Transaction[] = [
   },
   {
     orderNo: '#19033',
-    status: 'Failed',
+    status: 'Successful',
     type: 'television',
     amount: '₦6,700.00',
     date: '17 Apr 2024, 1:50 pm',
@@ -77,13 +93,13 @@ export const transactions: Transaction[] = [
   {
     orderNo: '#19271',
     status: 'Successful',
-    type: 'transfer',
+    type: 'paytonic-transfer',
     amount: '₦8,600.00',
     date: '18 Apr 2024, 4:30 pm',
   },
   {
     orderNo: '#19389',
-    status: 'Pending',
+    status: 'Successful',
     type: 'airtime',
     amount: '₦3,400.00',
     date: '18 Apr 2024, 9:00 am',
@@ -98,7 +114,7 @@ export const transactions: Transaction[] = [
   {
     orderNo: '#15998',
     status: 'Successful',
-    type: 'transfer',
+    type: 'bank-transfer',
     amount: '₦7,900.00',
     date: '15 Apr 2024, 10:12 am',
   },
@@ -111,22 +127,22 @@ export const transactions: Transaction[] = [
   },
   {
     orderNo: '#15917',
-    status: 'Pending',
+    status: 'Successful',
     type: 'betting',
     amount: '₦880.00',
     date: '17 Apr 2024, 5:54 pm',
   },
   {
     orderNo: '#14404',
-    status: 'Failed',
-    type: 'transfer',
+    status: 'Successful',
+    type: 'bank-transfer',
     amount: '₦7,650.00',
     date: '18 Apr 2024, 7:32 am',
   },
   {
     orderNo: '#16987',
     status: 'Successful',
-    type: 'transfer',
+    type: 'bank-transfer',
     amount: '₦3,500.00',
     date: '14 Apr 2024, 1:20 pm',
   },

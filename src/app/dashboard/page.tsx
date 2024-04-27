@@ -42,14 +42,10 @@ const Dashboard = () => {
         (transaction.type === 'deposit' || transaction.type === 'received')
     )
 
-    // Sum the amounts of successful transactions for the day
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
-      // Extract the numeric value from the amount string (remove '₦' and ',' and parse as float)
       const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
       return sum + amount
     }, 0)
-
-    // Add the sum to the corresponding index of the 'seriesData' array
     seriesData[index] = sumForDay
   })
 
@@ -67,10 +63,12 @@ const Dashboard = () => {
         }) === day &&
         transaction.status === 'Successful' &&
         (transaction.type === 'airtime' ||
-          transaction.type === 'transfer' ||
+          transaction.type === 'bank-transfer' ||
+          transaction.type === 'paytonic-transfer' ||
           transaction.type === 'betting' ||
           transaction.type === 'settlement' ||
           transaction.type === 'television' ||
+          transaction.type === 'data' ||
           transaction.type === 'electricity')
     )
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
