@@ -44,7 +44,7 @@ const BankTransferModule = () => {
   const [open, setOpen] = useState(false)
   const [openBen, setOpenBen] = useState(false)
   const [selectedBank, setSelectedBank] = useState('')
-  const [otpValue, setOtpValue] = useState<string>("")
+  const [otpValue, setOtpValue] = useState<string>('')
   const { balance } = useBalanceStore()
 
   const {
@@ -65,18 +65,8 @@ const BankTransferModule = () => {
   const amountValue = watch('amount')
   const narrationValue = watch('narration')
 
-  const beneficiary = Beneficiary.find(
-    (beneficiary) => beneficiary.accountNumber === accountNumberValue
-  )
-
   const handleOtpChange = (otp: string) => {
-      setOtpValue(otp)
-  }
-
-  const handleClick = (item: beneficiaryType) => {
-    setValue('bankName', item.bankName)
-    setSelectedBank(item.bankName)
-    setValue('accountNumber', item.accountNumber)
+    setOtpValue(otp)
   }
 
   const onSubmit: SubmitHandler<BankTransferType> = async (formData) => {
@@ -89,7 +79,7 @@ const BankTransferModule = () => {
         customClass: { confirmButton: 'btn btn-primary' },
       })
       reset()
-      setOtpValue("")
+      setOtpValue('')
       setSelectedBank('')
       setCurrentStep(1)
     } catch (error: unknown) {
@@ -210,36 +200,6 @@ const BankTransferModule = () => {
                 <div className="lg:tw-hidden tw-flex">
                   <span className="required">Account number</span>
                 </div>
-                <Popover open={openBen} onOpenChange={setOpenBen}>
-                  <PopoverTrigger asChild>
-                    <div className="text-primary tw-cursor-pointer">
-                      Choose beneficiary
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="tw-p-0" align="end">
-                    <Command>
-                      <CommandInput placeholder="Search..." />
-                      <CommandList>
-                        <CommandEmpty>No beneficiary found.</CommandEmpty>
-                        <CommandGroup>
-                          {Beneficiary.map((item) => (
-                            <CommandItem key={item.name}>
-                              <p
-                                onClick={() => {
-                                  handleClick(item)
-                                  setOpenBen(false)
-                                }}
-                                className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                              >
-                                {item.name}
-                              </p>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
               </div>
               <input
                 type="number"
@@ -247,9 +207,6 @@ const BankTransferModule = () => {
                 className="form-control form-control-lg form-control-solid tw-mb-2.5"
                 placeholder="Please provide the account number"
               />
-              {beneficiary && (
-                <span className="tw-ml-2">{beneficiary.name}</span>
-              )}
 
               {errors.accountNumber && (
                 <span className="text-danger">

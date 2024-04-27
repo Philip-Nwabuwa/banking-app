@@ -32,7 +32,7 @@ const Sidebar = () => {
       data-kt-drawer-name="app-sidebar"
       data-kt-drawer-activate="{default: true, lg: false}"
       data-kt-drawer-overlay="true"
-      data-kt-drawer-width="275px"
+      data-kt-drawer-width="285px"
       data-kt-drawer-direction="start"
     >
       <div>
@@ -164,7 +164,7 @@ const Sidebar = () => {
               {sidebarLinks.map((section, index) => (
                 <div key={index}>
                   {section.name && (
-                    <h3 className="text-gray-800 fw-bold mb-8">
+                    <h3 className="text-gray-800 fw-bold mb-6">
                       {section.name}
                     </h3>
                   )}

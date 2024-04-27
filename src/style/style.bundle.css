@@ -51368,8 +51368,8 @@ router-outlet {
     margin-bottom: 20px;
   }
   :root {
-    --bs-app-sidebar-width: 350px;
-    --bs-app-sidebar-width-actual: 350px;
+    --bs-app-sidebar-width: 360px;
+    --bs-app-sidebar-width-actual: 360px;
     --bs-app-sidebar-gap-start: 30px;
     --bs-app-sidebar-gap-end: 0px;
     --bs-app-sidebar-gap-top: 30px;

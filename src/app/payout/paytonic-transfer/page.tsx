@@ -97,7 +97,7 @@ const PaytonicTransfer = () => {
                     data-kt-ecommerce-order-filter="status"
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
-                   <option value="all">All</option>
+                    <option value="all">All</option>
                     <option value="Successful">Successful</option>
                     <option value="Pending">Pending</option>
                     <option value="Failed">Failed</option>

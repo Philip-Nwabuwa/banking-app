@@ -191,7 +191,10 @@ const ElectricityModal = ({ onClose }: { onClose: () => void }) => {
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                      <PopoverContent
+                        className="tw-p-0 tw-z-[1000]"
+                        align="start"
+                      >
                         <Command>
                           <CommandInput placeholder="Search..." />
                           <CommandList>
@@ -232,7 +235,10 @@ const ElectricityModal = ({ onClose }: { onClose: () => void }) => {
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                      <PopoverContent
+                        className="tw-p-0 tw-z-[1000]"
+                        align="start"
+                      >
                         <Command>
                           <CommandList>
                             <CommandEmpty>No results found.</CommandEmpty>

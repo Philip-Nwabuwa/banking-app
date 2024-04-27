@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect } from 'react'
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
-    const defaultThemeMode = 'light'
+    const defaultThemeMode = 'dark'
     let themeMode: string
 
     if (document.documentElement) {

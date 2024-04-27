@@ -1,26 +1,26 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { create } from 'zustand';
+import { create } from 'zustand'
 
 interface SidebarLinksState {
-  showModal: string | null;
+  showModal: string | null
 }
 
 interface SidebarLinksActions {
-  setShowModal: (modal: string | null) => void;
+  setShowModal: (modal: string | null) => void
 }
 
-type SidebarLinksStore = SidebarLinksState & SidebarLinksActions;
+type SidebarLinksStore = SidebarLinksState & SidebarLinksActions
 
 const useSidebarLinksStore = create<SidebarLinksStore>((set) => ({
   showModal: null,
   setShowModal: (modal) => set({ showModal: modal }),
-}));
+}))
 
 function useSidebarLinks() {
   const pathname = usePathname()
-  const { showModal, setShowModal } = useSidebarLinksStore();
+  const { showModal, setShowModal } = useSidebarLinksStore()
 
   const billsCategory = [
     'data',
@@ -91,8 +91,16 @@ function useSidebarLinks() {
       {
         name: 'Services',
         links: [
-          { icon: 'ki-bank', label: 'Bank Transfer' },
-          { icon: 'ki-cheque', label: 'Paytonic Transfer' },
+          {
+            icon: 'ki-bank',
+            label: `Bank Transfer`,
+            onClick: () => setShowModal('bank-transfer'),
+          },
+          {
+            icon: 'ki-cheque',
+            label: 'Paytonic Transfer',
+            onClick: () => setShowModal('paytonic-transfer'),
+          },
         ],
       },
     ]

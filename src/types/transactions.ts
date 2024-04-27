@@ -2,7 +2,7 @@ type TransactionStatus = 'Successful' | 'Pending' | 'Failed'
 type TransactionType =
   | 'airtime'
   | 'bank-transfer'
-  | "paytonic-transfer"
+  | 'paytonic-transfer'
   | 'deposit'
   | 'received'
   | 'betting'

@@ -201,7 +201,10 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                      <PopoverContent
+                        className="tw-p-0 tw-z-[1000]"
+                        align="start"
+                      >
                         <Command>
                           <CommandInput placeholder="Search..." />
                           <CommandList>
@@ -226,8 +229,7 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
                     </Popover>
                   </div>
                 </div>
-                {selectedTelevision !==
-                  'Please select a tv provider' && (
+                {selectedTelevision !== 'Please select a tv provider' && (
                   <div className="row mb-6">
                     <label className="col-lg-4 col-form-label required fw-semibold fs-6">
                       Select Plan
@@ -241,7 +243,10 @@ const TelevisionModal = ({ onClose }: { onClose: () => void }) => {
                             <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                           </button>
                         </PopoverTrigger>
-                        <PopoverContent className="tw-p-0 tw-z-[1000]" align="start">
+                        <PopoverContent
+                          className="tw-p-0 tw-z-[1000]"
+                          align="start"
+                        >
                           <Command>
                             <CommandInput placeholder="Search..." />
                             <CommandList>

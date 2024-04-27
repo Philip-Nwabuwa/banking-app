@@ -14,10 +14,10 @@ const Television = () => {
   const sortedStatements = transactions
     .filter((statement) => statement.type === 'television')
     .sort((a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB.getTime() - dateA.getTime()
-  })
+      const dateA = new Date(a.date)
+      const dateB = new Date(b.date)
+      return dateB.getTime() - dateA.getTime()
+    })
 
   const filteredStatements = sortedStatements.filter((item) => {
     const matchesSearchTerm =
@@ -177,7 +177,7 @@ const Television = () => {
                   {currentItems.map((item, index) => (
                     <tr key={index}>
                       <td>
-                      <>
+                        <>
                           <button
                             className="text-primary"
                             onClick={() => openModal(index)}

@@ -12,12 +12,12 @@ const Airtime = () => {
   const itemsPerPage = 5
 
   const sortedStatements = transactions
-  .filter((statement) => statement.type === 'data')
-  .sort((a, b) => {
-    const dateA = new Date(a.date)
-    const dateB = new Date(b.date)
-    return dateB.getTime() - dateA.getTime()
-  })
+    .filter((statement) => statement.type === 'data')
+    .sort((a, b) => {
+      const dateA = new Date(a.date)
+      const dateB = new Date(b.date)
+      return dateB.getTime() - dateA.getTime()
+    })
 
   const filteredStatements = sortedStatements.filter((item) => {
     const matchesSearchTerm =
@@ -178,7 +178,7 @@ const Airtime = () => {
                   {currentItems.map((item, index) => (
                     <tr key={index}>
                       <td>
-                      <>
+                        <>
                           <button
                             className="text-primary"
                             onClick={() => openModal(index)}

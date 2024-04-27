@@ -2,6 +2,8 @@ import useSidebarLinks from '@/types/sidebar-links'
 import Link from 'next/link'
 import { UrlObject } from 'url'
 
+import BankTransferModal from '../Modals/payout/BankTransferModal'
+import PaytonicTransferModal from '../Modals/payout/PaytonicTransferModal'
 import AirtimeModal from '@/components/Modals/bills/AirtimeModal'
 import BettingModal from '@/components/Modals/bills/BettingModal'
 import DataModal from '@/components/Modals/bills/DataModal'
@@ -93,6 +95,12 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({
           <ElectricityModal onClose={closeModal} />
         )}
         {showModal === 'betting' && <BettingModal onClose={closeModal} />}
+        {showModal === 'bank-transfer' && (
+          <BankTransferModal onClose={closeModal} />
+        )}
+        {showModal === 'paytonic-transfer' && (
+          <PaytonicTransferModal onClose={closeModal} />
+        )}
       </div>
     )
   }

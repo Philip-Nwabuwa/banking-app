@@ -2,8 +2,8 @@ import React from 'react'
 
 interface ModalProps {
   isOpen: boolean
-  onClose: () => void;
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  onClose: () => void
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
   title: string
   buttonText: string
   submitStyle?: string
