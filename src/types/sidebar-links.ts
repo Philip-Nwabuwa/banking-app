@@ -27,5 +27,4 @@ export const sidebarLinks = [
     label: 'Reversal',
   },
   { href: '/pos', icon: 'ki-shop', label: 'POS' },
-  { href: '/settings', icon: 'ki-setting-4', label: 'Settings' },
 ]

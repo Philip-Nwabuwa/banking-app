@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import Card from '@/assets/images/credit-card.png'
-import {Balance} from '@/components/common/Balance'
+import { Balance } from '@/components/common/Balance'
 import LineChart from '@/components/common/LineChart'
 import { formatTime } from '@/lib/utils'
 import { transactions } from '@/types/transactions'
@@ -42,14 +42,10 @@ const Dashboard = () => {
         (transaction.type === 'deposit' || transaction.type === 'received')
     )
 
-    // Sum the amounts of successful transactions for the day
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
-      // Extract the numeric value from the amount string (remove '₦' and ',' and parse as float)
       const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
       return sum + amount
     }, 0)
-
-    // Add the sum to the corresponding index of the 'seriesData' array
     seriesData[index] = sumForDay
   })
 
@@ -67,10 +63,12 @@ const Dashboard = () => {
         }) === day &&
         transaction.status === 'Successful' &&
         (transaction.type === 'airtime' ||
-          transaction.type === 'transfer' ||
+          transaction.type === 'bank-transfer' ||
+          transaction.type === 'paytonic-transfer' ||
           transaction.type === 'betting' ||
           transaction.type === 'settlement' ||
           transaction.type === 'television' ||
+          transaction.type === 'data' ||
           transaction.type === 'electricity')
     )
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
@@ -118,20 +116,19 @@ const Dashboard = () => {
               <div className="card-body d-flex justify-content-center flex-wrap ps-xl-15 pe-0">
                 <div className="flex-grow-1 mt-2 me-9 me-md-0">
                   <div className="position-relative text-gray-800 fs-1 z-index-2 fw-bold mb-5">
-                    Upgrade Your Account
+                    Verfiy Your Account
                   </div>
                   <span className="text-gray-600 fw-semibold fs-6 mb-6 d-block">
-                    Upgrade your account to access all features of Paytonic.
+                  Verfiy your account to access all features of Paytonic.
                     <br />
                     by submitting your BVN and other details.
                   </span>
                   <div className="mb-7">
                     <Link
-                      href="/dashboard/welcome"
-                      replace
+                      href="/verify-account"
                       className="btn btn-sm btn-primary fw-semibold me-2"
                     >
-                      Upgrade Now
+                      Verfiy Now
                     </Link>
                   </div>
                 </div>

@@ -17,10 +17,9 @@ const SettingsLayout = ({
   const pathname = usePathname()
 
   const navItems = [
-    { label: 'Settings', path: '/settings' },
-    { label: 'Security', path: '/settings/security' },
-    { label: 'Create Settlement', path: '/settings/create-settlement' },
-    { label: 'API Keys', path: '#' },
+    { label: 'Profile', path: '/settings' },
+    { label: 'Privacy & Security', path: '/settings/security' },
+    { label: 'Settlement Accounts', path: '/settings/create-settlement' },
   ]
 
   return (
@@ -86,7 +85,7 @@ const SettingsLayout = ({
                     id="kt_app_content_container"
                     className="app-container container-xxl"
                   >
-                    <div className="card mb-5 mb-xl-10">
+                    <div className="card !tw-rounded-es-none !tw-rounded-ee-none">
                       <div className="card-body pt-9 pb-0">
                         <div className="d-flex flex-wrap flex-sm-nowrap">
                           <div className="me-7 mb-4">
@@ -172,7 +171,7 @@ const SettingsLayout = ({
                               <Link
                                 href={item.path}
                                 replace
-                                className={`nav-link text-active-primary ms-0 me-10 py-5 ${pathname === item.path ? 'active' : ''}`}
+                                className={`nav-link text-active-primary ms-0 me-10 ${pathname === item.path ? 'active' : ''}`}
                               >
                                 {item.label}
                               </Link>

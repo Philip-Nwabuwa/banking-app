@@ -35,18 +35,20 @@ const LoginModule = () => {
     console.log(formData)
 
     try {
-      setIsSubmitting(false)
-      toast.success('Login successful!')
-      setTimeout(() => {
-        router.replace('/dashboard')
-      }, 2000)
+      setTimeout(async () => {
+        setIsSubmitting(false)
+        toast.success('Login successful!')
+        setTimeout(() => {
+          router.replace('/dashboard')
+        }, 2000)
+      }, 1000)
     } catch (error) {
       setIsSubmitting(false)
       toast.error('An error occurred. Please try again later.')
     }
   }
   return (
-    <form className="form w-100" onSubmit={handleSubmit(onSubmit)}>
+    <form className="form w-100" noValidate onSubmit={handleSubmit(onSubmit)}>
       <div className="text-center mb-11">
         <h1 className="text-gray-900 fw-bolder mb-3">Log In</h1>
         <div className="text-gray-500 fw-semibold fs-6">
@@ -98,7 +100,7 @@ const LoginModule = () => {
       <div className="d-grid mb-10">
         <SubmitButton
           isSubmitting={isSubmitting}
-          disabled={isSubmitting || !isPasswordValid}
+          disabled={isSubmitting || !isPasswordValid || !!errors.email?.message}
           text="Sign In"
         />
       </div>

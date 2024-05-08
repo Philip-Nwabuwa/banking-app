@@ -1,8 +1,7 @@
-import Link from 'next/link'
 
 const CreateSettlement = () => {
   return (
-    <div className="card mb-5 mb-xl-10">
+    <div className="card !tw-rounded-se-none !tw-rounded-ss-none mb-5 mb-xl-10">
       <div
         className="card-header border-0 cursor-pointer"
         role="button"

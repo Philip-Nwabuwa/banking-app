@@ -18,17 +18,16 @@ import RadioButton from '@/components/common/RadioButton'
 import SubmitButton from '@/components/common/SubmitBtn'
 import Button from '@/components/common/Button'
 import { toast } from 'sonner'
-import { SignUpSchema } from '@/lib/validation'
 import { useRouter } from 'next/navigation'
 import { getPasswordStrength } from '@/lib/utils'
 import { countries } from '@/types/countries'
+import { AccountTypeSchema } from '@/lib/validation'
 
 const SignupPage = () => {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [accountType, setAccountType] = useState('personal')
 
   const stepsData = [
     { title: 'Account Type', desc: 'Select your account type' },
@@ -45,7 +44,7 @@ const SignupPage = () => {
     watch,
     control,
   } = useForm({
-    resolver: zodResolver(SignUpSchema),
+    resolver: zodResolver(AccountTypeSchema),
   })
 
   const account = watch('accountType')
@@ -125,7 +124,7 @@ const SignupPage = () => {
         <div className="d-flex flex-column flex-lg-row flex-column-fluid stepper stepper-pills stepper-column stepper-multistep">
           <div className="d-flex flex-column flex-lg-row-auto w-lg-350px w-xl-500px">
             <div className="signupBg d-flex flex-column position-lg-fixed top-0 bottom-0 w-lg-350px w-xl-500px scroll-y bgi-size-cover bgi-position-center">
-              <div className="d-flex flex-center py-10 py-lg-20 mt-lg-20">
+              <div className="d-flex flex-center py-10 py-lg-20">
                 <Link href="/">
                   <Image
                     alt="Logo"
@@ -177,21 +176,21 @@ const SignupPage = () => {
                 <div className="d-flex fw-normal">
                   <Link
                     href="/terms"
-                    className="text-success px-5"
+                    className="tw-text-white px-5"
                     target="_blank"
                   >
                     Terms
                   </Link>
                   <Link
                     href="/plans"
-                    className="text-success px-5"
+                    className="tw-text-white px-5"
                     target="_blank"
                   >
                     Plans
                   </Link>
                   <Link
                     href="/contact"
-                    className="text-success px-5"
+                    className="tw-text-white px-5"
                     target="_blank"
                   >
                     Contact Us
@@ -242,7 +241,6 @@ const SignupPage = () => {
                           <Controller
                             name="accountType"
                             control={control}
-                            defaultValue="personal"
                             render={({ field }) => (
                               <>
                                 <RadioButton
@@ -322,9 +320,9 @@ const SignupPage = () => {
                                 onClick={togglePasswordVisibility}
                               >
                                 {passwordVisible ? (
-                                  <i className="ki-outline ki-eye fs-2"></i>
-                                ) : (
                                   <i className="ki-outline ki-eye-slash fs-2"></i>
+                                ) : (
+                                  <i className="ki-outline ki-eye fs-2"></i>
                                 )}
                               </span>
                             </div>
@@ -442,11 +440,10 @@ const SignupPage = () => {
                           placeholder="Pick date rage"
                           type="date"
                           id="kt_daterangepicker_3"
-                          min={minDateStr}
                         />
                       </div>
 
-                      <div className="col-lg-8 fv-row mb-10 mt-10">
+                      <div className="fv-row mb-10 mt-10">
                         <label className="form-label required">Country</label>
 
                         <select
@@ -501,6 +498,7 @@ const SignupPage = () => {
                       </div>
                     </div>
                   </div>
+
                   <div
                     className={`step-content ${
                       currentStep === 4 ? 'current' : ''
@@ -535,14 +533,8 @@ const SignupPage = () => {
 
                       <div className="fv-row mb-10">
                         <label className="d-flex align-items-center form-label">
-                          <span className="required">Shortened Descriptor</span>
-                          <span
-                            className="lh-1 ms-1"
-                            data-bs-toggle="popover"
-                            data-bs-trigger="hover"
-                            data-bs-html="true"
-                            data-bs-content='&lt;div className=&#039;p-4 rounded bg-light&#039;&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-4&#039;&gt; &lt;i className="ki-outline ki-bank fs-3 me-3"&gt;&lt;/i&gt; &lt;div className=&#039;fw-bold&#039;&gt;INCBANK **** 1245 STATEMENT&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack fw-semibold text-gray-600&#039;&gt; &lt;div&gt;Amount&lt;/div&gt; &lt;div&gt;Transaction&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;separator separator-dashed my-2&#039;&gt;&lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-gray-900 fw-bold mb-2&#039;&gt; &lt;div&gt;USD345.00&lt;/div&gt; &lt;div&gt;KEENTHEMES*&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-2&#039;&gt; &lt;div&gt;USD75.00&lt;/div&gt; &lt;div&gt;Hosting fee&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted&#039;&gt; &lt;div&gt;USD3,950.00&lt;/div&gt; &lt;div&gt;Payrol&lt;/div&gt; &lt;/div&gt; &lt;/div&gt;'
-                          >
+                          <span className="required">RC or VC number.</span>
+                          <span className="lh-1 ms-1">
                             <i className="ki-outline ki-information-5 text-gray-500 fs-6"></i>
                           </span>
                         </label>
@@ -551,11 +543,6 @@ const SignupPage = () => {
                           className="form-control bg-transparent"
                           {...register('business_descriptor')}
                         />
-
-                        <div className="form-text">
-                          Customers will see this shortened version of your
-                          statement descriptor
-                        </div>
                       </div>
 
                       <div className="fv-row mb-10">
@@ -588,6 +575,11 @@ const SignupPage = () => {
                           className="form-control bg-transparent"
                           {...register('business_description')}
                         ></textarea>
+
+                        <div className="form-text">
+                          Customers will see this shortened version of your
+                          statement description.
+                        </div>
                       </div>
 
                       <div className="fv-row mb-0">
@@ -616,10 +608,10 @@ const SignupPage = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please
-                          <a href="#" className="link-primary fw-bold">
+                          If you need more info, please{' '}
+                          <Link href="#" className="link-primary fw-bold">
                             Sign In
-                          </a>
+                          </Link>
                           .
                         </div>
                       </div>
@@ -641,13 +633,10 @@ const SignupPage = () => {
                                 We need your attention!
                               </h4>
                               <div className="fs-6 text-gray-700">
-                                To start using great tools, please,
-                                <a
-                                  href="utilities/wizards/vertical.html"
-                                  className="fw-bold"
-                                >
-                                  Create Team Platform
-                                </a>
+                                To start using great tools, please{' '}
+                                <Link href="#" className="fw-bold">
+                                  Create Team Platform.
+                                </Link>
                               </div>
                             </div>
                           </div>
@@ -691,7 +680,7 @@ const SignupPage = () => {
 
                       {currentStep === 5 && (
                         <Button
-                          onClick={() => router.push('/dashboard/welcome')}
+                          onClick={() => router.replace('/verify-account')}
                           text="Proceed to Dashboard"
                           iconClass="ki-arrow-right"
                           position="ms-1"

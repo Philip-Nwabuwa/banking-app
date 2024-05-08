@@ -16,6 +16,7 @@ const ForgotPasswordPage = () => {
             <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
                 <Image
+                priority
                   alt="Logo"
                   src={Logo}
                   className="h-100 w-100"

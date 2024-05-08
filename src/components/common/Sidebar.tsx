@@ -1,12 +1,12 @@
 'use client'
 
 import DarkLogo from '@/assets/logos/main-black.png'
-import UserImage from '@/assets/images/user.jpg'
+import UserImage from '@/assets/images/300-1.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/types/sidebar-links'
-import {Balance} from './Balance'
+import { Balance } from './Balance'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
 
@@ -19,8 +19,7 @@ const Sidebar = () => {
 
   return (
     <div
-      id="kt_app_sidebar"
-      className="app-sidebar flex-column tw-mb-5"
+      className="app-sidebar flex-column tw-justify-between table-responsive"
       data-kt-drawer="true"
       data-kt-drawer-name="app-sidebar"
       data-kt-drawer-activate="{default: true, lg: false}"
@@ -57,7 +56,7 @@ const Sidebar = () => {
             data-kt-menu-attach="parent"
             data-kt-menu-placement="bottom-end"
           >
-            <Link href={'/dashboard/settings'} replace>
+            <Link href={'/settings'} replace>
               <Image
                 src={UserImage}
                 width={100}
@@ -94,28 +93,6 @@ const Sidebar = () => {
           data-kt-scroll-wrappers="#kt_app_sidebar, #kt_app_sidebar_nav"
           data-kt-scroll-offset="5px"
         >
-          {/* <div className="d-flex align-items-center flex-column w-100 mb-6">
-            <div className="d-flex justify-content-between fw-bolder fs-6 text-gray-800 w-100 mt-auto mb-3">
-              <span>Your Goal</span>
-            </div>
-            <div
-              className="w-100 bg-light-primary rounded mb-2"
-              style={{ height: "24px" }}
-            >
-              <div
-                className="bg-primary rounded"
-                role="progressbar"
-                style={{ height: "24px", width: "0%" }}
-                aria-valuenow={0}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              ></div>
-            </div>
-            <div className="fw-semibold fs-7 text-primary w-100 mt-auto">
-              <span>reached 0% of your target</span>
-            </div>
-          </div> */}
-
           <Balance />
 
           <div className="mb-6">
@@ -135,9 +112,19 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-          <div className="app-footer-item tw-flex tw-justify-center">
-            <Logout />
-          </div>
+        </div>
+      </div>
+      <div className="-tw-mt-4">
+        <div className="separator my-2"></div>
+
+        <div className="tw-flex tw-justify-between tw-items-center tw-mx-4 tw-my-4">
+          <Logout />
+          <Link href={'/settings'}>
+            <i className="ki-duotone ki-setting-2 fs-2x">
+              <span className="path1"></span>
+              <span className="path2"></span>
+            </i>
+          </Link>
         </div>
       </div>
     </div>

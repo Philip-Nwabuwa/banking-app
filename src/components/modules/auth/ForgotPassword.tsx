@@ -42,10 +42,7 @@ const ForgotPasswordMoules = () => {
     control,
   } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
-  })
-
-  console.log(errors);
-  
+  })  
 
   const handleResendOTP = (e: any) => {
     e.preventDefault()
@@ -170,7 +167,7 @@ const ForgotPasswordMoules = () => {
                   onChange={(otp) => {
                     field.onChange(otp)
                   }}
-                  inputType="password"
+                  inputType="number"
                   numInputs={6}
                   renderInput={(props) => (
                     <input {...props} />

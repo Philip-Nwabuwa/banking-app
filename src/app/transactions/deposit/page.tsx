@@ -60,7 +60,7 @@ const Deposit = () => {
         id="kt_app_content_container"
         className="app-container container-xxl"
       >
-        <div className="card card-custom bg-body border-0 h-md-10 mb-6">
+        <div className="card !tw-rounded-se-none !tw-rounded-ss-none card-custom bg-body border-0 h-md-10 mb-6">
           <div className="card-body tw-flex tw-gap-2 tw-items-center">
             <i className="ki-duotone ki-information fs-4x">
               <span className="path1"></span>

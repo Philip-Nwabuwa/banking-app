@@ -58,7 +58,7 @@ const Statement = () => {
         className="app-container container-xxl"
       >
         {StatementsData.length > 0 ? (
-          <div className="card card-flush tw-mt-10">
+          <div className="card !tw-rounded-se-none !tw-rounded-ss-none card-flush tw-mt-10">
             <div className="card-header align-items-center py-5 gap-2 gap-md-5">
               <div className="card-title">
                 <div className="d-flex align-items-center position-relative my-1">

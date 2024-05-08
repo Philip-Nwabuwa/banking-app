@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 import DarkLogo from '@/assets/logos/main-black.png'
-import UserImage from '@/assets/images/user.jpg'
+import UserImage from '@/assets/images/300-1.jpg'
 import { sidebarLinks } from '@/types/sidebar-links'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
@@ -28,7 +28,7 @@ const Navbar = () => {
   ]
 
   const isActiveLink = (href: string) => {
-    return pathname.startsWith(href);
+    return pathname.startsWith(href)
   }
 
   return (
@@ -105,9 +105,9 @@ const Navbar = () => {
               ></div>
             )}
             <div
-              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-h-screen tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
+              className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-h-screen tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
             >
-              <div>
+              <div className='tw-h-full tw-flex tw-flex-col tw-justify-between'>
                 <div
                   className="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8"
                   id="kt_app_sidebar_logo"
@@ -183,11 +183,23 @@ const Navbar = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="app-footer-item tw-flex tw-justify-center tw-mt-4">
-                      <Logout  />
+                  </div>
+                  
+                </div>
+
+                <div className="-tw-mt-4">
+                    <div className="separator my-2"></div>
+
+                    <div className="tw-flex tw-justify-between tw-items-center tw-mx-4 tw-my-4">
+                      <Logout />
+                      <Link href={'/settings'}>
+                        <i className="ki-duotone ki-setting-2 fs-2tx">
+                          <span className="path1"></span>
+                          <span className="path2"></span>
+                        </i>
+                      </Link>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
 

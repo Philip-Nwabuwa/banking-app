@@ -13,6 +13,7 @@ const LoginPage = () => {
             <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
                 <Image
+                  priority
                   alt="Logo"
                   src={Logo}
                   className="h-100 w-100"
@@ -21,7 +22,7 @@ const LoginPage = () => {
                 />
               </Link>
               <h2 className="text-white fw-normal m-0 text-center">
-                A redefined payment service for your business
+                A redefined payment service for your business.
               </h2>
             </div>
           </div>
