@@ -7,9 +7,10 @@ import { useState } from 'react'
 
 import DarkLogo from '@/assets/logos/main-black.png'
 import UserImage from '@/assets/images/300-1.jpg'
-import { sidebarLinks } from '@/types/sidebar-links'
+import sidebarLinks from '@/types/sidebar-links'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
+import { Balance } from './Balance'
 
 const Navbar = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false)
@@ -19,6 +20,8 @@ const Navbar = () => {
   }
 
   const pathname = usePathname()
+
+  const links = sidebarLinks()
 
   const menuItems = [
     { path: '/dashboard', title: 'Dashboard' },
@@ -107,7 +110,7 @@ const Navbar = () => {
             <div
               className={`${sidebarVisible ? 'sm-tw-w-[275px] tw-h-screen tw-w-[300px] lg:tw-hidden tw-fixed tw-flex tw-flex-col tw-top-0 tw-bottom-0 tw-left-0  tw-bg-white tw-z-[200] .flex-column tw-transition tw-ease-in-out' : 'tw-transition tw-ease-in-out tw-hidden'}`}
             >
-              <div className='tw-h-full tw-flex tw-flex-col tw-justify-between'>
+              <div className="tw-h-full tw-flex tw-flex-col tw-justify-between">
                 <div
                   className="d-flex flex-stack px-4 px-lg-6 py-3 py-lg-8"
                   id="kt_app_sidebar_logo"
@@ -130,10 +133,7 @@ const Navbar = () => {
                       data-kt-menu-attach="parent"
                       data-kt-menu-placement="bottom-end"
                     >
-                      <Link
-                        href={'/dashboard/settings'}
-                        onClick={toggleSidebar}
-                      >
+                      <Link href={'/settings'} onClick={toggleSidebar}>
                         <Image
                           src={UserImage}
                           width={100}
@@ -149,6 +149,10 @@ const Navbar = () => {
                       <div className="position-absolute rounded-circle bg-success start-100 top-100 h-8px w-8px ms-n3 mt-n3"></div>
                     </div>
                   </div>
+                </div>
+
+                <div className="tw-px-[15px]">
+                  <Balance />
                 </div>
 
                 <div
@@ -173,7 +177,7 @@ const Navbar = () => {
                         data-kt-buttons="true"
                         data-kt-buttons-target="[data-kt-button]"
                       >
-                        {sidebarLinks.map((link, index) => (
+                        {links.map((link, index) => (
                           <SidebarLink
                             key={index}
                             link={link}
@@ -184,22 +188,21 @@ const Navbar = () => {
                       </div>
                     </div>
                   </div>
-                  
                 </div>
 
                 <div className="-tw-mt-4">
-                    <div className="separator my-2"></div>
+                  <div className="separator my-2"></div>
 
-                    <div className="tw-flex tw-justify-between tw-items-center tw-mx-4 tw-my-4">
-                      <Logout />
-                      <Link href={'/settings'}>
-                        <i className="ki-duotone ki-setting-2 fs-2tx">
-                          <span className="path1"></span>
-                          <span className="path2"></span>
-                        </i>
-                      </Link>
-                    </div>
+                  <div className="tw-flex tw-justify-between tw-items-center tw-mx-4 tw-my-4">
+                    <Logout />
+                    <Link href={'/settings'}>
+                      <i className="ki-duotone ki-setting-2 fs-2tx">
+                        <span className="path1"></span>
+                        <span className="path2"></span>
+                      </i>
+                    </Link>
                   </div>
+                </div>
               </div>
             </div>
 

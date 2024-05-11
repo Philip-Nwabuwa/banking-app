@@ -61,18 +61,15 @@ const WelcomePage = () => {
                   className="form w-100 accordion accordion-icon-toggle"
                   id="kt_accordion_2"
                 >
-                  <div className="card card-flush py-4">
-                    <div className="card-header">
+                  <div className="py-4">
+                    <div className="card-header !tw-border-b-0">
                       <div className="card-title">
-                        <h2>Identification</h2>
+                        <h2>Identification of NIN or Passport</h2>
                       </div>
                     </div>
                     <div className="card-body pt-0">
                       <div className="fv-row mb-2">
-                        <div
-                          className="dropzone"
-                          id="kt_ecommerce_add_product_media"
-                        >
+                        <div className="dropzone">
                           <div className="dz-message needsclick">
                             <i className="ki-outline ki-file-up text-primary fs-3x"></i>
                             <div className="ms-4">
@@ -114,7 +111,6 @@ const WelcomePage = () => {
                           value={emailOtp}
                           onChange={setEmailOtp}
                           numInputs={4}
-                          renderSeparator={<span>-</span>}
                           renderInput={(props) => <input {...props} />}
                         />
                       </div>
@@ -204,7 +200,6 @@ const WelcomePage = () => {
                           value={authorizationPin}
                           onChange={setAuthorizationPin}
                           numInputs={4}
-                          renderSeparator={<span>-</span>}
                           renderInput={(props) => <input {...props} />}
                         />
                       </div>

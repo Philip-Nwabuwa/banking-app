@@ -1,6 +1,9 @@
-import { redirect } from 'next/navigation'
-const page = () => {
-  redirect('/login')
+'use client'
+
+import useAuthRedirect from '@/hooks/useAuthRedirect'
+
+const Home = () => {
+  useAuthRedirect('/login')
 }
 
-export default page
+export default Home

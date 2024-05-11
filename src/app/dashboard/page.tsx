@@ -9,8 +9,10 @@ import { Balance } from '@/components/common/Balance'
 import LineChart from '@/components/common/LineChart'
 import { formatTime } from '@/lib/utils'
 import { transactions } from '@/types/transactions'
+import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const Dashboard = () => {
+  useAuthRedirect('/login')
   const [currentPage, setCurrentPage] = useState(1)
   const transactionsPerPage = 5
 
@@ -119,7 +121,7 @@ const Dashboard = () => {
                     Verfiy Your Account
                   </div>
                   <span className="text-gray-600 fw-semibold fs-6 mb-6 d-block">
-                  Verfiy your account to access all features of Paytonic.
+                    Verfiy your account to access all features of Paytonic.
                     <br />
                     by submitting your BVN and other details.
                   </span>
@@ -134,6 +136,7 @@ const Dashboard = () => {
                 </div>
                 <Image
                   src={Card}
+                  priority
                   className="h-175px me-15"
                   alt="Card image"
                   width={175}

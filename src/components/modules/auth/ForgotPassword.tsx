@@ -18,8 +18,10 @@ import {
   SubmitHandler,
   useForm,
 } from 'react-hook-form'
+import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const ForgotPasswordMoules = () => {
+  useAuthRedirect('/forgot-password')
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [passwordVisible, setPasswordVisible] = useState(false)
@@ -42,7 +44,7 @@ const ForgotPasswordMoules = () => {
     control,
   } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
-  })  
+  })
 
   const handleResendOTP = (e: any) => {
     e.preventDefault()
@@ -59,7 +61,7 @@ const ForgotPasswordMoules = () => {
 
   const emailValue = watch('email')
   const password = watch('password')
-  const otp = watch('otp');
+  const otp = watch('otp')
 
   const passwordStrengthScore = getPasswordStrength(password)
   const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue)
@@ -169,9 +171,7 @@ const ForgotPasswordMoules = () => {
                   }}
                   inputType="number"
                   numInputs={6}
-                  renderInput={(props) => (
-                    <input {...props} />
-                  )}
+                  renderInput={(props) => <input {...props} />}
                 />
               )}
             />

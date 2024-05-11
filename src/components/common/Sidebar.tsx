@@ -5,13 +5,14 @@ import UserImage from '@/assets/images/300-1.jpg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { sidebarLinks } from '@/types/sidebar-links'
+import sidebarLinks from '@/types/sidebar-links'
 import { Balance } from './Balance'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
 
 const Sidebar = () => {
   const pathname = usePathname()
+  const links = sidebarLinks()
 
   const isActiveLink = (href: string) => {
     return pathname.startsWith(href)
@@ -103,7 +104,7 @@ const Sidebar = () => {
               data-kt-buttons="true"
               data-kt-buttons-target="[data-kt-button]"
             >
-              {sidebarLinks.map((link, index) => (
+              {links.map((link, index) => (
                 <SidebarLink
                   key={index}
                   link={link}

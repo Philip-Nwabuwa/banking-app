@@ -1,16 +1,19 @@
 import { z } from 'zod'
 
 export const LoginSchema = z.object({
-  email: z.string().email(),
+  email_address: z.string().email(),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
 export type LoginType = z.infer<typeof LoginSchema>
 
 export const AccountTypeSchema = z.object({
-  email: z.string().email('Invalid email address').min(1, 'Email is required'),
+  email_address: z
+    .string()
+    .email('Invalid email address')
+    .min(1, 'Email is required'),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
-  accountType: z.enum(['personal', 'corporate']),
+  account_type: z.enum(['PERSONAL', 'BUSINESS']),
 })
 
 export type AccountType = z.infer<typeof AccountTypeSchema>

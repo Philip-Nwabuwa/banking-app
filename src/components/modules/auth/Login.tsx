@@ -2,16 +2,22 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 
 import { LoginSchema, LoginType } from '@/lib/validation'
 import SubmitButton from '@/components/common/SubmitBtn'
+import axios from 'axios'
+import { useLogin } from '@/services/auth'
+import useAuthRedirect, { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
+import { setAccountKey, setSessionId, setUserKey } from '@/store/cookie'
 
 const LoginModule = () => {
-  const router = useRouter()
+  useAuthRedirect('/login')
+
+  const { mutateAsync, isLoading } = useLogin()
+
   const {
     register,
     handleSubmit,
@@ -20,7 +26,6 @@ const LoginModule = () => {
   } = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -31,20 +36,27 @@ const LoginModule = () => {
   const isPasswordValid = password ? password.length >= 8 : false
 
   const onSubmit: SubmitHandler<LoginType> = async (formData) => {
-    setIsSubmitting(true)
-    console.log(formData)
-
     try {
-      setTimeout(async () => {
-        setIsSubmitting(false)
-        toast.success('Login successful!')
-        setTimeout(() => {
-          router.replace('/dashboard')
-        }, 2000)
-      }, 1000)
+      const response = await mutateAsync(formData)
+      console.log(response)
+      setAccountKey(response.data.data.account_key)
+      setUserKey(response.data.data.user_key)
+      setSessionId(response.data.data.session.id)
+      toast.success(response.data.message)
+      setTimeout(() => {
+        triggerAuthRedirect()
+      }, 2000)
     } catch (error) {
-      setIsSubmitting(false)
-      toast.error('An error occurred. Please try again later.')
+      if (axios.isAxiosError(error)) {
+        const serverError = error.response?.data
+        if (serverError && serverError.details) {
+          toast.error(serverError.details)
+        } else {
+          toast.error(serverError.message)
+        }
+      } else {
+        toast.error('An error occurred:')
+      }
     }
   }
   return (
@@ -61,9 +73,11 @@ const LoginModule = () => {
           type="email"
           placeholder="Email"
           className={`form-control bg-transparent`}
-          {...register('email')}
+          {...register('email_address')}
         />
-        {errors.email && <p className="text-danger">{errors.email.message}</p>}
+        {errors.email_address && (
+          <p className="text-danger">{errors.email_address.message}</p>
+        )}
       </div>
       <div className="fv-row mb-3">
         <div className="position-relative">
@@ -99,8 +113,10 @@ const LoginModule = () => {
 
       <div className="d-grid mb-10">
         <SubmitButton
-          isSubmitting={isSubmitting}
-          disabled={isSubmitting || !isPasswordValid || !!errors.email?.message}
+          isSubmitting={isLoading}
+          disabled={
+            isLoading || !isPasswordValid || !!errors.email_address?.message
+          }
           text="Sign In"
         />
       </div>

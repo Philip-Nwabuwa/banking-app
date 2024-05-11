@@ -1,23 +1,39 @@
-import { useRouter } from 'next/navigation'
+'use client'
+
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 import Modal from './Modal'
+import { useLogout } from '@/services/auth'
+import axios from 'axios'
+import { clearAllCookies } from '@/store/cookie'
+import { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
 
 const Logout = () => {
-  const router = useRouter()
+  const { mutateAsync } = useLogout()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => setIsModalOpen(false)
 
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     closeModal()
     try {
-      toast.success('Logged out successfully')
+      const response = await mutateAsync()
+      toast.success(response.data.message)
+      clearAllCookies()
       setTimeout(() => {
-        router.replace('/login')
+        triggerAuthRedirect()
       }, 2000)
     } catch (error) {
-      toast.error('An error occurred while logging out, please try again later')
+      if (axios.isAxiosError(error)) {
+        const serverError = error.response?.data
+        if (serverError && serverError.details) {
+          toast.error(serverError.details)
+        } else {
+          toast.error(serverError.message)
+        }
+      } else {
+        toast.error('An error occurred:')
+      }
     }
   }
   return (
@@ -34,8 +50,8 @@ const Logout = () => {
         title={''}
         buttonText={'Close'}
         onSubmit={handleSubmitOrder}
-        submitText="continue"
-        submitStyle="btn btn-primary"
+        submitText="Logout"
+        submitStyle="btn btn-light-danger"
       >
         <div className="tw-text-center">
           <p className="tw-font-bold tw-text-2xl">

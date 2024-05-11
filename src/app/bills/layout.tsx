@@ -6,12 +6,15 @@ import Navigation from '@/components/common/Navigation'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
 import ScrollToTop from '@/components/common/ScrollToTop'
+import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const BillsLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) => {
+  useAuthRedirect('/login')
+
   const pathname = usePathname()
 
   const navItems = [
@@ -48,7 +51,10 @@ const BillsLayout = ({
               id="kt_app_main"
             >
               <div className="d-flex flex-column flex-column-fluid">
-                <div id="kt_app_toolbar" className="app-toolbar !tw-h-16 py-3 py-lg-0">
+                <div
+                  id="kt_app_toolbar"
+                  className="app-toolbar !tw-h-16 py-3 py-lg-0"
+                >
                   <div
                     id="kt_app_toolbar_container"
                     className="app-container container-xxl d-flex flex-stack"
@@ -87,7 +93,6 @@ const BillsLayout = ({
           </div>
         </div>
         <ScrollToTop />
-
       </div>
     </div>
   )

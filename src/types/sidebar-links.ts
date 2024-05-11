@@ -1,30 +1,57 @@
-export const sidebarLinks = [
-  {
-    href: '/dashboard',
-    icon: 'ki-home',
-    label: 'Dashboard',
-  },
-  {
-    href: '/transactions/deposit',
-    icon: 'ki-save-deposit',
-    label: 'Deposit',
-  },
-  { href: '/payout', icon: 'ki-bank ', label: 'Payout' },
-  { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
-  {
-    href: '/transactions/settlement',
-    icon: 'ki-wifi-square',
-    label: 'Settlement',
-  },
-  {
-    href: '/transactions/statement',
-    icon: 'ki-scroll',
-    label: 'Statement',
-  },
-  {
-    href: '/transactions/reversal',
-    icon: 'ki-information-3',
-    label: 'Reversal',
-  },
-  { href: '/pos', icon: 'ki-shop', label: 'POS' },
-]
+'use client'
+
+import { usePathname } from 'next/navigation'
+
+interface SidebarLink {
+  href: string
+  icon: string
+  label: string
+}
+
+const SidebarLinks = (): SidebarLink[] => {
+  const pathname = usePathname()
+
+  let sidebarLinks: SidebarLink[]
+
+  const billsCategory = [
+    'data',
+    'airtime',
+    'electricity',
+    'betting',
+    'television',
+  ]
+
+  const payoutCategory = ['bank-transfer', 'paytonic-transfer']
+
+  const isBillsPage = billsCategory.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`/bills/${prefix}`)
+  )
+
+  const isPayoutPage = payoutCategory.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`/payout/${prefix}`)
+  )
+
+  if (pathname === '/dashboard') {
+    sidebarLinks = [
+      { href: '/payout', icon: 'ki-bank ', label: 'Payout' },
+      { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
+      { href: '/pos', icon: 'ki-shop', label: 'POS' },
+    ]
+  } else if (isBillsPage) {
+    sidebarLinks = [
+      { href: '/dashboard', icon: 'ki-home', label: 'Dashboard' },
+      { href: '/bills', icon: 'ki-cheque ', label: 'Airtime' },
+    ]
+  } else if (isPayoutPage) {
+    sidebarLinks = [
+      { href: '/dashboard', icon: 'ki-home', label: 'Dashboard' },
+      { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
+    ]
+  } else {
+    sidebarLinks = []
+  }
+
+  return sidebarLinks
+}
+
+export default SidebarLinks
