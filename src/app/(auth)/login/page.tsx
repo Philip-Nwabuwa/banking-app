@@ -1,10 +1,18 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
 import Logo from '@/assets/logos/main.png'
 import LoginModule from '@/components/modules/auth/Login'
+import Loading from '@/components/common/loading'
+import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const LoginPage = () => {
+  const loading = useAuthRedirect('/login')
+  if (loading) {
+    return <Loading />
+  }
   return (
     <div className="body app-blank signupBg !tw-h-screen">
       <div className="d-flex flex-column flex-root">

@@ -1,5 +1,19 @@
 import { z } from 'zod'
 
+export const verifyOtpSchema = z.object({
+  auth_code: z.string().min(6, 'OTP must be 6 digits long'),
+  reference: z
+    .string()
+    .min(1, 'Password must be at least 1 characters long')
+    .optional(),
+  service: z
+    .string()
+    .min(1, 'Service must be at least 1 characters long')
+    .optional(),
+})
+
+export type VerifyOtpType = z.infer<typeof verifyOtpSchema>
+
 export const LoginSchema = z.object({
   email_address: z.string().email(),
   password: z.string().min(8, 'Password must be at least 8 characters long'),
@@ -129,9 +143,17 @@ export const bettingTransferSchema = z.object({
 export type BettingTransferType = z.infer<typeof bettingTransferSchema>
 
 export const forgotPasswordSchema = z.object({
-  email: z.string().email('Invalid email address').min(1, 'Email is required'),
-  otp: z.string().min(6, 'OTP must be 6 digits long'),
-  password: z.string().min(8, 'Password must be at least 8 characters long'),
+  email_address: z
+    .string()
+    .email('Invalid email address')
+    .min(1, 'Email is required'),
+  auth_code: z.string().min(6, 'OTP must be 6 digits long').optional(),
+
+  reference: z
+    .string()
+    .min(1, 'Password must be at least 1 characters long')
+    .optional(),
+  password: z.string().optional(),
 })
 
 export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>

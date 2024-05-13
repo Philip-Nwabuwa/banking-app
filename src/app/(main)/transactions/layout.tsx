@@ -7,15 +7,12 @@ import { usePathname } from 'next/navigation'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
 import ScrollToTop from '@/components/common/ScrollToTop'
-import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const TransactionsLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  useAuthRedirect('/login')
-
   const pathname = usePathname()
 
   const statementPathname = pathname.startsWith('/transactions/statement')

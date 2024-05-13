@@ -2,7 +2,7 @@ import Cookies from 'js-cookie'
 
 export const setAccountKey = (value: string) => {
   if (value) {
-    Cookies.set('account_key', value)
+    Cookies.set('account_key', value, { expires: 1 / 48 })
   } else {
     Cookies.remove('account_key')
   }
@@ -10,7 +10,7 @@ export const setAccountKey = (value: string) => {
 
 export const setSessionId = (value: string) => {
   if (value) {
-    Cookies.set('session_id', value)
+    Cookies.set('session_id', value, { expires: 1 / 48 })
   } else {
     Cookies.remove('session_id')
   }
@@ -18,7 +18,7 @@ export const setSessionId = (value: string) => {
 
 export const setUserKey = (value: string) => {
   if (value) {
-    Cookies.set('user_key', value)
+    Cookies.set('user_key', value, { expires: 1 / 48 })
   } else {
     Cookies.remove('user_key')
   }

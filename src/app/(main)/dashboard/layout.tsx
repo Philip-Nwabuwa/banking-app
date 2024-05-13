@@ -1,17 +1,12 @@
-'use client'
-
 import Navbar from '@/components/common/Navbar'
 import ScrollToTop from '@/components/common/ScrollToTop'
 import Sidebar from '@/components/common/Sidebar'
-import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const Layout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  useAuthRedirect('/login')
-
   return (
     <div
       className="body app-default tw-min-h-screen"

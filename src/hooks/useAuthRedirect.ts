@@ -1,22 +1,31 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
 
 const useAuthRedirect = (redirectTo: string = '/login') => {
   const router = useRouter()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const session_id = Cookies.get('session_id')
-    if (!session_id) {
-      router.replace(redirectTo)
-    } else {
-      router.push('/dashboard')
-    }
-  }, [router, redirectTo])
-}
+    setLoading(true)
 
+    const checkAuth = async () => {
+      const session_id = Cookies.get('session_id')
+      if (!session_id) {
+        router.push(redirectTo)
+      } else {
+        router.push('/dashboard')
+      }
+      setLoading(false)
+    }
+
+    checkAuth()
+  }, [router, redirectTo])
+
+  return loading
+}
 export const triggerAuthRedirect = (redirectTo: string = '/login') => {
   const session_id = Cookies.get('session_id')
   if (!session_id) {

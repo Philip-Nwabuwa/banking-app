@@ -9,10 +9,8 @@ import { Balance } from '@/components/common/Balance'
 import LineChart from '@/components/common/LineChart'
 import { formatTime } from '@/lib/utils'
 import { transactions } from '@/types/transactions'
-import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const Dashboard = () => {
-  useAuthRedirect('/login')
   const [currentPage, setCurrentPage] = useState(1)
   const transactionsPerPage = 5
 

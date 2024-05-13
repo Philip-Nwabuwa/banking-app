@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import React from 'react'
 
 interface ButtonProps {
@@ -15,12 +16,12 @@ const Button: React.FC<ButtonProps> = ({
   iconClass,
   position,
   disabled,
-  className
+  className,
 }) => {
   return (
     <button
       type="button"
-      className="btn btn-lg btn-primary"
+      className={cn('btn btn-lg btn-light', className)}
       onClick={onClick}
       disabled={disabled}
     >

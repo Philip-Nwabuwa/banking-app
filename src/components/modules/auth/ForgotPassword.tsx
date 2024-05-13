@@ -10,23 +10,21 @@ import { useRouter } from 'next/navigation'
 
 import PhoneImg from '@/assets/images/smartphone-2.svg'
 import { getPasswordStrength } from '@/lib/utils'
-import { forgotPasswordSchema } from '@/lib/validation'
+import { forgotPasswordSchema, forgotPasswordType } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  Controller,
-  FieldValues,
-  SubmitHandler,
-  useForm,
-} from 'react-hook-form'
-import useAuthRedirect from '@/hooks/useAuthRedirect'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { usePasswordReset } from '@/services/auth'
+import axios from 'axios'
+import Button from '@/components/common/Button'
 
 const ForgotPasswordMoules = () => {
-  useAuthRedirect('/forgot-password')
   const router = useRouter()
+  const { mutateAsync, isLoading } = usePasswordReset()
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isChecked, setIsChecked] = useState(false)
+  const [reference, setReference] = useState('')
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked)
@@ -42,7 +40,7 @@ const ForgotPasswordMoules = () => {
     formState: { errors },
     watch,
     control,
-  } = useForm({
+  } = useForm<forgotPasswordType>({
     resolver: zodResolver(forgotPasswordSchema),
   })
 
@@ -55,58 +53,82 @@ const ForgotPasswordMoules = () => {
     }
   }
 
-  const handlePrevious = () => {
+  const handlePrevious = (e: any) => {
+    e.preventDefault()
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
   }
 
-  const emailValue = watch('email')
+  const emailValue = watch('email_address')
   const password = watch('password')
-  const otp = watch('otp')
+  const otp = watch('auth_code')
 
-  const passwordStrengthScore = getPasswordStrength(password)
+  const passwordStrengthScore = getPasswordStrength(password || '')
   const isEmailValid = /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,}/.test(emailValue)
   const isOtpValid = otp ? otp.length === 6 : false
   const isConfirmPasswordValid = confirmPassword && confirmPassword === password
 
-  const handleSendOTP = (e: any) => {
-    e.preventDefault()
-    try {
-      toast.success(`OTP sent to ${emailValue}`)
-      setTimeout(() => {
-        setCurrentStep(2)
-      }, 1000)
-    } catch (error) {
-      toast.error('Failed to send OTP.')
-    }
-  }
-
-  const verifyOTP = (e: any) => {
-    e.preventDefault()
-    try {
-      toast.success('OTP verified successfully.')
-      setTimeout(() => {
-        setCurrentStep(3)
-      }, 1000)
-    } catch (error) {
-      toast.error('Failed to verify OTP.')
-    }
-  }
-
-  const handleChangePassword: SubmitHandler<FieldValues> = async (data) => {
+  const handleChangePassword: SubmitHandler<forgotPasswordType> = async (
+    data
+  ) => {
     console.log(data)
-    try {
-      toast.success('Password changed successfully.')
-      setTimeout(() => {
-        router.replace('/login')
-      }, 1000)
-    } catch (error) {
-      toast.error('Failed to change password.')
-      console.error('Error:', error)
+
+    if (currentStep === 1) {
+      try {
+        const response = await mutateAsync(data)
+        console.log(response)
+        toast.success(response.data.message)
+        setReference(response.data.data.referece)
+        setTimeout(() => {
+          setCurrentStep((prevStep) => prevStep + 1)
+        }, 2000)
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const serverError = error.response?.data
+          if (serverError && serverError.details) {
+            toast.error(serverError.details)
+          } else {
+            toast.error(serverError.message)
+          }
+        } else {
+          toast.error('An error occurred')
+        }
+      }
+    } else {
+      try {
+        const response = await mutateAsync({
+          email_address: data.email_address,
+          auth_code: data.auth_code,
+          password: data.password,
+          reference: reference,
+        })
+        console.log(response)
+        toast.success(response.data.message)
+        setTimeout(() => {
+          router.replace('/login')
+        }, 2000)
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const serverError = error.response?.data
+          if (serverError && serverError.details) {
+            toast.error(serverError.details)
+          } else {
+            if (serverError.message === 'Invalid auth code') {
+              setTimeout(() => {
+                setCurrentStep((prevStep) => prevStep - 1)
+              }, 1000)
+            }
+            toast.error(serverError.message)
+          }
+        } else {
+          toast.error('An error occurred')
+        }
+      }
     }
   }
   return (
     <>
       <form
+        onSubmit={handleSubmit(handleChangePassword)}
         className={`${currentStep === 1 ? 'tw-flex tw-flex-col form w-100' : 'tw-hidden'}`}
         noValidate
       >
@@ -120,7 +142,7 @@ const ForgotPasswordMoules = () => {
         <div className="fv-row mb-8">
           <input
             type="email"
-            {...register('email')}
+            {...register('email_address')}
             placeholder="Email"
             className="form-control bg-transparent"
           />
@@ -131,8 +153,8 @@ const ForgotPasswordMoules = () => {
           </Link>
 
           <SubmitButton
-            disabled={!isEmailValid}
-            onClick={handleSendOTP}
+            disabled={!isEmailValid || isLoading}
+            isSubmitting={isLoading}
             text="Request OTP"
           />
         </div>
@@ -160,14 +182,14 @@ const ForgotPasswordMoules = () => {
         <div className="mb-10">
           <div className="tw-flex tw-items-center tw-justify-center">
             <Controller
-              name="otp"
+              name="auth_code"
               control={control}
               render={({ field }) => (
                 <OtpInput
                   inputStyle="inputStyleOTP"
                   value={field.value}
-                  onChange={(otp) => {
-                    field.onChange(otp)
+                  onChange={(auth_code) => {
+                    field.onChange(auth_code)
                   }}
                   inputType="number"
                   numInputs={6}
@@ -181,21 +203,20 @@ const ForgotPasswordMoules = () => {
           <button onClick={handlePrevious} className="btn btn-light">
             Back
           </button>
-          <SubmitButton
+          <Button
             disabled={!isOtpValid}
-            onClick={verifyOTP}
-            text="Verify OTP"
+            onClick={() => {
+              setCurrentStep(3)
+            }}
+            className="btn btn-primary"
+            text="Next"
           />
         </div>
         <div className="text-center fw-semibold fs-5 tw-mt-10">
           <span className="text-muted me-1">Didn’t get the code?</span>
           <button onClick={handleResendOTP} className="link-primary fs-5">
             Resend
-          </button>{' '}
-          <span className="text-muted me-1">or</span>
-          <a href="#" className="link-primary fs-5">
-            Call Us
-          </a>
+          </button>
         </div>
       </form>
       <form
@@ -288,15 +309,13 @@ const ForgotPasswordMoules = () => {
           </label>
         </div>
 
-        <button
-          type="submit"
+        <SubmitButton
           disabled={
             passwordStrengthScore < 4 || !isConfirmPasswordValid || !isChecked
           }
           className="btn btn-primary d-grid mb-10"
-        >
-          Change Password
-        </button>
+          text={'Change Password'}
+        />
       </form>
     </>
   )

@@ -8,15 +8,12 @@ import UserImage from '@/assets/images/300-1.jpg'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
 import ScrollToTop from '@/components/common/ScrollToTop'
-import useAuthRedirect from '@/hooks/useAuthRedirect'
 
 const SettingsLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) => {
-  useAuthRedirect('/login')
-
   const pathname = usePathname()
 
   const navItems = [

@@ -2,7 +2,7 @@ import Navbar from '@/components/common/Navbar'
 import ScrollToTop from '@/components/common/ScrollToTop'
 import Sidebar from '@/components/common/Sidebar'
 
-const layout = ({
+const Layout = ({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -40,4 +40,4 @@ const layout = ({
   )
 }
 
-export default layout
+export default Layout

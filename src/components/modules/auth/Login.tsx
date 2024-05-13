@@ -10,12 +10,10 @@ import { LoginSchema, LoginType } from '@/lib/validation'
 import SubmitButton from '@/components/common/SubmitBtn'
 import axios from 'axios'
 import { useLogin } from '@/services/auth'
-import useAuthRedirect, { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
+import { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
 import { setAccountKey, setSessionId, setUserKey } from '@/store/cookie'
 
 const LoginModule = () => {
-  useAuthRedirect('/login')
-
   const { mutateAsync, isLoading } = useLogin()
 
   const {
@@ -55,12 +53,12 @@ const LoginModule = () => {
           toast.error(serverError.message)
         }
       } else {
-        toast.error('An error occurred:')
+        toast.error('An error occurred')
       }
     }
   }
   return (
-    <form className="form w-100" noValidate onSubmit={handleSubmit(onSubmit)}>
+    <form className="form w-100" onSubmit={handleSubmit(onSubmit)}>
       <div className="text-center mb-11">
         <h1 className="text-gray-900 fw-bolder mb-3">Log In</h1>
         <div className="text-gray-500 fw-semibold fs-6">

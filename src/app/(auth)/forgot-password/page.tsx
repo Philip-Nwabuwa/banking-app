@@ -1,22 +1,27 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 
 import Logo from '@/assets/logos/main.png'
 import ForgotPasswordMoules from '@/components/modules/auth/ForgotPassword'
+import useAuthRedirect from '@/hooks/useAuthRedirect'
+import Loading from '@/components/common/loading'
 
 const ForgotPasswordPage = () => {
-  
+  const loading = useAuthRedirect('/forgot-password')
+  if (loading) {
+    return <Loading />
+  }
   return (
     <div className="body app-blank signupBg !tw-min-h-screen">
-      <div
-        className="d-flex flex-column flex-root tw-h-screen"
-      >
+      <div className="d-flex flex-column flex-root tw-h-screen">
         <div className="d-flex flex-column flex-column-fluid flex-lg-row">
           <div className="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
             <div className="d-flex flex-center flex-lg-start flex-column">
               <Link href="/" className="mb-7">
                 <Image
-                priority
+                  priority
                   alt="Logo"
                   src={Logo}
                   className="h-100 w-100"
@@ -32,7 +37,7 @@ const ForgotPasswordPage = () => {
           <div className="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">
             <div className="bg-body d-flex flex-column align-items-stretch flex-center rounded-4 w-md-500px p-10">
               <div className="d-flex flex-center flex-column flex-column-fluid px-lg-10 pb-5 pb-lg-8">
-                <ForgotPasswordMoules/>
+                <ForgotPasswordMoules />
               </div>
 
               <div className="d-flex flex-stack px-lg-10">

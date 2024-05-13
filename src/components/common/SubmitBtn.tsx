@@ -24,7 +24,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     >
       {isSubmitting ? (
         <>
-          Please wait...
           <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
         </>
       ) : (
