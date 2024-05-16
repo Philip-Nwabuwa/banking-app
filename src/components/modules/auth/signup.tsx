@@ -2,11 +2,11 @@
 
 import Logo from '@/assets/logos/main.png'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller, FieldError, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Check } from 'lucide-react'
+import { Check, ChevronDownIcon, Router } from 'lucide-react'
 import Link from 'next/link'
 import RadioButton from '@/components/common/RadioButton'
 import SubmitButton from '@/components/common/SubmitBtn'
@@ -14,15 +14,44 @@ import Button from '@/components/common/Button'
 import { toast } from 'sonner'
 import { getPasswordStrength } from '@/lib/utils'
 import { countries } from '@/types/countries'
-import { AccountType, AccountTypeSchema } from '@/lib/validation'
-import { useSignUpAccountType } from '@/services/auth'
+import {
+  AccountType,
+  AccountTypeSchema,
+  ProfileType,
+  ProfileUpdateSchema,
+} from '@/lib/validation'
+import { useProfileUpdate, useSignUpAccountType } from '@/services/auth'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command'
+import {
+  setAccountKey,
+  setProfileName,
+  setSessionId,
+  setUserKey,
+} from '@/store/cookie'
 
 const Signup = () => {
+  const router = useRouter()
   const [currentStep, setCurrentStep] = useState<number>(1)
+
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const { isLoading, mutateAsync } = useSignUpAccountType()
+  const { isLoading: upadatingProfile, mutateAsync: mutatingProfile } =
+    useProfileUpdate()
 
   const stepsData = [
     { title: 'Account Type', desc: 'Select your account type' },
@@ -38,13 +67,48 @@ const Signup = () => {
     formState: { errors },
     watch,
     control,
+    setValue,
   } = useForm<AccountType>({
     resolver: zodResolver(AccountTypeSchema),
+  })
+
+  const {
+    register: registerProfile,
+    handleSubmit: handleSubmitProfile,
+    formState: { errors: errorsProfile },
+    watch: watchProfile,
+    control: controlProfile,
+  } = useForm<ProfileType>({
+    resolver: zodResolver(ProfileUpdateSchema),
   })
 
   const account = watch('account_type')
   const password = watch('password')
   const emailValue = watch('email_address')
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const setCurrentStepParam = urlParams.get('setCurrentStep')
+    const typeParam = urlParams.get('type')
+
+    if (
+      setCurrentStepParam &&
+      setCurrentStepParam === '3' &&
+      typeParam === 'PERSONAL'
+    ) {
+      setCurrentStep(3)
+      setValue('account_type', 'PERSONAL')
+    } else if (
+      setCurrentStepParam &&
+      setCurrentStepParam === '3' &&
+      typeParam === 'BUSINESS'
+    ) {
+      setCurrentStep(3)
+      setValue('account_type', 'BUSINESS')
+    } else if (setCurrentStepParam && setCurrentStepParam === '4') {
+      setCurrentStep(4)
+    }
+  }, [setCurrentStep, setValue])
 
   const passwordStrengthScore = getPasswordStrength(password)
 
@@ -61,8 +125,10 @@ const Signup = () => {
       setCurrentStep((prevStep) => prevStep + 1)
     } else if (currentStep === 2) {
       setCurrentStep(3)
-    } else if (currentStep === 3) {
+    } else if (currentStep === 3 && account === 'BUSINESS') {
       setCurrentStep(4)
+    } else if (currentStep === 3 && account === 'PERSONAL') {
+      setCurrentStep(5)
     } else if (currentStep === 4) {
       setCurrentStep(5)
     }
@@ -83,6 +149,9 @@ const Signup = () => {
       const response = await mutateAsync(formData)
       console.log(response)
       toast.success(response.data.message)
+      setAccountKey(response.data.data.account_key)
+      setUserKey(response.data.data.user_key)
+      setSessionId(response.data.data.session.id)
       setTimeout(() => setCurrentStep((prevStep) => prevStep + 1), 1000)
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -90,13 +159,52 @@ const Signup = () => {
         if (serverError && serverError.details) {
           toast.error(serverError.details)
         } else {
-          toast.error(serverError.message)
+          toast.error('Email already registered, procced to login.')
+          setTimeout(() => router.push('/login'), 1000)
         }
       } else {
         toast.error('An error occurred')
       }
     }
   }
+
+  const submitProfileSignup: SubmitHandler<ProfileType> = async (
+    profileData
+  ) => {
+    console.log(profileData)
+    try {
+      const response = await mutatingProfile(profileData)
+      console.log(response)
+      toast.success(response.data.message)
+      setProfileName('true')
+      setTimeout(() => setCurrentStep((prevStep) => prevStep + 1), 1000)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverError = error.response?.data
+        if (serverError && serverError.details) {
+          toast.error(serverError.details)
+        } else {
+          toast.error('Email already registered, procced to login.')
+          setTimeout(() => router.push('/login'), 1000)
+        }
+      } else {
+        toast.error('An error occurred')
+      }
+    }
+  }
+
+  const GenderType = [
+    { name: 'Female', label: 'female' },
+    { name: 'Male', label: 'male' },
+    { name: 'Other', label: 'other' },
+  ] as const
+
+  const [openGender, setOpenGender] = useState(false)
+  const [openCountry, setOpenCountry] = useState(false)
+  const [selectedGender, setSelectedGender] = useState<string>('')
+  const [selectedCountry, setSelectedCountry] = useState<string>('')
+
+  console.log(errorsProfile)
 
   return (
     <div className="body app-blank !tw-h-screen">
@@ -204,10 +312,14 @@ const Signup = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please check out{' '}
-                          <a href="#" className="link-primary fw-bold">
-                            Help Page
-                          </a>
+                          Already created an account, please{' '}
+                          <Link
+                            replace
+                            href="/login"
+                            className="link-primary fw-bold"
+                          >
+                            Login
+                          </Link>
                           .
                         </div>
                       </div>
@@ -270,9 +382,13 @@ const Signup = () => {
                         </h2>
 
                         <div className="text-muted fw-semibold fs-6">
-                          If you need more info, please check out{' '}
-                          <Link href="/help" className="link-primary fw-bold">
-                            Help Page
+                          Already created an account, please{' '}
+                          <Link
+                            replace
+                            href="/login"
+                            className="link-primary fw-bold"
+                          >
+                            Login
                           </Link>
                           .
                         </div>
@@ -356,7 +472,7 @@ const Signup = () => {
                   </div>
                 </form>
 
-                <div
+                <form
                   className={`step-content ${
                     currentStep === 3 ? 'current' : ''
                   }`}
@@ -396,7 +512,10 @@ const Signup = () => {
                           First Name
                         </label>
 
-                        <input className="form-control bg-transparent w-100" />
+                        <input
+                          {...registerProfile('first_name')}
+                          className="form-control bg-transparent w-100"
+                        />
                       </div>
                       <div
                         style={{
@@ -405,26 +524,66 @@ const Signup = () => {
                       >
                         <label className="form-label required">Last Name</label>
 
-                        <input className="form-control bg-transparent" />
+                        <input
+                          {...registerProfile('surname')}
+                          className="form-control bg-transparent"
+                        />
                       </div>
                     </div>
 
                     <div className="fv-row mb-10">
                       <label className="form-label required">Gender</label>
 
-                      <select
-                        name="business_type"
-                        className="form-select bg-transparent"
-                        data-control="select2"
-                        data-placeholder="Select..."
-                        data-allow-clear="true"
-                        data-hide-search="false"
-                      >
-                        <option></option>
-                        <option value="1">Male</option>
-                        <option value="1">Female</option>
-                        <option value="2">Other</option>
-                      </select>
+                      <Controller
+                        name="gender"
+                        control={controlProfile}
+                        render={({ field }) => (
+                          <Popover
+                            open={openGender}
+                            onOpenChange={setOpenGender}
+                          >
+                            <PopoverTrigger asChild>
+                              <button
+                                aria-expanded={openGender}
+                                className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-select bg-transparent"
+                              >
+                                {selectedGender
+                                  ? GenderType.find(
+                                      (gender) => gender.name === selectedGender
+                                    )?.name
+                                  : 'Select...'}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="tw-p-8" align="start">
+                              <Command>
+                                <CommandList>
+                                  <CommandGroup>
+                                    {GenderType.map((item) => (
+                                      <CommandItem key={item.name}>
+                                        <p
+                                          onClick={() => {
+                                            setSelectedGender(
+                                              (prevSelectedGender) =>
+                                                prevSelectedGender === item.name
+                                                  ? ''
+                                                  : item.name
+                                            )
+                                            setOpenGender(false)
+                                            field.onChange(item.label)
+                                          }}
+                                          className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                        >
+                                          {item.name}
+                                        </p>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      />
                     </div>
 
                     <div className="mb-0">
@@ -434,61 +593,147 @@ const Signup = () => {
                         placeholder="Pick date rage"
                         type="date"
                         id="kt_daterangepicker_3"
+                        {...registerProfile('date_of_birth')}
                       />
+                    </div>
+
+                    <div className="fv-row mb-10 mt-10">
+                      <label className="form-label required">
+                        Address Line 1
+                      </label>
+
+                      <input
+                        className="form-control bg-transparent"
+                        type="text"
+                        {...registerProfile('address')}
+                      />
+                    </div>
+
+                    <div
+                      className="mb-10"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        gap: '10px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        <label className="form-label required">City</label>
+
+                        <input
+                          {...registerProfile('city')}
+                          className="form-control bg-transparent w-100"
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        <label className="form-label required">Province</label>
+
+                        <input
+                          {...registerProfile('province')}
+                          className="form-control bg-transparent"
+                        />
+                      </div>
                     </div>
 
                     <div className="fv-row mb-10 mt-10">
                       <label className="form-label required">Country</label>
 
-                      <select
+                      <Controller
                         name="country"
-                        aria-label="Select a Country"
-                        data-control="select2"
-                        data-placeholder="Select a country..."
-                        className="form-select bg-transparent"
-                      >
-                        {countries.map((country, index) => (
-                          <option key={index} value={country.value}>
-                            {country.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="fv-row mb-10 mt-10">
-                      <label className="form-label required">
-                        Phone Number
-                      </label>
-
-                      <input
-                        className="form-control bg-transparent"
-                        type="number"
+                        control={controlProfile}
+                        render={({ field }) => (
+                          <Popover
+                            open={openCountry}
+                            onOpenChange={setOpenCountry}
+                          >
+                            <PopoverTrigger asChild>
+                              <button
+                                aria-expanded={openCountry}
+                                className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-select bg-transparent"
+                              >
+                                {selectedCountry
+                                  ? countries.find(
+                                      (country) =>
+                                        country.label === selectedCountry
+                                    )?.label
+                                  : 'Select...'}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="tw-p-0" align="start">
+                              <Command>
+                                <CommandInput placeholder="Search..." />
+                                <CommandList>
+                                  <CommandEmpty>No results found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {countries.map((item) => (
+                                      <CommandItem key={item.label}>
+                                        <p
+                                          onClick={() => {
+                                            setSelectedCountry(
+                                              (prevSelectedCountry) =>
+                                                prevSelectedCountry ===
+                                                item.label
+                                                  ? ''
+                                                  : item.label
+                                            )
+                                            setOpenCountry(false)
+                                            field.onChange(item.label)
+                                          }}
+                                          className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                        >
+                                          {item.label}
+                                        </p>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        )}
                       />
                     </div>
 
                     <div className="fv-row mb-10 mt-10">
                       <label className="d-flex align-items-center form-label">
                         <span className="required">Occupation</span>
-                        <span
-                          className="lh-1 ms-1"
-                          data-bs-toggle="popover"
-                          data-bs-trigger="hover"
-                          data-bs-html="true"
-                          data-bs-content='&lt;div className=&#039;p-4 rounded bg-light&#039;&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-4&#039;&gt; &lt;i className="ki-outline ki-bank fs-3 me-3"&gt;&lt;/i&gt; &lt;div className=&#039;fw-bold&#039;&gt;INCBANK **** 1245 STATEMENT&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack fw-semibold text-gray-600&#039;&gt; &lt;div&gt;Amount&lt;/div&gt; &lt;div&gt;Transaction&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;separator separator-dashed my-2&#039;&gt;&lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-gray-900 fw-bold mb-2&#039;&gt; &lt;div&gt;USD345.00&lt;/div&gt; &lt;div&gt;KEENTHEMES*&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted mb-2&#039;&gt; &lt;div&gt;USD75.00&lt;/div&gt; &lt;div&gt;Hosting fee&lt;/div&gt; &lt;/div&gt; &lt;div className=&#039;d-flex flex-stack text-muted&#039;&gt; &lt;div&gt;USD3,950.00&lt;/div&gt; &lt;div&gt;Payrol&lt;/div&gt; &lt;/div&gt; &lt;/div&gt;'
-                        >
+                        <span className="lh-1 ms-1">
                           <i className="ki-outline ki-information-5 text-gray-500 fs-6"></i>
                         </span>
                       </label>
 
-                      <input className="form-control bg-transparent" />
+                      <input
+                        {...registerProfile('occupation')}
+                        className="form-control bg-transparent"
+                      />
+                    </div>
 
-                      {/* <div className="form-text">
-                          Customers will see this shortened version of your
-                          statement descriptor
-                        </div> */}
+                    <div className="tw-w-full tw-flex tw-justify-between pt-15">
+                      <Button
+                        onClick={handlePrevious}
+                        text="Previous"
+                        iconClass="ki-arrow-left"
+                        position="me-1"
+                      />
+                      <SubmitButton
+                        disabled={upadatingProfile}
+                        onClick={handleSubmitProfile(submitProfileSignup)}
+                        isSubmitting={upadatingProfile}
+                        text="Sign up"
+                      />
                     </div>
                   </div>
-                </div>
+                </form>
 
                 <div
                   className={`step-content ${

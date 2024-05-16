@@ -1,5 +1,4 @@
 export const countries = [
-  { value: '', label: 'Select a Country...' },
   { value: 'AF', label: 'Afghanistan' },
   { value: 'AL', label: 'Albania' },
   { value: 'DZ', label: 'Algeria' },
@@ -247,4 +246,4 @@ export const countries = [
   { value: 'YE', label: 'Yemen' },
   { value: 'ZM', label: 'Zambia' },
   { value: 'ZW', label: 'Zimbabwe' },
-]
+] as const

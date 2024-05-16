@@ -31,13 +31,7 @@ const SidebarLinks = (): SidebarLink[] => {
     (prefix) => pathname === prefix || pathname.startsWith(`/payout/${prefix}`)
   )
 
-  if (pathname === '/dashboard') {
-    sidebarLinks = [
-      { href: '/payout', icon: 'ki-bank ', label: 'Payout' },
-      { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
-      { href: '/pos', icon: 'ki-shop', label: 'POS' },
-    ]
-  } else if (isBillsPage) {
+  if (isBillsPage) {
     sidebarLinks = [
       { href: '/dashboard', icon: 'ki-home', label: 'Dashboard' },
       { href: '/bills', icon: 'ki-cheque ', label: 'Airtime' },
@@ -48,7 +42,11 @@ const SidebarLinks = (): SidebarLink[] => {
       { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
     ]
   } else {
-    sidebarLinks = []
+    sidebarLinks = [
+      { href: '/payout', icon: 'ki-bank ', label: 'Payout' },
+      { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
+      { href: '/pos', icon: 'ki-shop', label: 'POS' },
+    ]
   }
 
   return sidebarLinks

@@ -8,6 +8,14 @@ export const setAccountKey = (value: string) => {
   }
 }
 
+export const setProfileName = (value: string) => {
+  if (value) {
+    Cookies.set('profile_set', value, { expires: 1 / 48 })
+  } else {
+    Cookies.remove('profile_set')
+  }
+}
+
 export const setSessionId = (value: string) => {
   if (value) {
     Cookies.set('session_id', value, { expires: 1 / 48 })

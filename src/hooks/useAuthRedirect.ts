@@ -13,7 +13,10 @@ const useAuthRedirect = (redirectTo: string = '/login') => {
 
     const checkAuth = async () => {
       const session_id = Cookies.get('session_id')
+      const profile_name = Cookies.get('profile_set')
       if (!session_id) {
+        router.push(redirectTo)
+      } else if (session_id && profile_name === 'false') {
         router.push(redirectTo)
       } else {
         router.push('/dashboard')

@@ -75,6 +75,48 @@ const BillsLayout = ({
                         <li className="breadcrumb-item text-muted">bills</li>
                       </ul>
                     </div>
+                    <div className="d-flex align-items-center gap-2 gap-lg-3">
+                      {pathname === '/bills/airtime' && (
+                        <Link
+                          href="/bills/airtime/add"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Airtime Transactions
+                        </Link>
+                      )}
+                      {pathname === '/bills/data' && (
+                        <Link
+                          href="/bills/data/add"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Data Transactions
+                        </Link>
+                      )}{' '}
+                      {pathname === '/bills/television' && (
+                        <Link
+                          href="/bills/television/add"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Television Transactions
+                        </Link>
+                      )}{' '}
+                      {pathname === '/bills/betting' && (
+                        <Link
+                          href="/bills/betting/add"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Betting Transactions
+                        </Link>
+                      )}{' '}
+                      {pathname === '/bills/electricity' && (
+                        <Link
+                          href="/bills/electricity/add"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Electricity Transactions
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
 

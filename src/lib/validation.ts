@@ -32,6 +32,28 @@ export const AccountTypeSchema = z.object({
 
 export type AccountType = z.infer<typeof AccountTypeSchema>
 
+export const ProfileUpdateSchema = z.object({
+  first_name: z
+    .string()
+    .min(3, 'First name must be at least 3 characters long'),
+  surname: z.string().min(3, 'Surname must be at least 3 characters long'),
+  date_of_birth: z
+    .string()
+    .min(3, 'Date of birth must be at least 3 characters long'),
+  gender: z.enum(['male', 'female', 'other']),
+  occupation: z
+    .string()
+    .min(3, 'Occupation must be at least 3 characters long'),
+  country: z.string().min(2, 'Country name must be at least 2 characters long'),
+  province: z
+    .string()
+    .min(2, 'Province name must be at least 2 characters long'),
+  city: z.string().min(2, 'City name must be at least 2 characters long'),
+  address: z.string().min(3, 'Address must be at least 3 characters long'),
+})
+
+export type ProfileType = z.infer<typeof ProfileUpdateSchema>
+
 export const BusinessSchema = z.object({
   business_email: z.string(),
   business_name: z.string(),
@@ -157,3 +179,9 @@ export const forgotPasswordSchema = z.object({
 })
 
 export type forgotPasswordType = z.infer<typeof forgotPasswordSchema>
+
+export const createWalletSchema = z.object({
+  currency_code: z.string().min(1, 'Currency code is required'),
+})
+
+export type createWalletType = z.infer<typeof createWalletSchema>

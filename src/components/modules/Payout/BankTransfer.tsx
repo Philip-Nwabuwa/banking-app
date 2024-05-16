@@ -3,6 +3,7 @@
 import Swal from 'sweetalert2'
 import Button from '@/components/common/Button'
 import SubmitButton from '@/components/common/SubmitBtn'
+import Image from 'next/image'
 import OtpInput from 'react-otp-input'
 import {
   Command,
@@ -20,11 +21,12 @@ import {
 import { ChevronDownIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { BankNames, Beneficiary, beneficiaryType } from '@/types/bank'
+import { BankListType, Beneficiary, beneficiaryType } from '@/types/bank'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { BankTransferType, bankTransferSchema } from '@/lib/validation'
-import { SubBalance, useBalanceStore } from '@/components/common/Balance'
+import { SubBalance } from '@/components/common/Balance'
+import { useBankList } from '@/services/wallet'
 
 const steps = [
   {
@@ -44,8 +46,23 @@ const BankTransferModule = () => {
   const [open, setOpen] = useState(false)
   const [openBen, setOpenBen] = useState(false)
   const [selectedBank, setSelectedBank] = useState('')
-  const [otpValue, setOtpValue] = useState<string>("")
-  const { balance } = useBalanceStore()
+  const [otpValue, setOtpValue] = useState<string>('')
+
+  const { data, isLoading: loadingBankList, error, isError } = useBankList()
+
+  let BankList: BankListType[] = []
+
+  if (data) {
+    BankList = data.data.data.map((item: BankListType) => ({
+      bank_code: item.bank_code,
+      bank_name: item.bank_name,
+      bank_type: item.bank_type,
+      bank_image: item.bank_image,
+      ussd_code: item.ussd_code,
+      ussd_transfer_code: item.ussd_transfer_code,
+    }))
+    console.log(BankList)
+  }
 
   const {
     register,
@@ -70,7 +87,7 @@ const BankTransferModule = () => {
   )
 
   const handleOtpChange = (otp: string) => {
-      setOtpValue(otp)
+    setOtpValue(otp)
   }
 
   const handleClick = (item: beneficiaryType) => {
@@ -89,7 +106,7 @@ const BankTransferModule = () => {
         customClass: { confirmButton: 'btn btn-primary' },
       })
       reset()
-      setOtpValue("")
+      setOtpValue('')
       setSelectedBank('')
       setCurrentStep(1)
     } catch (error: unknown) {
@@ -106,8 +123,6 @@ const BankTransferModule = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
   }
 
-  console.log(errors.amount)
-
   type FieldName =
     | 'bankName'
     | 'accountNumber'
@@ -120,12 +135,6 @@ const BankTransferModule = () => {
     const output = await trigger(fields as FieldName[], { shouldFocus: true })
 
     if (!output) return
-
-    if (currentStep === 1) {
-      if (amountValue > balance + 10) {
-        return toast.error('amount balance is not sufficient')
-      }
-    }
     console.log(fields)
     setCurrentStep(currentStep + 1)
   }
@@ -157,9 +166,9 @@ const BankTransferModule = () => {
                         className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid"
                       >
                         {selectedBank
-                          ? BankNames.find(
-                              (bankname) => bankname.name === selectedBank
-                            )?.name
+                          ? BankList.find(
+                              (bank) => bank.bank_name === selectedBank
+                            )?.bank_name
                           : 'Select...'}
                         <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                       </button>
@@ -170,21 +179,27 @@ const BankTransferModule = () => {
                         <CommandList>
                           <CommandEmpty>No results found.</CommandEmpty>
                           <CommandGroup>
-                            {BankNames.map((item) => (
-                              <CommandItem key={item.name}>
+                            {BankList.map((item) => (
+                              <CommandItem key={item.bank_code}>
                                 <p
                                   onClick={() => {
                                     setSelectedBank((prevSelectedBank) =>
-                                      prevSelectedBank === item.name
+                                      prevSelectedBank === item.bank_name
                                         ? ''
-                                        : item.name
+                                        : item.bank_name
                                     )
                                     setOpen(false)
-                                    field.onChange(item.name)
+                                    field.onChange(item)
                                   }}
                                   className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                 >
-                                  {item.name}
+                                  <Image
+                                    src={item.bank_image}
+                                    alt={item.bank_name}
+                                    width={30}
+                                    height={30}
+                                  />{' '}
+                                  {item.bank_name}
                                 </p>
                               </CommandItem>
                             ))}

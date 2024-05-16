@@ -1,12 +1,12 @@
 import {
   AccountType,
   LoginType,
-  VerifyOtpType,
+  ProfileType,
   forgotPasswordType,
 } from '@/lib/validation'
 import { baseUrl, config } from './api'
 import axios from 'axios'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export const useLogin = () => {
   const mutationFn = async (payload: LoginType) => {
@@ -40,6 +40,22 @@ export const useSignUpAccountType = () => {
   return { mutate, mutateAsync, isLoading, data }
 }
 
+export const useProfileUpdate = () => {
+  const mutationFn = async (payload: ProfileType) => {
+    const data = payload
+
+    return await axios.post(`${baseUrl}/1.0/user/update/profile`, data, config)
+  }
+  const {
+    mutate,
+    mutateAsync,
+    isPending: isLoading,
+    data,
+  } = useMutation({ mutationFn: mutationFn })
+
+  return { mutate, mutateAsync, isLoading, data }
+}
+
 export const useLogout = () => {
   const mutationFn = async () => {
     return await axios.get(`${baseUrl}/1.0/auth/user/logout`, config)
@@ -58,26 +74,6 @@ export const usePasswordReset = () => {
     const data = payload
 
     return await axios.post(`${baseUrl}/1.0/auth/password/reset`, data, config)
-  }
-  const {
-    mutate,
-    mutateAsync,
-    isPending: isLoading,
-    data,
-  } = useMutation({ mutationFn: mutationFn })
-
-  return { mutate, mutateAsync, isLoading, data }
-}
-
-export const useVerifyOTP = () => {
-  const mutationFn = async (payload: VerifyOtpType) => {
-    const data = payload
-
-    return await axios.post(
-      `${baseUrl}/1.0/auth/auth-codes/verify`,
-      data,
-      config
-    )
   }
   const {
     mutate,

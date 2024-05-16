@@ -1,58 +1,79 @@
 'use client'
 
+import { useGetBalance } from '@/services/wallet'
 import { create } from 'zustand'
 
-interface BalanceState {
-  loading: boolean
-  balance: number
-  error: string | null
+interface HideBalanceState {
   hideBalance: boolean
-  setLoading: (loading: boolean) => void
-  setBalance: (balance: number) => void
-  setError: (error: string | null) => void
   setHideBalance: (hideBalance: boolean) => void
-  handleRefresh: () => void
 }
 
-const useBalanceStore = create<BalanceState>((set) => ({
-  loading: false,
-  balance: 10000,
-  error: null,
-  hideBalance: false,
-  setLoading: (loading) => set({ loading }),
-  setBalance: (balance) => set({ balance }),
-  setError: (error) => set({ error }),
-  setHideBalance: (hideBalance) => set({ hideBalance }),
-  handleRefresh: () => {
-    set({ loading: true })
-    setTimeout(() => {
-      set({ balance: Math.floor(Math.random() * 100000), loading: false })
-    }, 1000)
-  },
-}))
+const useHideBalance = create<HideBalanceState>((set) => {
+  const localStorageAvailable = typeof localStorage !== 'undefined'
+
+  const storedHideBalance = localStorageAvailable
+    ? localStorage.getItem('hideBalance')
+    : null
+  const initialHideBalance = storedHideBalance
+    ? JSON.parse(storedHideBalance)
+    : false
+
+  return {
+    hideBalance: initialHideBalance,
+    setHideBalance: (hideBalance) => {
+      if (localStorageAvailable) {
+        localStorage.setItem('hideBalance', JSON.stringify(hideBalance))
+      }
+      set({ hideBalance })
+    },
+  }
+})
 
 const Balance = () => {
-  const { loading, balance, hideBalance, handleRefresh, setHideBalance } =
-    useBalanceStore()
+  const { data, isLoading, refetch, isError, error } = useGetBalance()
+
+  let symbol = ''
+  let balance = 0
+  if (data) {
+    balance = data?.data.data.balances.available
+    const symbolCode = data?.data?.data?.currency?.symbol || 'NGN'
+    symbol = symbolCode
+      ? String.fromCharCode(parseInt(symbolCode.substring(2), 16))
+      : ''
+  }
+
+  const { hideBalance, setHideBalance } = useHideBalance()
   return (
     <div className="d-flex mb-3 mb-lg-6">
       <div className="tw-bg-white border border-gray-300 border-dashed rounded w-100 py-2 px-4">
         <span className="fs-6 text-gray-500 fw-bold tw-flex tw-justify-between tw-items-center">
           Balance{' '}
           <i
-            onClick={handleRefresh}
-            className={`ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer ${loading ? 'tw-animate-spin' : ''}`}
+            onClick={() => {
+              refetch()
+            }}
+            className={`ki-duotone ki-arrows-circle fs-2 tw-cursor-pointer ${isLoading ? 'tw-animate-spin' : ''}`}
           >
             <span className="path1"></span>
             <span className="path2"></span>
           </i>
         </span>
-        {loading ? (
+        {isLoading ? (
           <div className="fs-2x fw-bold">- - - -</div>
         ) : (
           <div className="d-flex tw-justify-between tw-items-center">
-            <div className="fs-2x fw-bold text-success">
-              {hideBalance ? '****' : `₦${balance.toLocaleString()}`}
+            <div>
+              {balance !== undefined ? (
+                <span className="fs-2x fw-bold text-success">
+                  {hideBalance
+                    ? '****'
+                    : `${symbol}${balance.toLocaleString()}`}
+                </span>
+              ) : (
+                <span className="text-danger">
+                  Balance information not available, please refresh.
+                </span>
+              )}
             </div>
             <i
               onClick={() => setHideBalance(!hideBalance)}
@@ -81,17 +102,28 @@ const Balance = () => {
 }
 
 const SubBalance = () => {
-  const { balance, loading } = useBalanceStore()
-
+  const { data, isLoading } = useGetBalance()
+  let symbol = ''
+  let balance = 0
+  if (data) {
+    balance = data?.data.data.balances.available
+    const symbolCode = data?.data?.data?.currency?.symbol || 'NGN'
+    symbol = symbolCode
+      ? String.fromCharCode(parseInt(symbolCode.substring(2), 16))
+      : ''
+  }
   return (
     <div>
-      {
-        loading ? (<>Loading...</>) : (
-          <span>Balance: ₦{balance.toLocaleString()}</span>
-        )
-      }
+      {isLoading ? (
+        <>Loading...</>
+      ) : (
+        <span>
+          Balance: ${symbol}
+          {balance.toLocaleString()}
+        </span>
+      )}
     </div>
   )
 }
 
-export { Balance, SubBalance, useBalanceStore }
+export { Balance, SubBalance, useHideBalance }

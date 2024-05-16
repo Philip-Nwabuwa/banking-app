@@ -1,10 +1,11 @@
-export const BankNames = [
-  { name: 'First Bank of Nigeria', label: 'fbn' },
-  { name: 'Guaranty Trust Bank', label: 'gtb' },
-  { name: 'Zenith Bank', label: 'zenith' },
-  { name: 'Access Bank', label: 'access' },
-  { name: 'United Bank for Africa (UBA)', label: 'uba' },
-] as const
+export type BankListType = {
+  bank_code: string
+  bank_name: string
+  bank_type: string
+  bank_image: string
+  ussd_code: string
+  ussd_transfer_code: string
+}
 
 export type beneficiaryType = {
   name: string

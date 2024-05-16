@@ -11,7 +11,13 @@ import SubmitButton from '@/components/common/SubmitBtn'
 import axios from 'axios'
 import { useLogin } from '@/services/auth'
 import { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
-import { setAccountKey, setSessionId, setUserKey } from '@/store/cookie'
+import {
+  setAccountKey,
+  setProfileName,
+  setSessionId,
+  setUserKey,
+} from '@/store/cookie'
+import { useRouter } from 'next/navigation'
 
 const LoginModule = () => {
   const { mutateAsync, isLoading } = useLogin()
@@ -24,6 +30,8 @@ const LoginModule = () => {
   } = useForm<LoginType>({
     resolver: zodResolver(LoginSchema),
   })
+
+  const router = useRouter()
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -37,13 +45,22 @@ const LoginModule = () => {
     try {
       const response = await mutateAsync(formData)
       console.log(response)
+      const accountType = response.data.data.account.type
+      const profileName = response.data.data.account.name
+      if (profileName === ' ') {
+        setProfileName('false')
+        router.push(`/signup?setCurrentStep=3&type=${accountType}`)
+        toast.success('Please complete your profile information.')
+      } else {
+        setProfileName('true')
+        toast.success(response.data.message)
+        setTimeout(() => {
+          triggerAuthRedirect()
+        }, 2000)
+      }
       setAccountKey(response.data.data.account_key)
       setUserKey(response.data.data.user_key)
       setSessionId(response.data.data.session.id)
-      toast.success(response.data.message)
-      setTimeout(() => {
-        triggerAuthRedirect()
-      }, 2000)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data
