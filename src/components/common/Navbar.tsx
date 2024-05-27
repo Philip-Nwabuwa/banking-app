@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 import DarkLogo from '@/assets/logos/main-black.png'
-import UserImage from '@/assets/images/300-1.jpg'
+import defaultAvatar from '@/assets/images/blank.svg'
 import sidebarLinks from '@/types/sidebar-links'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
@@ -135,7 +135,7 @@ const Navbar = () => {
                     >
                       <Link href={'/settings'} onClick={toggleSidebar}>
                         <Image
-                          src={UserImage}
+                          src={defaultAvatar}
                           width={100}
                           height={100}
                           alt="user"
@@ -227,7 +227,7 @@ const Navbar = () => {
                 <i className="ki-outline ki-message-notif fs-1"></i>
               </div>
             </div>
-            <div
+            {/* <div
               className="app-navbar-item d-lg-none ms-2 me-n4"
               title="Show header menu"
             >
@@ -237,7 +237,7 @@ const Navbar = () => {
               >
                 <i className="ki-outline ki-text-align-left fs-2 fw-bold"></i>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

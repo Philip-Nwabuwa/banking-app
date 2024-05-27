@@ -1,7 +1,7 @@
 'use client'
 
 import DarkLogo from '@/assets/logos/main-black.png'
-import UserImage from '@/assets/images/300-1.jpg'
+import defaultAvatar from '@/assets/images/blank.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -9,6 +9,7 @@ import sidebarLinks from '@/types/sidebar-links'
 import { Balance } from './Balance'
 import SidebarLink from './SidebarLinks'
 import Logout from './Logout'
+import DepositSlider from './DepositSlider'
 
 const Sidebar = () => {
   const pathname = usePathname()
@@ -59,7 +60,7 @@ const Sidebar = () => {
           >
             <Link href={'/settings'} replace>
               <Image
-                src={UserImage}
+                src={defaultAvatar}
                 width={100}
                 height={100}
                 alt="user"
@@ -95,6 +96,7 @@ const Sidebar = () => {
           data-kt-scroll-offset="5px"
         >
           <Balance />
+          <DepositSlider />
 
           <div className="mb-6">
             <h3 className="text-gray-800 fw-bold mb-8">Services</h3>

@@ -59,19 +59,21 @@ const Balance = () => {
           </i>
         </span>
         {isLoading ? (
-          <div className="fs-2x fw-bold">- - - -</div>
+          <div className="fs-2x fw-bold">
+            <i className="ki-solid ki-loading fs-2 tw-animate-spin"></i>
+          </div>
         ) : (
           <div className="d-flex tw-justify-between tw-items-center">
             <div>
-              {balance !== undefined ? (
+              {isError ? (
+                <span className="text-danger">
+                  Balance information not available, please refresh.
+                </span>
+              ) : (
                 <span className="fs-2x fw-bold text-success">
                   {hideBalance
                     ? '****'
                     : `${symbol}${balance.toLocaleString()}`}
-                </span>
-              ) : (
-                <span className="text-danger">
-                  Balance information not available, please refresh.
                 </span>
               )}
             </div>
@@ -118,7 +120,7 @@ const SubBalance = () => {
         <>Loading...</>
       ) : (
         <span>
-          Balance: ${symbol}
+          Balance: {symbol}
           {balance.toLocaleString()}
         </span>
       )}

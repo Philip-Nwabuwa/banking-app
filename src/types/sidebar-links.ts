@@ -34,12 +34,25 @@ const SidebarLinks = (): SidebarLink[] => {
   if (isBillsPage) {
     sidebarLinks = [
       { href: '/dashboard', icon: 'ki-home', label: 'Dashboard' },
-      { href: '/bills', icon: 'ki-cheque ', label: 'Airtime' },
+      { href: '/bills/airtime', icon: 'ki-cheque ', label: 'Airtime' },
+      { href: '/bills/data', icon: 'ki-cheque ', label: 'Data' },
+      { href: '/bills/betting', icon: 'ki-cheque ', label: 'Betting' },
+      { href: '/bills/television', icon: 'ki-cheque ', label: 'Television' },
+      { href: '/bills/electricity', icon: 'ki-cheque ', label: 'Electricity' },
     ]
   } else if (isPayoutPage) {
     sidebarLinks = [
       { href: '/dashboard', icon: 'ki-home', label: 'Dashboard' },
-      { href: '/bills', icon: 'ki-cheque ', label: 'Bills' },
+      {
+        href: '/payout/bank-transfer',
+        icon: 'ki-cheque ',
+        label: 'Bank Transfer',
+      },
+      {
+        href: '/payout/paytonic-transfer',
+        icon: 'ki-cheque ',
+        label: 'P2P Transfer',
+      },
     ]
   } else {
     sidebarLinks = [

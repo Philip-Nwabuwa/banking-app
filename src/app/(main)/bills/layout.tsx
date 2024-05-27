@@ -52,10 +52,7 @@ const BillsLayout = ({
                   id="kt_app_toolbar"
                   className="app-toolbar !tw-h-16 py-3 py-lg-0"
                 >
-                  <div
-                    id="kt_app_toolbar_container"
-                    className="app-container container-xxl d-flex flex-stack"
-                  >
+                  <div className="app-container container-xxl d-flex flex-stack">
                     <div className="page-title d-flex flex-column justify-content-center me-3">
                       <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
                         Bills
@@ -78,7 +75,7 @@ const BillsLayout = ({
                     <div className="d-flex align-items-center gap-2 gap-lg-3">
                       {pathname === '/bills/airtime' && (
                         <Link
-                          href="/bills/airtime/add"
+                          href="/bills/airtime/transactions"
                           className="btn btn-sm fw-bold btn-primary"
                         >
                           Airtime Transactions

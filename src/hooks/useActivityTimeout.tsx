@@ -5,15 +5,18 @@ import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { triggerAuthRedirect } from './useAuthRedirect'
 import { useLogout } from '@/services/auth'
+import useUserStore from '@/store/profile'
 
 function useLogoutOnTimeout(timeoutDuration: number) {
   const { mutateAsync } = useLogout()
+  const { clearUserData } = useUserStore()
 
   useEffect(() => {
     const checkTimeout = setInterval(async () => {
       const response = await mutateAsync()
       toast.success(response.data.message)
       clearAllCookies()
+      clearUserData()
       setTimeout(() => {
         triggerAuthRedirect()
       }, 2000)

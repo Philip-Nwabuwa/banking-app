@@ -10,12 +10,15 @@ import { useRouter } from 'next/navigation'
 
 import PhoneImg from '@/assets/images/smartphone-2.svg'
 import { getPasswordStrength } from '@/lib/utils'
-import { forgotPasswordSchema, forgotPasswordType } from '@/lib/validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { usePasswordReset } from '@/services/auth'
 import axios from 'axios'
 import Button from '@/components/common/Button'
+import {
+  forgotPasswordSchema,
+  forgotPasswordType,
+} from '@/lib/Validations/auth'
 
 const ForgotPasswordMoules = () => {
   const router = useRouter()

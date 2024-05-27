@@ -19,7 +19,7 @@ const useAuthRedirect = (redirectTo: string = '/login') => {
       } else if (session_id && profile_name === 'false') {
         router.push(redirectTo)
       } else {
-        router.push('/dashboard')
+        ;[]
       }
       setLoading(false)
     }

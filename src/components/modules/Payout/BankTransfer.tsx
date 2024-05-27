@@ -1,8 +1,6 @@
 'use client'
 
 import Swal from 'sweetalert2'
-import Button from '@/components/common/Button'
-import SubmitButton from '@/components/common/SubmitBtn'
 import Image from 'next/image'
 import OtpInput from 'react-otp-input'
 import {
@@ -19,20 +17,30 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { ChevronDownIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { BankListType, Beneficiary, beneficiaryType } from '@/types/bank'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { BankListType } from '@/types/bank'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { BankTransferType, bankTransferSchema } from '@/lib/validation'
 import { SubBalance } from '@/components/common/Balance'
-import { useBankList } from '@/services/wallet'
+import {
+  useBankList,
+  useBankTransfer,
+  useVerifyAccount,
+} from '@/services/wallet'
+import axios from 'axios'
+import {
+  BankTransferType,
+  bankTransferSchema,
+} from '@/lib/Validations/transfer'
+import { useQueryClient } from '@tanstack/react-query'
+import { generateUniqueKey } from '@/hooks/useGenerateRandomReference'
 
 const steps = [
   {
     id: 1,
     label: 'Select and verify bank details',
-    fields: ['bankName', 'accountNumber', 'amount', 'narration'],
+    fields: ['bank_code', 'accountNumber', 'amount', 'narration'],
   },
   {
     id: 2,
@@ -42,28 +50,21 @@ const steps = [
 ]
 
 const BankTransferModule = () => {
+  const queryClient = useQueryClient()
+
+  const { isLoading: loadingDetails, mutateAsync } = useVerifyAccount()
+  const { data: BankList, isLoading: loadingBankList } = useBankList()
+  const { isLoading, mutateAsync: mutateBankTransfer } = useBankTransfer()
+
   const [currentStep, setCurrentStep] = useState<number>(1)
   const [open, setOpen] = useState(false)
   const [openBen, setOpenBen] = useState(false)
   const [selectedBank, setSelectedBank] = useState('')
   const [otpValue, setOtpValue] = useState<string>('')
+  const [VerifiedName, setVerifiedName] = useState<string>('')
+  const [uniqueKeys, setUniqueKeys] = useState<string>('')
 
-  const { data, isLoading: loadingBankList, error, isError } = useBankList()
-
-  let BankList: BankListType[] = []
-
-  if (data) {
-    BankList = data.data.data.map((item: BankListType) => ({
-      bank_code: item.bank_code,
-      bank_name: item.bank_name,
-      bank_type: item.bank_type,
-      bank_image: item.bank_image,
-      ussd_code: item.ussd_code,
-      ussd_transfer_code: item.ussd_transfer_code,
-    }))
-    console.log(BankList)
-  }
-
+  const bankList = BankList?.data.data
   const {
     register,
     handleSubmit,
@@ -77,60 +78,130 @@ const BankTransferModule = () => {
     resolver: zodResolver(bankTransferSchema),
   })
 
-  const bankValue = watch('bankName')
-  const accountNumberValue = watch('accountNumber')
+  const bankCode = watch('bank_code')
+  const accountNumberValue = watch('account_number')
   const amountValue = watch('amount')
   const narrationValue = watch('narration')
-
-  const beneficiary = Beneficiary.find(
-    (beneficiary) => beneficiary.accountNumber === accountNumberValue
-  )
+  const authPinValue = watch('authorization.auth_pin')
 
   const handleOtpChange = (otp: string) => {
     setOtpValue(otp)
   }
 
-  const handleClick = (item: beneficiaryType) => {
-    setValue('bankName', item.bankName)
-    setSelectedBank(item.bankName)
-    setValue('accountNumber', item.accountNumber)
-  }
+  // const handleClick = (item: beneficiaryType) => {
+  //   setValue('bankName', item.bankName)
+  //   setSelectedBank(item.bankName)
+  //   setValue('accountNumber', item.accountNumber)
+  // }
+  useEffect(() => {
+    const key = generateUniqueKey()
+    setUniqueKeys(key)
+  }, [])
 
-  const onSubmit: SubmitHandler<BankTransferType> = async (formData) => {
-    try {
-      Swal.fire({
-        text: 'Transaction Successful.',
-        icon: 'success',
-        buttonsStyling: !1,
-        confirmButtonText: 'Ok, got it!',
-        customClass: { confirmButton: 'btn btn-primary' },
-      })
-      reset()
-      setOtpValue('')
-      setSelectedBank('')
-      setCurrentStep(1)
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Validation error:', error.message)
-      } else {
-        console.error('An unknown error occurred:', error)
-        toast.error('Something went wrong, pls try again later.')
+  useEffect(() => {
+    const submitForm = async () => {
+      if (authPinValue && authPinValue.length === 4) {
+        const reference = uniqueKeys
+        const data = {
+          bank_code: bankCode,
+          account_number: accountNumberValue,
+          amount: amountValue,
+          reference,
+          narration: narrationValue,
+          authorization: {
+            auth_pin: authPinValue,
+          },
+        }
+        try {
+          const response = await mutateBankTransfer(data)
+          queryClient.invalidateQueries({
+            queryKey: ['balance'],
+          })
+          Swal.fire({
+            text: response.data.message,
+            icon: 'success',
+            buttonsStyling: !1,
+            confirmButtonText: 'Ok, got it!',
+            customClass: { confirmButton: 'btn btn-primary' },
+          })
+          reset()
+          setOtpValue('')
+          setUniqueKeys('')
+          setSelectedBank('')
+          setCurrentStep(1)
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            const serverError = error.response?.data
+            if (serverError && serverError.details) {
+              toast.error(serverError.details)
+            } else {
+              Swal.fire({
+                text: serverError.message,
+                icon: 'error',
+                buttonsStyling: !1,
+                confirmButtonText: 'Ok, got it!',
+                customClass: { confirmButton: 'btn btn-primary' },
+              })
+              setOtpValue('')
+              setValue('authorization.auth_pin', '')
+            }
+          } else {
+            toast.error('An error occurred')
+          }
+        }
       }
     }
-  }
+
+    submitForm()
+  }, [authPinValue, setValue])
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
+    setOtpValue('')
+    setValue('authorization.auth_pin', '')
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (bankCode && accountNumberValue.length === 10) {
+        try {
+          const data = {
+            bank_code: bankCode,
+            account_number: accountNumberValue,
+          }
+          const response = await mutateAsync(data)
+          setVerifiedName(response.data.data.account_name)
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            const serverError = error.response?.data
+            if (serverError && serverError.details) {
+              toast.error(serverError.details)
+            } else {
+              toast.error(serverError.message)
+            }
+          } else {
+            toast.error('An error occurred')
+          }
+        }
+      } else {
+        setVerifiedName('')
+      }
+    }
+
+    fetchData()
+  }, [bankCode, accountNumberValue])
+
   type FieldName =
-    | 'bankName'
-    | 'accountNumber'
+    | 'bank_code'
+    | 'account_number'
     | 'amount'
     | 'narration'
-    | 'authPin'
+    | 'authorization'
+    | 'authorization.auth_pin'
 
-  const handleNext = async () => {
+  const handleNext = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
     const fields = steps[currentStep - 1].fields
     const output = await trigger(fields as FieldName[], { shouldFocus: true })
 
@@ -139,12 +210,11 @@ const BankTransferModule = () => {
     setCurrentStep(currentStep + 1)
   }
 
+  console.log(errors)
+
   return (
     <div className="collapse show">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="form card-body border-top p-9"
-      >
+      <form className="form card-body border-top p-9">
         <div
           className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
         >
@@ -155,7 +225,7 @@ const BankTransferModule = () => {
 
             <div className="col-lg-8 fv-row">
               <Controller
-                name="bankName"
+                name="bank_code"
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
@@ -163,11 +233,12 @@ const BankTransferModule = () => {
                     <PopoverTrigger asChild>
                       <button
                         aria-expanded={open}
-                        className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid"
+                        className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control bg-transparent"
                       >
                         {selectedBank
-                          ? BankList.find(
-                              (bank) => bank.bank_name === selectedBank
+                          ? bankList.find(
+                              (bank: BankListType) =>
+                                bank.bank_name === selectedBank
                             )?.bank_name
                           : 'Select...'}
                         <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
@@ -179,30 +250,32 @@ const BankTransferModule = () => {
                         <CommandList>
                           <CommandEmpty>No results found.</CommandEmpty>
                           <CommandGroup>
-                            {BankList.map((item) => (
-                              <CommandItem key={item.bank_code}>
-                                <p
-                                  onClick={() => {
-                                    setSelectedBank((prevSelectedBank) =>
-                                      prevSelectedBank === item.bank_name
-                                        ? ''
-                                        : item.bank_name
-                                    )
-                                    setOpen(false)
-                                    field.onChange(item)
-                                  }}
-                                  className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                                >
-                                  <Image
-                                    src={item.bank_image}
-                                    alt={item.bank_name}
-                                    width={30}
-                                    height={30}
-                                  />{' '}
-                                  {item.bank_name}
-                                </p>
-                              </CommandItem>
-                            ))}
+                            {bankList &&
+                              bankList.map((item: BankListType) => (
+                                <CommandItem key={item.bank_code}>
+                                  <p
+                                    onClick={() => {
+                                      setSelectedBank((prevSelectedBank) =>
+                                        prevSelectedBank === item.bank_name
+                                          ? ''
+                                          : item.bank_name
+                                      )
+                                      setOpen(false)
+                                      field.onChange(item.bank_code)
+                                    }}
+                                    className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex tw-items-center hover:tw-bg-slate-200"
+                                  >
+                                    <Image
+                                      src={item.bank_image}
+                                      alt={item.bank_name}
+                                      width={30}
+                                      height={30}
+                                      className="tw-mr-3 tw-rounded-full tw-w-6 tw-h-6"
+                                    />
+                                    {item.bank_name}
+                                  </p>
+                                </CommandItem>
+                              ))}
                           </CommandGroup>
                         </CommandList>
                       </Command>
@@ -210,8 +283,8 @@ const BankTransferModule = () => {
                   </Popover>
                 )}
               />
-              {errors.bankName && (
-                <span className="text-danger">{errors.bankName.message}</span>
+              {errors.bank_code && (
+                <span className="text-danger">{errors.bank_code.message}</span>
               )}
             </div>
           </div>
@@ -225,52 +298,26 @@ const BankTransferModule = () => {
                 <div className="lg:tw-hidden tw-flex">
                   <span className="required">Account number</span>
                 </div>
-                <Popover open={openBen} onOpenChange={setOpenBen}>
-                  <PopoverTrigger asChild>
-                    <div className="text-primary tw-cursor-pointer">
-                      Choose beneficiary
-                    </div>
-                  </PopoverTrigger>
-                  <PopoverContent className="tw-p-0" align="end">
-                    <Command>
-                      <CommandInput placeholder="Search..." />
-                      <CommandList>
-                        <CommandEmpty>No beneficiary found.</CommandEmpty>
-                        <CommandGroup>
-                          {Beneficiary.map((item) => (
-                            <CommandItem key={item.name}>
-                              <p
-                                onClick={() => {
-                                  handleClick(item)
-                                  setOpenBen(false)
-                                }}
-                                className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                              >
-                                {item.name}
-                              </p>
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
               </div>
               <input
-                type="number"
-                {...register('accountNumber', { valueAsNumber: true })}
-                className="form-control form-control-lg form-control-solid tw-mb-2.5"
+                type="text"
+                {...register('account_number')}
+                className="form-control bg-transparent tw-mb-2.5"
                 placeholder="Please provide the account number"
               />
-              {beneficiary && (
-                <span className="tw-ml-2">{beneficiary.name}</span>
-              )}
-
-              {errors.accountNumber && (
+              {errors.account_number && (
                 <span className="text-danger">
-                  {errors.accountNumber.message}
+                  {errors.account_number.message}
                 </span>
               )}
+              <div className="tw-w-full tw-flex tw-justify-end">
+                {loadingDetails && (
+                  <i className="ki-solid ki-loading fs-2 tw-animate-spin"></i>
+                )}
+                {VerifiedName && (
+                  <span className="tw-ml-2">{VerifiedName}</span>
+                )}
+              </div>
             </div>
           </div>
           <div className="row mb-6">
@@ -288,7 +335,7 @@ const BankTransferModule = () => {
               <input
                 type="number"
                 {...register('amount', { valueAsNumber: true })}
-                className="form-control form-control-lg form-control-solid"
+                className="form-control bg-transparent"
                 placeholder="Amount to send"
               />
               {errors.amount && (
@@ -305,7 +352,7 @@ const BankTransferModule = () => {
               <input
                 type="text"
                 {...register('narration')}
-                className="form-control form-control-lg form-control-solid"
+                className="form-control bg-transparent"
                 placeholder="Purpose of this transfer"
               />
               {errors.narration && (
@@ -327,11 +374,11 @@ const BankTransferModule = () => {
           <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Reciever:</p>
-              <p className="tw-font-bold tw-truncate">John Doe</p>
+              <p className="tw-font-bold tw-truncate">{VerifiedName}</p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Bank:</p>
-              <p className="tw-font-bold">{bankValue}</p>
+              <p className="tw-font-bold">{selectedBank}</p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <p>Account Number:</p>
@@ -358,7 +405,7 @@ const BankTransferModule = () => {
               Provide Pin to authorize payment.
             </p>
             <Controller
-              name="authPin"
+              name="authorization.auth_pin"
               control={control}
               render={({ field }) => (
                 <OtpInput
@@ -366,7 +413,7 @@ const BankTransferModule = () => {
                   value={otpValue !== null ? otpValue.toString() : ''}
                   onChange={(otp) => {
                     handleOtpChange(otp)
-                    field.onChange(parseInt(otp, 10))
+                    field.onChange(otp.toString())
                   }}
                   inputType="password"
                   numInputs={4}
@@ -377,13 +424,13 @@ const BankTransferModule = () => {
           </div>
         </div>
 
-        <div className="card-footer d-flex justify-content-end py-6 px-9">
-          <div className="mr-2">
+        <div className="card-footer d-flex justify-content-end py-6 !tw-px-0">
+          <div>
             {currentStep === 2 && (
               <button
                 onClick={handlePrevious}
                 type="reset"
-                className="btn btn-light btn-active-light-primary me-2"
+                className="btn btn-light btn-active-light-primary"
               >
                 Previous
               </button>
@@ -398,17 +445,12 @@ const BankTransferModule = () => {
               Reset
             </button>
           )}
-          <div className="mr-2">
+          <div>
             {currentStep === 1 && (
-              <Button
-                onClick={handleNext}
-                text="Continue"
-                iconClass="ki-arrow-right"
-                position="ms-1"
-              />
+              <button className="btn btn-primary" onClick={handleNext}>
+                Continue
+              </button>
             )}
-
-            {currentStep === 2 && <SubmitButton text="Transfer" />}
           </div>
         </div>
       </form>

@@ -117,7 +117,7 @@ const Electricity = () => {
                   <div className="col-lg-8 fv-row">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control bg-transparent">
                           {selectedProduct}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
@@ -155,7 +155,7 @@ const Electricity = () => {
                   <div className="col-lg-8 fv-row">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
+                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control bg-transparent">
                           {selectedMeter}
                           <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                         </button>
@@ -190,7 +190,7 @@ const Electricity = () => {
                   <div className="col-lg-8 fv-row">
                     <input
                       type="number"
-                      className="form-control form-control-lg form-control-solid"
+                      className="form-control bg-transparent"
                       placeholder="Please provide the metter number"
                     />
                   </div>
@@ -203,7 +203,7 @@ const Electricity = () => {
                   <div className="col-lg-8 fv-row">
                     <input
                       type="number"
-                      className="form-control form-control-lg form-control-solid"
+                      className="form-control bg-transparent"
                       placeholder="Please provide the phone number"
                     />
                   </div>
@@ -216,7 +216,7 @@ const Electricity = () => {
                   <div className="col-lg-8 fv-row">
                     <input
                       type="number"
-                      className="form-control form-control-lg form-control-solid"
+                      className="form-control bg-transparent"
                       placeholder="Amount to send"
                     />
                   </div>

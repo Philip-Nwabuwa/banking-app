@@ -6,21 +6,19 @@ import { useEffect, useState } from 'react'
 import { useForm, Controller, FieldError, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { Check, ChevronDownIcon, Router } from 'lucide-react'
+import { Check } from 'lucide-react'
 import Link from 'next/link'
 import RadioButton from '@/components/common/RadioButton'
 import SubmitButton from '@/components/common/SubmitBtn'
 import Button from '@/components/common/Button'
 import { toast } from 'sonner'
 import { getPasswordStrength } from '@/lib/utils'
-import { countries } from '@/types/countries'
+import { countries, industry } from '@/types/countries'
 import {
-  AccountType,
-  AccountTypeSchema,
-  ProfileType,
-  ProfileUpdateSchema,
-} from '@/lib/validation'
-import { useProfileUpdate, useSignUpAccountType } from '@/services/auth'
+  useBusinessUpdate,
+  useProfileUpdate,
+  useSignUpAccountType,
+} from '@/services/auth'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import {
@@ -42,16 +40,26 @@ import {
   setSessionId,
   setUserKey,
 } from '@/store/cookie'
+import {
+  AccountType,
+  AccountTypeSchema,
+  BusinessSchema,
+  BusinessType,
+  ProfileType,
+  ProfileUpdateSchema,
+} from '@/lib/Validations/auth'
 
 const Signup = () => {
   const router = useRouter()
-  const [currentStep, setCurrentStep] = useState<number>(1)
+  const [currentStep, setCurrentStep] = useState<number>(4)
 
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const { isLoading, mutateAsync } = useSignUpAccountType()
   const { isLoading: upadatingProfile, mutateAsync: mutatingProfile } =
     useProfileUpdate()
+  const { isLoading: updatingBusinessProfile, mutateAsync: mutatingBusiness } =
+    useBusinessUpdate()
 
   const stepsData = [
     { title: 'Account Type', desc: 'Select your account type' },
@@ -80,6 +88,16 @@ const Signup = () => {
     control: controlProfile,
   } = useForm<ProfileType>({
     resolver: zodResolver(ProfileUpdateSchema),
+  })
+
+  const {
+    register: registerBusiness,
+    handleSubmit: handleSubmitBusiness,
+    formState: { errors: errorsBusiness },
+    watch: watchBusiness,
+    control: controlBusiness,
+  } = useForm<BusinessType>({
+    resolver: zodResolver(BusinessSchema),
   })
 
   const account = watch('account_type')
@@ -193,6 +211,31 @@ const Signup = () => {
     }
   }
 
+  const submitBusinessSignup: SubmitHandler<BusinessType> = async (
+    profileData
+  ) => {
+    console.log(profileData)
+    try {
+      const response = await mutatingBusiness(profileData)
+      console.log(response)
+      toast.success(response.data.message)
+      setProfileName('true')
+      setTimeout(() => setCurrentStep((prevStep) => prevStep + 1), 1000)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const serverError = error.response?.data
+        if (serverError && serverError.details) {
+          toast.error(serverError.details)
+        } else {
+          toast.error('Email already registered, procced to login.')
+          setTimeout(() => router.push('/login'), 1000)
+        }
+      } else {
+        toast.error('An error occurred')
+      }
+    }
+  }
+
   const GenderType = [
     { name: 'Female', label: 'female' },
     { name: 'Male', label: 'male' },
@@ -201,10 +244,15 @@ const Signup = () => {
 
   const [openGender, setOpenGender] = useState(false)
   const [openCountry, setOpenCountry] = useState(false)
+  const [openBusinessCountry, setOpenBusinessCountry] = useState(false)
+  const [openIndustry, setOpenIndustry] = useState(false)
   const [selectedGender, setSelectedGender] = useState<string>('')
   const [selectedCountry, setSelectedCountry] = useState<string>('')
+  const [selectedIndustry, setSelectedIndustry] = useState<string>('')
+  const [selectedBusinessCountry, setSelectedBusinessCountry] =
+    useState<string>('')
 
-  console.log(errorsProfile)
+  console.log(errorsBusiness)
 
   return (
     <div className="body app-blank !tw-h-screen">
@@ -291,7 +339,10 @@ const Signup = () => {
           <div className="d-flex flex-column flex-lg-row-fluid py-10">
             <div className="d-flex flex-center flex-column flex-column-fluid">
               <div className="w-lg-650px w-xl-700px p-10 p-lg-15 mx-auto">
-                <form className="my-auto pb-5">
+                <form
+                  className="my-auto pb-5"
+                  onSubmit={handleSubmit(submitAccountSignup)}
+                >
                   <div
                     className={`step-content ${
                       currentStep === 1 ? 'current tw-flex-col' : ''
@@ -464,7 +515,6 @@ const Signup = () => {
                       />
                       <SubmitButton
                         disabled={isLoading || passwordStrengthScore < 3}
-                        onClick={handleSubmit(submitAccountSignup)}
                         isSubmitting={isLoading}
                         text="Sign up"
                       />
@@ -477,6 +527,7 @@ const Signup = () => {
                     currentStep === 3 ? 'current' : ''
                   }`}
                   data-kt-stepper-element="content"
+                  onSubmit={handleSubmitProfile(submitProfileSignup)}
                 >
                   <div className="w-100">
                     <div className="pb-10 pb-lg-12">
@@ -605,7 +656,7 @@ const Signup = () => {
                       <input
                         className="form-control bg-transparent"
                         type="text"
-                        {...registerProfile('address')}
+                        {...registerProfile('contact.address')}
                       />
                     </div>
 
@@ -627,7 +678,7 @@ const Signup = () => {
                         <label className="form-label required">City</label>
 
                         <input
-                          {...registerProfile('city')}
+                          {...registerProfile('contact.city')}
                           className="form-control bg-transparent w-100"
                         />
                       </div>
@@ -639,7 +690,7 @@ const Signup = () => {
                         <label className="form-label required">Province</label>
 
                         <input
-                          {...registerProfile('province')}
+                          {...registerProfile('contact.province')}
                           className="form-control bg-transparent"
                         />
                       </div>
@@ -649,7 +700,7 @@ const Signup = () => {
                       <label className="form-label required">Country</label>
 
                       <Controller
-                        name="country"
+                        name="contact.country"
                         control={controlProfile}
                         render={({ field }) => (
                           <Popover
@@ -727,18 +778,18 @@ const Signup = () => {
                       />
                       <SubmitButton
                         disabled={upadatingProfile}
-                        onClick={handleSubmitProfile(submitProfileSignup)}
                         isSubmitting={upadatingProfile}
-                        text="Sign up"
+                        text="Submit Profile Info"
                       />
                     </div>
                   </div>
                 </form>
 
-                <div
+                <form
                   className={`step-content ${
                     currentStep === 4 ? 'current' : ''
                   }`}
+                  onSubmit={handleSubmitBusiness(submitBusinessSignup)}
                   data-kt-stepper-element="content"
                 >
                   <div className="w-100">
@@ -761,7 +812,10 @@ const Signup = () => {
                         Business Name
                       </label>
 
-                      <input className="form-control bg-transparent" />
+                      <input
+                        {...registerBusiness('name')}
+                        className="form-control bg-transparent"
+                      />
                     </div>
 
                     <div className="fv-row mb-10">
@@ -772,49 +826,223 @@ const Signup = () => {
                         </span>
                       </label>
 
-                      <input className="form-control bg-transparent" />
+                      <input
+                        {...registerBusiness('rc_number')}
+                        className="form-control bg-transparent"
+                      />
                     </div>
 
                     <div className="fv-row mb-10">
-                      <label className="form-label required">
-                        Corporation Type
-                      </label>
+                      <label className="form-label required">Industry</label>
 
-                      <select
-                        className="form-select bg-transparent"
-                        data-control="select2"
-                        data-placeholder="Select..."
-                        data-allow-clear="true"
-                        data-hide-search="true"
-                      >
-                        <option></option>
-                        <option value="1">S Corporation</option>
-                        <option value="1">C Corporation</option>
-                        <option value="2">Sole Proprietorship</option>
-                        <option value="3">Non-profit</option>
-                        <option value="4">Limited Liability</option>
-                        <option value="5">General Partnership</option>
-                      </select>
+                      <Controller
+                        name="industry"
+                        control={controlBusiness}
+                        render={({ field }) => (
+                          <Popover
+                            open={openIndustry}
+                            onOpenChange={setOpenIndustry}
+                          >
+                            <PopoverTrigger asChild>
+                              <button
+                                aria-expanded={openIndustry}
+                                className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-select bg-transparent"
+                              >
+                                {selectedIndustry
+                                  ? industry.find(
+                                      (type) => type.label === selectedIndustry
+                                    )?.label
+                                  : 'Select...'}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="tw-p-0" align="start">
+                              <Command>
+                                <CommandInput placeholder="Search..." />
+                                <CommandList>
+                                  <CommandEmpty>No results found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {industry.map((item) => (
+                                      <CommandItem key={item.label}>
+                                        <p
+                                          onClick={() => {
+                                            setSelectedIndustry(
+                                              (prevSelectedIndustry) =>
+                                                prevSelectedIndustry ===
+                                                item.label
+                                                  ? ''
+                                                  : item.label
+                                            )
+                                            setOpenIndustry(false)
+                                            field.onChange(item.label)
+                                          }}
+                                          className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                        >
+                                          {item.label}
+                                        </p>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      />
                     </div>
                     <div className="fv-row mb-10">
                       <label className="form-label">Business Description</label>
-                      <textarea className="form-control bg-transparent"></textarea>
+                      <textarea
+                        {...registerBusiness('description')}
+                        className="form-control bg-transparent"
+                      ></textarea>
 
                       <div className="form-text">
                         Customers will see this shortened version of your
                         statement description.
                       </div>
                     </div>
-
-                    <div className="fv-row mb-0">
-                      <label className="fs-6 fw-semibold form-label required">
-                        Business Email
+                    <div className="fv-row mb-10 mt-10">
+                      <label className="form-label required">
+                        Business Address
                       </label>
 
-                      <input className="form-control bg-transparent" />
+                      <input
+                        className="form-control bg-transparent"
+                        type="text"
+                        {...registerBusiness('contact.address')}
+                      />
+                    </div>
+
+                    <div
+                      className="mb-10"
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        width: '100%',
+                        justifyContent: 'space-between',
+                        gap: '10px',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        <label className="form-label required">City</label>
+
+                        <input
+                          {...registerBusiness('contact.city')}
+                          className="form-control bg-transparent w-100"
+                        />
+                      </div>
+                      <div
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        <label className="form-label required">Province</label>
+
+                        <input
+                          {...registerBusiness('contact.province')}
+                          className="form-control bg-transparent"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="fv-row mb-10 mt-10">
+                      <label className="form-label required">Country</label>
+
+                      <Controller
+                        name="contact.country"
+                        control={controlBusiness}
+                        render={({ field }) => (
+                          <Popover
+                            open={openBusinessCountry}
+                            onOpenChange={setOpenBusinessCountry}
+                          >
+                            <PopoverTrigger asChild>
+                              <button
+                                aria-expanded={openBusinessCountry}
+                                className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-select bg-transparent"
+                              >
+                                {selectedBusinessCountry
+                                  ? countries.find(
+                                      (country) =>
+                                        country.label ===
+                                        selectedBusinessCountry
+                                    )?.label
+                                  : 'Select...'}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent className="tw-p-0" align="start">
+                              <Command>
+                                <CommandInput placeholder="Search..." />
+                                <CommandList>
+                                  <CommandEmpty>No results found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {countries.map((item) => (
+                                      <CommandItem key={item.label}>
+                                        <p
+                                          onClick={() => {
+                                            setSelectedBusinessCountry(
+                                              (prevSelectedCountry) =>
+                                                prevSelectedCountry ===
+                                                item.label
+                                                  ? ''
+                                                  : item.label
+                                            )
+                                            setOpenBusinessCountry(false)
+                                            field.onChange(item.label)
+                                          }}
+                                          className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
+                                        >
+                                          {item.label}
+                                        </p>
+                                      </CommandItem>
+                                    ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
+                        )}
+                      />
+                    </div>
+                    <div className="fv-row mb-10">
+                      <label className="fs-6 fw-semibold form-label required">
+                        Phone Number
+                      </label>
+
+                      <input
+                        {...registerBusiness('phone_number')}
+                        className="form-control bg-transparent"
+                      />
+                    </div>
+                    <div className="fv-row mb-0">
+                      <label className="fs-6 fw-semibold form-label required">
+                        Website
+                      </label>
+
+                      <input
+                        {...registerBusiness('website')}
+                        className="form-control bg-transparent"
+                      />
+                    </div>
+                    <div className="tw-w-full tw-flex tw-justify-between pt-15">
+                      <Button
+                        onClick={handlePrevious}
+                        text="Previous"
+                        iconClass="ki-arrow-left"
+                        position="me-1"
+                      />
+                      <SubmitButton
+                        disabled={updatingBusinessProfile}
+                        isSubmitting={updatingBusinessProfile}
+                        text="Submit Business Details"
+                      />
                     </div>
                   </div>
-                </div>
+                </form>
 
                 <div
                   className={`step-content ${
@@ -863,50 +1091,6 @@ const Signup = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <div className="d-flex flex-stack pt-15">
-                  <div className="mr-2">
-                    {currentStep !== 1 && currentStep !== 5 && (
-                      <Button
-                        onClick={handlePrevious}
-                        text="Previous"
-                        iconClass="ki-arrow-left"
-                        position="me-1"
-                      />
-                    )}
-                  </div>
-                  <div>
-                    {((account === 'personal' && currentStep < 3) ||
-                      (account === 'corporate' && currentStep < 4)) && (
-                      <Button
-                        disabled={isSubmitting}
-                        onClick={handleNext}
-                        text="Continue"
-                        iconClass="ki-arrow-right"
-                        position="ms-1"
-                      />
-                    )}
-
-                    {((account === 'personal' && currentStep === 3) ||
-                      (account === 'corporate' && currentStep === 4)) && (
-                      <SubmitButton
-                        onClick={handleSubmit(onSubmit)}
-                        isSubmitting={isSubmitting}
-                        disabled={isSubmitting}
-                        text="Sign In"
-                      />
-                    )}
-
-                    {currentStep === 5 && (
-                      <Button
-                        onClick={() => router.replace('/verify-account')}
-                        text="Proceed to Dashboard"
-                        iconClass="ki-arrow-right"
-                        position="ms-1"
-                      />
-                    )}
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

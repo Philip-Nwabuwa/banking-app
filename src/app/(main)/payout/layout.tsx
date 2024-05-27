@@ -74,6 +74,24 @@ const PayoutLayout = ({
                         </li>
                       </ul>
                     </div>
+                    <div className="d-flex align-items-center gap-2 gap-lg-3">
+                      {pathname === '/payout/bank-transfer' && (
+                        <Link
+                          href="/payout/bank-transfer/transactions"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Bank Transactions
+                        </Link>
+                      )}
+                      {pathname === '/payout/paytonic-transfer' && (
+                        <Link
+                          href="/payout/paytonic-transfer/transactions"
+                          className="btn btn-sm fw-bold btn-primary"
+                        >
+                          Paytonic Transactions
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </div>
 

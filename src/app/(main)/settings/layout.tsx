@@ -4,10 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import UserImage from '@/assets/images/300-1.jpg'
+import defaultAvatar from '@/assets/images/blank.svg'
 import Navbar from '@/components/common/Navbar'
 import Sidebar from '@/components/common/Sidebar'
 import ScrollToTop from '@/components/common/ScrollToTop'
+import useUserStore from '@/store/profile'
 
 const SettingsLayout = ({
   children,
@@ -15,6 +16,12 @@ const SettingsLayout = ({
   children: React.ReactNode
 }>) => {
   const pathname = usePathname()
+  const { userProfile } = useUserStore()
+  const profileName = userProfile?.full_name || ''
+  const profileAvatar = userProfile?.avatar || defaultAvatar
+  const profileEmail = userProfile?.email_address || ''
+  const profileOccupation = userProfile?.occupation || ''
+  // const profileAddress = userProfile?.contact.address || ''
 
   const navItems = [
     { label: 'Profile', path: '/settings' },
@@ -92,7 +99,7 @@ const SettingsLayout = ({
                             <div className="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
                               <Image
                                 className="w-160px h-160px"
-                                src={UserImage}
+                                src={profileAvatar}
                                 width={160}
                                 height={160}
                                 alt="image"
@@ -106,7 +113,7 @@ const SettingsLayout = ({
                               <div className="d-flex flex-column">
                                 <div className="d-flex align-items-center mb-2">
                                   <div className="text-gray-900 text-hover-primary fs-2 fw-bold me-1">
-                                    Max Smith
+                                    {profileName}
                                   </div>
                                   <div>
                                     <i className="ki-outline ki-verify fs-1 text-primary"></i>
@@ -116,15 +123,17 @@ const SettingsLayout = ({
                                 <div className="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
                                   <div className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
                                     <i className="ki-outline ki-profile-circle fs-4 me-1"></i>
-                                    Developer
+                                    {profileOccupation}
                                   </div>
-                                  <div className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
-                                    <i className="ki-outline ki-geolocation fs-4 me-1"></i>
-                                    SF, Bay Area
-                                  </div>
+                                  {/* {profileAddress && (
+                                    <div className="d-flex align-items-center text-gray-500 text-hover-primary me-5 mb-2">
+                                      <i className="ki-outline ki-geolocation fs-4 me-1"></i>
+                                      {profileAddress}
+                                    </div>
+                                  )} */}
                                   <div className="d-flex align-items-center text-gray-500 text-hover-primary mb-2">
                                     <i className="ki-outline ki-sms fs-4"></i>
-                                    max@kt.com
+                                    {profileEmail}
                                   </div>
                                 </div>
                               </div>

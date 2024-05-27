@@ -7,9 +7,11 @@ import { useLogout } from '@/services/auth'
 import axios from 'axios'
 import { clearAllCookies } from '@/store/cookie'
 import { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
+import useUserStore from '@/store/profile'
 
 const Logout = () => {
   const { mutateAsync } = useLogout()
+  const { clearUserData } = useUserStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => setIsModalOpen(false)
@@ -20,10 +22,13 @@ const Logout = () => {
       const response = await mutateAsync()
       toast.success(response.data.message)
       clearAllCookies()
+      clearUserData()
       setTimeout(() => {
         triggerAuthRedirect()
       }, 2000)
     } catch (error) {
+      console.log(error)
+
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data
         if (serverError && serverError.details) {

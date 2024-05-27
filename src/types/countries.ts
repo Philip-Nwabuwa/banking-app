@@ -247,3 +247,19 @@ export const countries = [
   { value: 'ZM', label: 'Zambia' },
   { value: 'ZW', label: 'Zimbabwe' },
 ] as const
+
+export const industry = [
+  { value: 'Agriculture', label: 'Agriculture' },
+  { value: 'Construction', label: 'Construction' },
+  { value: 'Manufacturing', label: 'Manufacturing' },
+  { value: 'Services', label: 'Services' },
+  { value: 'Trade', label: 'Trade' },
+  { value: 'Transportation', label: 'Transportation' },
+  { value: 'Wholesale', label: 'Wholesale' },
+  {
+    value: 'Technology',
+    label: 'Technology',
+  },
+  { value: 'Finance', label: 'Finance' },
+  { value: 'Other', label: 'Other' },
+] as const

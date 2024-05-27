@@ -1,8 +1,7 @@
 'use client'
 
+import Image from 'next/image'
 import Swal from 'sweetalert2'
-import Button from '@/components/common/Button'
-import SubmitButton from '@/components/common/SubmitBtn'
 import OtpInput from 'react-otp-input'
 import {
   Command,
@@ -18,135 +17,205 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { ChevronDownIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import {
+  useDataPlanList,
+  useDataTransfer,
+  useGetBillsProvider,
+} from '@/services/bills'
+import { billsProviderType } from '@/types/bills'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { DataTransferType, dataTransferSchema } from '@/lib/Validations/bills'
+import { generateUniqueKey } from '@/hooks/useGenerateRandomReference'
+import axios from 'axios'
+import { useQueryClient } from '@tanstack/react-query'
 
-const AirtimeNames = [
-  { name: 'Airtel' },
-  { name: 'Mtn' },
-  { name: 'Glo' },
-  { name: '9mobile' },
-] as const
+type DataType = {
+  amout: number
+  code: string
+  duration: string
+  name: string
+}
 
-const DataPlans = [
+const steps = [
   {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 1.5GB for ₦300',
-      'Monthly 6GB for ₦1,500',
-      'Monthly 16GB for ₦3,000',
-    ],
+    id: 1,
+    label: 'Select and verify Data details',
+    fields: ['product', 'phone_number', 'code'],
   },
   {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 1GB for ₦500',
-      'Monthly 2GB for ₦1,000',
-      'Monthly 6GB for ₦2,000',
-    ],
+    id: 2,
+    label: 'Confirm account details and verify payment via authPin',
+    fields: ['authPin'],
   },
-  {
-    plans: [
-      'Daily 50MB for ₦50',
-      'Weekly 1.6GB for ₦500',
-      'Monthly 7GB for ₦1,500',
-      'Monthly 12.5GB for ₦2,500',
-    ],
-  },
-  {
-    plans: [
-      'Daily 50MB for ₦100',
-      'Weekly 500MB for ₦500',
-      'Monthly 1GB for ₦1,000',
-      'Monthly 4.5GB for ₦2,000',
-    ],
-  },
-] as const
+]
 
 const Airtime = () => {
+  const queryClient = useQueryClient()
+
+  const { data: providerList, isLoading: gettingBills } = useGetBillsProvider()
+  const { isLoading, mutateAsync } = useDataTransfer()
+  const { isLoading: gettingDataPlan, mutateAsync: getDataPlan } =
+    useDataPlanList()
+
+  const [openProduct, setOpenProduct] = useState<boolean>(false)
+  const [openDataPlan, setOpenDataPlan] = useState<boolean>(false)
+  const [selectedNetwork, setSelectedNetwork] = useState('')
+  const [selectedDataPlan, setSelectedDataPlan] = useState([])
+  const [selectedDataName, setSelectedDataName] = useState<string | undefined>(
+    undefined
+  )
+  const [selectedDataAmount, setSelectedDataAmount] = useState<
+    number | undefined
+  >(undefined)
   const [currentStep, setCurrentStep] = useState<number>(1)
-  const [selectedNetwork, setSelectedNetwork] = useState(
-    'Please select a network provider'
-  )
-  const [selectedDataPlan, setSelectedDataPlan] = useState(
-    'Please select a Plan'
-  )
+  const [uniqueKeys, setUniqueKeys] = useState<string>('')
+  const [pinValue, setPinValue] = useState('')
 
-  const renderDataPlans = () => {
-    switch (selectedNetwork) {
-      case 'Airtel':
-        return DataPlans[0].plans
-      case 'Mtn':
-        return DataPlans[1].plans
-      case 'Glo':
-        return DataPlans[2].plans
-      case '9mobile':
-        return DataPlans[3].plans
-      default:
-        return []
-    }
-  }
+  const DataNames =
+    providerList?.data?.data?.filter(
+      (provider: billsProviderType) => provider.service === 'MOBILE_DATA'
+    ) || []
 
-  const [otpValue, setOtpValue] = useState('')
+  const {
+    register,
+    watch,
+    trigger,
+    setValue,
+    formState: { errors },
+    control,
+    reset,
+  } = useForm<DataTransferType>({
+    resolver: zodResolver(dataTransferSchema),
+  })
 
-  const handleOtpChange = (otp: string) => {
-    setOtpValue(otp)
+  const authPinValue = watch('authorization.auth_pin')
+  const codeValue = watch('code')
+  const phoneNumberValue = watch('phone_number')
+  const productValue = watch('product')
+
+  const handlePinChange = (otp: string) => {
+    setPinValue(otp)
   }
 
   const handlePrevious = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1))
   }
 
-  const handleNext = () => {
-    if (currentStep === 1) {
-      setCurrentStep((prevStep) => prevStep + 1)
+  type FieldName =
+    | 'product'
+    | 'phone_number'
+    | 'code'
+    | 'authorization'
+    | 'authorization.auth_pin'
+
+  const handleNext = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+
+    const fields = steps[currentStep - 1].fields
+    const output = await trigger(fields as FieldName[], { shouldFocus: true })
+
+    if (!output) return
+    console.log(fields)
+    setCurrentStep(currentStep + 1)
+  }
+
+  const handleNetworkSelect = async (NetworkName: string) => {
+    setSelectedNetwork(NetworkName)
+    const data = {
+      product: NetworkName,
+    }
+    const response = await getDataPlan(data)
+    setSelectedDataPlan(response.data.data.plans)
+  }
+
+  const handleDataPlanSelect = (NetworkPlanName: DataType) => {
+    if (selectedDataName === NetworkPlanName.name) {
+      setSelectedDataPlan([])
+      setSelectedDataName(undefined)
+      setSelectedNetwork('')
+      setValue('code', '')
+      setSelectedDataAmount(undefined)
+    } else {
+      setSelectedDataName(NetworkPlanName.name)
+      setValue('code', NetworkPlanName.code)
+      setSelectedDataAmount(NetworkPlanName.amout)
     }
   }
 
-  const handleNetworkSelect = (NetworkName: string) => {
-    setSelectedNetwork(NetworkName)
-  }
+  useEffect(() => {
+    const key = generateUniqueKey()
+    setUniqueKeys(key)
+  }, [])
 
-  const handleDataPlanSelect = (NetworkPlanName: string) => {
-    setSelectedDataPlan(NetworkPlanName)
-  }
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    try {
-      Swal.fire({
-        text: 'Transaction Successful.',
-        icon: 'success',
-        buttonsStyling: !1,
-        confirmButtonText: 'Ok, got it!',
-        customClass: { confirmButton: 'btn btn-primary' },
-      })
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.error('Validation error:', error.message)
-      } else {
-        console.error('An unknown error occurred:', error)
-        toast.error('Something went wrong, pls try again later.')
+  useEffect(() => {
+    const submitForm = async () => {
+      if (authPinValue && authPinValue.length === 4) {
+        const reference = uniqueKeys
+        const data = {
+          code: codeValue,
+          product: productValue,
+          phone_number: phoneNumberValue,
+          reference,
+          authorization: {
+            auth_pin: authPinValue,
+          },
+        }
+        try {
+          const response = await mutateAsync(data)
+          queryClient.invalidateQueries({
+            queryKey: ['balance'],
+          })
+          Swal.fire({
+            text: response.data.message,
+            icon: 'success',
+            buttonsStyling: !1,
+            confirmButtonText: 'Ok, got it!',
+            customClass: { confirmButton: 'btn btn-primary' },
+          })
+          reset()
+          setSelectedDataPlan([])
+          setSelectedDataName(undefined)
+          setPinValue('')
+          setUniqueKeys('')
+          setSelectedNetwork('')
+          setCurrentStep(1)
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            const serverError = error.response?.data
+            if (serverError && serverError.details) {
+              toast.error(serverError.details)
+            } else {
+              Swal.fire({
+                text: serverError.message,
+                icon: 'error',
+                buttonsStyling: !1,
+                confirmButtonText: 'Ok, got it!',
+                customClass: { confirmButton: 'btn btn-primary' },
+              })
+              setPinValue('')
+              setValue('authorization.auth_pin', '')
+            }
+          } else {
+            toast.error('An error occurred')
+          }
+        }
       }
     }
-  }
+
+    submitForm()
+  }, [authPinValue, setValue])
+
+  console.log(errors)
 
   return (
-    <div id="kt_app_content" className="app-content flex-column-fluid">
-      <div
-        id="kt_app_content_container"
-        className="app-container container-xxl"
-      >
+    <div className="app-content flex-column-fluid">
+      <div className="app-container container-xxl">
         <div className="card !tw-rounded-se-none !tw-rounded-ss-none mb-5">
-          <div
-            id="kt_account_settings_profile_details"
-            className="collapse show"
-          >
-            <form
-              onSubmit={onSubmit}
-              id="kt_account_profile_details_form"
-              className="form card-body border-top p-9"
-            >
+          <div className="collapse show">
+            <form className="form card-body border-top p-9">
               <div
                 className={`${currentStep === 1 ? 'tw-flex tw-flex-col' : 'tw-hidden'}`}
                 data-kt-stepper-element="content"
@@ -157,49 +226,96 @@ const Airtime = () => {
                   </label>
 
                   <div className="col-lg-8 fv-row">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                          {selectedNetwork}
-                          <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
-                        </button>
-                      </PopoverTrigger>
-                      <PopoverContent className="tw-p-0" align="start">
-                        <Command>
-                          <CommandInput placeholder="Search..." />
-                          <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup>
-                              {AirtimeNames.map((item) => (
-                                <CommandItem key={item.name}>
-                                  <p
-                                    onClick={() =>
-                                      handleNetworkSelect(item.name)
-                                    }
-                                    className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
-                                  >
-                                    {item.name}
-                                  </p>
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                    <Controller
+                      name="product"
+                      control={control}
+                      defaultValue=""
+                      render={({ field }) => (
+                        <Popover
+                          open={openProduct}
+                          onOpenChange={setOpenProduct}
+                        >
+                          <PopoverTrigger asChild>
+                            <button
+                              aria-expanded={openProduct}
+                              className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control bg-transparent"
+                            >
+                              {selectedNetwork
+                                ? DataNames.find(
+                                    (product: billsProviderType) =>
+                                      product.product === selectedNetwork
+                                  )?.product
+                                : 'Select...'}
+                              <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent className="tw-p-0" align="start">
+                            <Command>
+                              <CommandInput placeholder="Search..." />
+                              <CommandList>
+                                <CommandEmpty>No results found.</CommandEmpty>
+                                <CommandGroup>
+                                  {DataNames &&
+                                    DataNames.map((item: billsProviderType) => (
+                                      <CommandItem key={item.code}>
+                                        <p
+                                          onClick={() => {
+                                            setSelectedNetwork(
+                                              (prevSelectedProduct) =>
+                                                prevSelectedProduct ===
+                                                item.product
+                                                  ? ''
+                                                  : item.product
+                                            )
+                                            handleNetworkSelect(item.product)
+                                            setOpenProduct(false)
+                                            field.onChange(item.product)
+                                          }}
+                                          className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex tw-items-center hover:tw-bg-slate-200"
+                                        >
+                                          <Image
+                                            src={item.image}
+                                            alt={item.code}
+                                            width={30}
+                                            height={30}
+                                            className="tw-mr-3 tw-rounded-full tw-w-6 tw-h-6"
+                                          />
+                                          {item.name}
+                                        </p>
+                                      </CommandItem>
+                                    ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      )}
+                    />
+                    {errors.product && (
+                      <span className="text-danger">
+                        {errors.product.message}
+                      </span>
+                    )}
                   </div>
                 </div>
-                {selectedNetwork !== 'Please select a network provider' && (
+                {selectedDataPlan.length > 0 && (
                   <div className="row mb-6">
                     <label className="col-lg-4 col-form-label required fw-semibold fs-6">
                       Data Plan
                     </label>
 
                     <div className="col-lg-8 fv-row">
-                      <Popover>
+                      <Popover
+                        open={openDataPlan}
+                        onOpenChange={setOpenDataPlan}
+                      >
                         <PopoverTrigger asChild>
-                          <button className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control form-control-lg form-control-solid">
-                            {selectedDataPlan}
+                          <button
+                            aria-expanded={openDataPlan}
+                            className="!tw-flex tw-items-center tw-justify-between tw-gap-2 form-control bg-transparent"
+                          >
+                            {selectedDataName ? selectedDataName : 'Select...'}
+
                             <ChevronDownIcon className="tw-ml-2 tw-h-4 tw-w-4 tw-text-muted-foreground" />
                           </button>
                         </PopoverTrigger>
@@ -209,13 +325,16 @@ const Airtime = () => {
                             <CommandList>
                               <CommandEmpty>No results found.</CommandEmpty>
                               <CommandGroup>
-                                {renderDataPlans().map((item, index) => (
-                                  <CommandItem key={index}>
+                                {selectedDataPlan.map((item: DataType) => (
+                                  <CommandItem key={item.code}>
                                     <p
-                                      onClick={() => handleDataPlanSelect(item)}
+                                      onClick={() => {
+                                        handleDataPlanSelect(item)
+                                        setOpenDataPlan(false)
+                                      }}
                                       className="tw-py-3 tw-px-3 tw-mb-0 tw-cursor-pointer tw-flex hover:tw-bg-slate-200"
                                     >
-                                      {item}
+                                      {item.name}
                                     </p>
                                   </CommandItem>
                                 ))}
@@ -234,8 +353,9 @@ const Airtime = () => {
 
                   <div className="col-lg-8 fv-row">
                     <input
+                      {...register('phone_number')}
                       type="number"
-                      className="form-control form-control-lg form-control-solid"
+                      className="form-control bg-transparent"
                       placeholder="Please provide the phone number"
                     />
                   </div>
@@ -255,14 +375,16 @@ const Airtime = () => {
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>Reciever:</p>
-                    <p className="tw-font-bold tw-truncate">08000000000</p>
+                    <p className="tw-font-bold tw-truncate">
+                      {phoneNumberValue}
+                    </p>
                   </div>
                 </div>
                 <div className="tw-flex tw-flex-col tw-gap-2 tw-text-xl">
                   <div className="tw-flex tw-justify-between tw-items-center">
                     <p>plan:</p>
                     <p className="tw-font-bold tw-truncate">
-                      Monthly 6GB for ₦1,500
+                      {selectedDataName}
                     </p>
                   </div>
                 </div>
@@ -283,24 +405,33 @@ const Airtime = () => {
                     Provide Pin to authorize payment.
                   </p>
 
-                  <OtpInput
-                    inputStyle="inputStyle"
-                    value={otpValue}
-                    onChange={handleOtpChange}
-                    inputType="password"
-                    numInputs={4}
-                    renderInput={(props) => <input {...props} />}
+                  <Controller
+                    name="authorization.auth_pin"
+                    control={control}
+                    render={({ field }) => (
+                      <OtpInput
+                        inputStyle="inputStyle"
+                        value={pinValue !== null ? pinValue.toString() : ''}
+                        onChange={(otp) => {
+                          handlePinChange(otp)
+                          field.onChange(otp.toString())
+                        }}
+                        inputType="password"
+                        numInputs={4}
+                        renderInput={(props) => <input {...props} />}
+                      />
+                    )}
                   />
                 </div>
               </div>
 
-              <div className="card-footer d-flex justify-content-end py-6 px-9">
-                <div className="mr-2">
+              <div className="card-footer d-flex justify-content-end py-6 !tw-px-0">
+                <div>
                   {currentStep === 2 && (
                     <button
                       onClick={handlePrevious}
                       type="reset"
-                      className="btn btn-light btn-active-light-primary me-2"
+                      className="btn btn-light btn-active-light-primary"
                     >
                       Previous
                     </button>
@@ -309,22 +440,24 @@ const Airtime = () => {
                 {currentStep === 1 && (
                   <button
                     type="reset"
+                    onClick={() => {
+                      setSelectedDataPlan([])
+                      setSelectedDataName(undefined)
+                      setSelectedNetwork('')
+                      reset()
+                      setSelectedDataAmount(undefined)
+                    }}
                     className="btn btn-light btn-active-light-primary me-2"
                   >
                     Reset
                   </button>
                 )}
-                <div className="mr-2">
+                <div>
                   {currentStep === 1 && (
-                    <Button
-                      onClick={handleNext}
-                      text="Continue"
-                      iconClass="ki-arrow-right"
-                      position="ms-1"
-                    />
+                    <button className="btn btn-primary" onClick={handleNext}>
+                      Continue
+                    </button>
                   )}
-
-                  {currentStep === 2 && <SubmitButton text="Transfer" />}
                 </div>
               </div>
             </form>

@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 
-import { LoginSchema, LoginType } from '@/lib/validation'
 import SubmitButton from '@/components/common/SubmitBtn'
 import axios from 'axios'
 import { useLogin } from '@/services/auth'
@@ -14,13 +13,23 @@ import { triggerAuthRedirect } from '@/hooks/useAuthRedirect'
 import {
   setAccountKey,
   setProfileName,
+  setReferenceKey,
   setSessionId,
   setUserKey,
 } from '@/store/cookie'
 import { useRouter } from 'next/navigation'
+import { LoginSchema, LoginType } from '@/lib/Validations/auth'
+import useUserStore from '@/store/profile'
 
 const LoginModule = () => {
   const { mutateAsync, isLoading } = useLogin()
+  const {
+    setUserAccount,
+    setUserConfig,
+    setUserProfile,
+    setUserKyc,
+    setUserSetup,
+  } = useUserStore()
 
   const {
     register,
@@ -46,8 +55,8 @@ const LoginModule = () => {
       const response = await mutateAsync(formData)
       console.log(response)
       const accountType = response.data.data.account.type
-      const profileName = response.data.data.account.name
-      if (profileName === ' ') {
+      const profileName = response.data.data.profile.first_name
+      if (profileName === null) {
         setProfileName('false')
         router.push(`/signup?setCurrentStep=3&type=${accountType}`)
         toast.success('Please complete your profile information.')
@@ -61,7 +70,14 @@ const LoginModule = () => {
       setAccountKey(response.data.data.account_key)
       setUserKey(response.data.data.user_key)
       setSessionId(response.data.data.session.id)
+      setReferenceKey(response.data.data.wallet.reference)
+      setUserAccount(response.data.data.account)
+      setUserConfig(response.data.data.config)
+      setUserProfile(response.data.data.profile)
+      setUserKyc(response.data.data.kyc)
+      setUserSetup(response.data.data.setup)
     } catch (error) {
+      console.log(error)
       if (axios.isAxiosError(error)) {
         const serverError = error.response?.data
         if (serverError && serverError.details) {

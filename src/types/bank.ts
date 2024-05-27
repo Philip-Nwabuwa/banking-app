@@ -7,6 +7,23 @@ export type BankListType = {
   ussd_transfer_code: string
 }
 
+export type BankTransactionType = {
+  account_name: string
+  account_number: string
+  amount: number
+  charge: number
+  date_created: string
+  narration: string
+  reference: string
+  status: string
+  switch_session_id: string
+  bank: {
+    code: string
+    logo: string
+    name: string
+  }
+}
+
 export type beneficiaryType = {
   name: string
   bankName: string

@@ -7,10 +7,29 @@ import { useState } from 'react'
 import Card from '@/assets/images/credit-card.png'
 import { Balance } from '@/components/common/Balance'
 import LineChart from '@/components/common/LineChart'
-import { formatTime } from '@/lib/utils'
-import { transactions } from '@/types/transactions'
+import useUserStore from '@/store/profile'
+import { useGetStatement } from '@/services/wallet'
+
+interface Transaction {
+  reference: number
+  amount: number
+  date_created: string
+  service: string
+  transaction: {
+    amount: number
+  }
+  type: string
+  status: string
+}
 
 const Dashboard = () => {
+  const { userProfile } = useUserStore()
+  const profileName = userProfile?.full_name || ''
+  const { data: statementList, isLoading: loadingStatementList } =
+    useGetStatement()
+
+  const transactions: Transaction[] = statementList?.data?.data || []
+
   const [currentPage, setCurrentPage] = useState(1)
   const transactionsPerPage = 5
 
@@ -32,20 +51,25 @@ const Dashboard = () => {
   const borderColor = '#ebedf2'
 
   categories.forEach((day, index) => {
-    // Filter transactions for the current day with status 'Successful' and types 'deposit' and 'received'
-    const transactionsForDay = transactions.filter(
-      (transaction) =>
-        new Date(transaction.date).toLocaleDateString('en-US', {
-          weekday: 'short',
-        }) === day &&
-        transaction.status === 'Successful' &&
-        (transaction.type === 'deposit' || transaction.type === 'received')
-    )
+    const transactionsForDay = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date_created)
+      const transactionDay = transactionDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+      })
+
+      console.log(transactionDay)
+
+      return (
+        transactionDay === day &&
+        transaction.status === 'SUCCESSFUL' &&
+        transaction.type === 'CREDIT'
+      )
+    })
 
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
-      const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
-      return sum + amount
+      return sum + transaction.amount
     }, 0)
+
     seriesData[index] = sumForDay
   })
 
@@ -56,25 +80,23 @@ const Dashboard = () => {
   const lightColor1 = '#FFEEF3'
 
   categories.forEach((day, index) => {
-    const transactionsForDay = transactions.filter(
-      (transaction) =>
-        new Date(transaction.date).toLocaleDateString('en-US', {
-          weekday: 'short',
-        }) === day &&
-        transaction.status === 'Successful' &&
-        (transaction.type === 'airtime' ||
-          transaction.type === 'bank-transfer' ||
-          transaction.type === 'paytonic-transfer' ||
-          transaction.type === 'betting' ||
-          transaction.type === 'settlement' ||
-          transaction.type === 'television' ||
-          transaction.type === 'data' ||
-          transaction.type === 'electricity')
-    )
+    const transactionsForDay = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date_created)
+      const transactionDay = transactionDate.toLocaleDateString('en-US', {
+        weekday: 'short',
+      })
+
+      return (
+        transactionDay === day &&
+        transaction.status === 'SUCCESSFUL' &&
+        transaction.type === 'CREDIT'
+      )
+    })
+
     const sumForDay = transactionsForDay.reduce((sum, transaction) => {
-      const amount = parseFloat(transaction.amount.replace(/[₦,]/g, ''))
-      return sum + amount
+      return sum + transaction.amount
     }, 0)
+
     seriesData1[index] = sumForDay
   })
 
@@ -87,7 +109,7 @@ const Dashboard = () => {
         >
           <div className="page-title d-flex flex-column justify-content-center me-3">
             <h1 className="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
-              Welcome
+              Welcome {profileName}
             </h1>
 
             <ul className="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
@@ -183,7 +205,8 @@ const Dashboard = () => {
                 >
                   <thead className="border-bottom border-gray-200 fs-7 fw-bold">
                     <tr className="text-start text-muted text-uppercase gs-0">
-                      <th>Order No.</th>
+                      <th>Reference</th>
+                      <th>Service</th>
                       <th>Type</th>
                       <th>Status</th>
                       <th>Amount</th>
@@ -191,21 +214,22 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody className="fs-6 fw-semibold text-gray-600">
-                    {currentTransactions.map((transaction, index) => (
-                      <tr key={index}>
+                    {currentTransactions.map((transaction) => (
+                      <tr key={transaction.reference}>
                         <td>
                           <span className="text-gray-600 mb-1">
-                            {transaction.orderNo}
+                            {transaction.reference}
                           </span>
                         </td>
+                        <td>{transaction.service}</td>
                         <td>{transaction.type}</td>
 
                         <td>
                           <span
                             className={`badge tw-text-sm badge-light-${
-                              transaction.status === 'Successful'
+                              transaction.status === 'SUCCESSFUL'
                                 ? 'success'
-                                : transaction.status === 'Pending'
+                                : transaction.status === 'PENDING'
                                   ? 'warning'
                                   : 'danger'
                             }`}
@@ -213,8 +237,8 @@ const Dashboard = () => {
                             {transaction.status}
                           </span>
                         </td>
-                        <td>{transaction.amount}</td>
-                        <td>{formatTime(transaction.date)}</td>
+                        <td>{transaction.transaction.amount}</td>
+                        <td>{transaction.date_created}</td>
                       </tr>
                     ))}
                   </tbody>
